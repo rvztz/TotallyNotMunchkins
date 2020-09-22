@@ -1,15 +1,8 @@
 <template>
-    <b-card title="Sign In">
+    <b-card title="Sign In" style="width: 25%">
         <div class="container">
-            <div class="elem">
-                <label for="uname"><b>Username</b></label>
-                <input type="text" placeholder="Enter Username" name="uname" required>
-            </div>
-
-            <div class="elem">
-                <label for="psw"><b>Password</b></label>
-                <input type="password" placeholder="Enter Password" name="psw" required>
-            </div>
+            <TextField />
+            <TextField />
 
             <div class="elem">
                 <button type="submit">Login</button>
@@ -26,11 +19,13 @@
 
 <script>
 import {BCard} from 'bootstrap-vue'
+import TextField from './TextField'
 
 export default {
     name: 'Card',
     components: {
-        BCard
+        BCard,
+        TextField
     }
 }
 </script>
