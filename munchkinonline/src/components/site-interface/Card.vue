@@ -3,15 +3,9 @@
         <div class="container">
             <TextField />
             <TextField />
-
+            <SiteButton />
             <div class="elem">
-                <button type="submit">Login</button>
-                <label>
-                <input type="checkbox" checked="checked" name="remember"> Remember me
-                </label>
-            </div>
-            <div class="elem">
-                <router-link to="/signup">No tienes cuenta?</router-link>
+                <router-link to="/signup">Don't have an account?</router-link>
             </div>
         </div>
     </b-card>
@@ -20,12 +14,14 @@
 <script>
 import {BCard} from 'bootstrap-vue'
 import TextField from './TextField'
+import SiteButton from './SiteButton'
 
 export default {
     name: 'Card',
     components: {
         BCard,
-        TextField
+        TextField,
+        SiteButton
     }
 }
 </script>
