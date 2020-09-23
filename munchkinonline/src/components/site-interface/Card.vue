@@ -1,5 +1,5 @@
 <template>
-    <b-card title="Sign In" style="width: 25%">
+    <b-card v-bind:title="cardData.title" style="width: 25%">
         <div class="container">
             <div v-bind:key="textField.id" v-for="textField in cardData.textFields">
                 <TextField v-bind:fieldData="textField"/>

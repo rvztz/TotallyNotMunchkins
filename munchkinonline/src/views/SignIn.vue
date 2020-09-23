@@ -15,6 +15,7 @@ export default {
     data () {
         return {
             cardData: {
+                title: "Sign In",
                 textFields: [
                     {
                         id: 0,
