@@ -4,7 +4,11 @@
             <div v-bind:key="textField.id" v-for="textField in cardData.textFields">
                 <TextField v-bind:fieldData="textField"/>
             </div>
-            <SiteButton />
+
+            <div v-bind:key="button.id" v-for="button in cardData.buttons">
+                <SiteButton v-bind:buttonData="button"/>
+            </div>
+
             <div class="elem">
                 <router-link to="/signup">Don't have an account?</router-link>
             </div>

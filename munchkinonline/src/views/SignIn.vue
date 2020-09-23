@@ -25,6 +25,12 @@ export default {
                         id: 1,
                         placeholder: "Password"
                     }
+                ],
+                buttons: [
+                    {
+                        id: 0,
+                        buttonText: "Log In"
+                    }
                 ]
             }
         }
