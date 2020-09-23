@@ -1,15 +1,8 @@
 <template>
     <div id="signin">
-        <Card />
+        <Card v-bind:cardData="cardData"/>
     </div>
 </template>
-
-Vue.component('blog-post', {
-  props: ['title'],
-  template: '<h3>{{ title }}</h3>'
-})
-
-<blog-post title="My journey with Vue"></blog-post>
 
 <script>
 import Card from '../components/site-interface/Card'
@@ -18,6 +11,22 @@ export default {
     name: 'signin',
     components: {
         Card
+    },
+    data () {
+        return {
+            cardData: {
+                textFields: [
+                    {
+                        id: 0,
+                        placeholder: "Username"
+                    },
+                    {
+                        id: 1,
+                        placeholder: "Password"
+                    }
+                ]
+            }
+        }
     }
 }
 </script>

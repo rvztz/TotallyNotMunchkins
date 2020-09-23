@@ -1,6 +1,6 @@
 <template>
    <div>
-       <b-form-input/>
+       <b-form-input v-bind:placeholder="fieldData.placeholder"/>
     </div>
 </template>>
 
@@ -11,7 +11,8 @@ export default {
     name: 'TextField',
     components: {
         BFormInput
-    }
+    },
+    props: ["fieldData"]
 }
 </script>
 

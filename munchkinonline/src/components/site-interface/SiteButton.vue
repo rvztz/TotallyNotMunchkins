@@ -1,6 +1,6 @@
 <template>
     <div>
-        <b-button variant="outline-info"> Placeholder Text </b-button>
+        <b-button variant="outline-info">Placeholder Text </b-button>
     </div>
 </template>
 

@@ -1,8 +1,9 @@
 <template>
     <b-card title="Sign In" style="width: 25%">
         <div class="container">
-            <TextField />
-            <TextField />
+            <div v-bind:key="textField.id" v-for="textField in cardData.textFields">
+                <TextField v-bind:fieldData="textField"/>
+            </div>
             <SiteButton />
             <div class="elem">
                 <router-link to="/signup">Don't have an account?</router-link>
@@ -22,6 +23,7 @@ export default {
         BCard,
         TextField,
         SiteButton
-    }
+    },
+    props: ["cardData"]
 }
 </script>
