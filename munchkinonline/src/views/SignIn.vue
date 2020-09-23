@@ -1,6 +1,6 @@
 <template>
     <div id="signin">
-        <Card v-bind:cardData="cardData"/>
+        <Card v-bind:cardData="cardData" v-on:btn-click="signInMethod"/>
     </div>
 </template>
 
@@ -33,6 +33,11 @@ export default {
                     }
                 ]
             }
+        }
+    },
+    methods: {
+        signInMethod() {
+            console.log("Event fired");
         }
     }
 }

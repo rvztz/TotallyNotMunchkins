@@ -6,7 +6,7 @@
             </div>
 
             <div v-bind:key="button.id" v-for="button in cardData.buttons">
-                <SiteButton v-bind:buttonData="button"/>
+                <SiteButton v-bind:buttonData="button" v-on:btn-click="$emit('btn-click')"/>
             </div>
 
             <div class="elem">
@@ -28,6 +28,7 @@ export default {
         TextField,
         SiteButton
     },
-    props: ["cardData"]
+    props: ["cardData"],
+
 }
 </script>

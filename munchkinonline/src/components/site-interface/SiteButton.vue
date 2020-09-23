@@ -1,6 +1,6 @@
 <template>
     <div>
-        <b-button style="width: 100%" variant="outline-info">{{buttonData.buttonText}}</b-button>
+        <b-button style="width: 100%" variant="outline-info" v-on:click="$emit('btn-click')">{{buttonData.buttonText}}</b-button>
     </div>
 </template>
 
