@@ -18,26 +18,33 @@ export default {
                 title: "Sign In",
                 textFields: [
                     {
-                        id: 0,
+                        id: 100,
                         placeholder: "Username"
                     },
                     {
-                        id: 1,
+                        id: 101,
                         placeholder: "Password"
                     }
                 ],
                 buttons: [
                     {
-                        id: 0,
+                        id: 201,
                         buttonText: "Log In"
                     }
-                ]
+                ],
+                footerLink : {
+                    display: true,
+                    route: "/signup",
+                    text: "Don't have an account?"
+                }
             }
         }
     },
     methods: {
-        signInMethod() {
-            console.log("Event fired");
+        //data = ["username", "password"]
+        signInMethod(data) {
+            // Sign in function here
+            console.log(data);
         }
     }
 }

@@ -1,6 +1,6 @@
 <template>
    <div>
-       <b-form-input v-bind:placeholder="fieldData.placeholder"/>
+       <b-form-input v-model="textValue" v-bind:placeholder="fieldData.placeholder" ref="input"/>
     </div>
 </template>>
 
@@ -12,7 +12,17 @@ export default {
     components: {
         BFormInput
     },
-    props: ["fieldData"]
+    props: ["fieldData"],
+    methods: {
+        getValue() {
+            return this.textValue
+        }
+    },
+    data () {
+        return {
+            textValue: ''
+        }
+    }
 }
 </script>
 
