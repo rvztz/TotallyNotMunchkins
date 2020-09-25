@@ -9,8 +9,8 @@
                 <SiteButton v-bind:buttonData="button" v-on:btn-click="getTextFieldValues"/>
             </div>
 
-            <div class="elem">
-                <router-link to="/signup">Don't have an account?</router-link>
+            <div class="elem"  v-bind:class="{'isHidden': !cardData.footerLink.display}">
+                <router-link v-bind:to="cardData.footerLink.route"> {{ cardData.footerLink.text }} </router-link>
             </div>
         </div>
     </b-card>
@@ -36,3 +36,9 @@ export default {
     props: ["cardData"]    
 }
 </script>
+
+<style scoped>
+    .isHidden {
+        display: none;
+    }
+</style>

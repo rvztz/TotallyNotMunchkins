@@ -35,7 +35,12 @@ export default {
                         id: 201,
                         buttonText: "Sign Up"
                     }
-                ]
+                ],
+                footerLink : {
+                    display: true,
+                    route: "/",
+                    text: "Already have an account?"
+                }
             }
         }
     },

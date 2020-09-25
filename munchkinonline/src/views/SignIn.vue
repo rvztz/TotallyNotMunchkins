@@ -31,7 +31,12 @@ export default {
                         id: 201,
                         buttonText: "Log In"
                     }
-                ]
+                ],
+                footerLink : {
+                    display: true,
+                    route: "/signup",
+                    text: "Don't have an account?"
+                }
             }
         }
     },
