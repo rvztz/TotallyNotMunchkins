@@ -36,8 +36,10 @@ export default {
         }
     },
     methods: {
-        signInMethod() {
-            console.log("Event fired");
+        //data = ["username", "password"]
+        signInMethod(data) {
+            // Sign in function here
+            console.log(data);
         }
     }
 }

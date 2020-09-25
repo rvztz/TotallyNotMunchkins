@@ -15,7 +15,6 @@ export default {
     props: ["fieldData"],
     methods: {
         getValue() {
-            console.log(this.textValue)
             return this.textValue
         }
     },

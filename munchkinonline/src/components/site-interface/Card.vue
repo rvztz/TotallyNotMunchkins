@@ -30,14 +30,7 @@ export default {
     },
     methods: {
         getTextFieldValues() {
-            // var values = []
-            console.log(this.$refs.textfields[0].getValue());
-            /*
-            for (var textField in this.$refs.textfields) {
-                values.push(textField.getValue())
-            }
-            console.log(values)
-            */
+            this.$emit('btn-click', this.$refs.textfields.map(tf => tf.getValue()))
         }
     },
     props: ["cardData"]    
