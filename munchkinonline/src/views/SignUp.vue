@@ -1,6 +1,6 @@
 <template>
     <div id="signup">
-        <Card v-bind:cardData="cardData" v-on:btn-click="signUpMethod"/>
+        <Card v-bind:cardData="cardData" v-on:signup="signUpMethod"/>
     </div>
 </template>
 
@@ -47,7 +47,8 @@ export default {
                 buttons: [
                     {
                         id: 201,
-                        buttonText: "Sign Up"
+                        buttonText: "Sign Up",
+                        eventName: "signup"
                     }
                 ],
                 footerLink : {

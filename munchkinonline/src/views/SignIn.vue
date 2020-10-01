@@ -1,6 +1,6 @@
 <template>
     <div id="signin">
-        <Card v-bind:cardData="cardData" v-on:btn-click="signInMethod"/>
+        <Card v-bind:cardData="cardData" v-on:login="signInMethod"/>
     </div>
 </template>
 
@@ -34,7 +34,8 @@ export default {
                 buttons: [
                     {
                         id: 201,
-                        buttonText: "Log In"
+                        buttonText: "Log In",
+                        eventName: "login"
                     }
                 ],
                 footerLink : {
