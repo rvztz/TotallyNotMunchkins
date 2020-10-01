@@ -1,6 +1,6 @@
 <template>
     <div id="play">
-        <Card v-bind:cardData="cardData" v-on:btn-click="createGame"/>
+        <Card v-bind:cardData="cardData" v-on:create-game="createGame" v-on:join-game="joinGame"/>
     </div>
 </template>
 
@@ -25,11 +25,13 @@ export default {
                 buttons: [
                     {
                         id: 201,
-                        buttonText: "Create Game"
+                        buttonText: "Create Game",
+                        eventName: "create-game"
                     },
                     {
                         id: 202,
-                        buttonText: "Join Game"
+                        buttonText: "Join Game",
+                        eventName: "join-game"
                     },
                 ],
                 footerLink : {
@@ -44,6 +46,12 @@ export default {
         //data = ["roomName"]
         createGame(data) {
             // Game creation here
+            console.log("CREATE GAME");
+            console.log(data);
+        },
+        joinGame(data) {
+            // Join game here
+            console.log("JOIN GAME");
             console.log(data);
         }
     }

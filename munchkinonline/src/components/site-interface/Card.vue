@@ -6,7 +6,7 @@
             </div>
 
             <div v-bind:key="button.id" v-for="button in cardData.buttons">
-                <SiteButton v-bind:buttonData="button" v-on:btn-click="getTextFieldValues"/>
+                <SiteButton v-bind:buttonData="button" v-on:btn-click="getTextFieldValues(button.eventName)"/>
             </div>
 
             <div class="elem"  v-bind:class="{'isHidden': !cardData.footerLink.display}">
@@ -29,8 +29,8 @@ export default {
         SiteButton
     },
     methods: {
-        getTextFieldValues() {
-            this.$emit('btn-click', this.$refs.textfields.map(tf => tf.getValue()))
+        getTextFieldValues(eventName) {
+            this.$emit(eventName, this.$refs.textfields.map(tf => tf.getValue()))
         }
     },
     props: ["cardData"]    
