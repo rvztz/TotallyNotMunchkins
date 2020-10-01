@@ -6,6 +6,11 @@
 
 <script>
 import Card from '../components/site-interface/Card'
+import firebase from 'firebase'; 
+
+function validateFields(data)  {
+    return ((data[0].replace(/\s/g,"") == "") || (data[1].replace(/\s/g,"") == "")); 
+}
 
 export default {
     name: 'signin',
@@ -43,8 +48,17 @@ export default {
     methods: {
         //data = ["username", "password"]
         signInMethod(data) {
-            // Sign in function here
-            console.log(data);
+            if(validateFields(data)) {
+                alert('Uno o más campos están vacíos');
+            } else {
+                firebase.auth().signInWithEmailAndPassword(
+                    data[0], data[1]
+                ).then( () => {
+                    this.$router.push('/home'); 
+                }).catch((error) => {
+                    alert(error.message); 
+                }); 
+            }
         }
     }
 }
