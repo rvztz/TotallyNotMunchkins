@@ -3,6 +3,9 @@
     <div id="nav">
       <router-link to="/">Sign In</router-link> |
       <router-link to="/about">About</router-link> |
+      <router-link to="/signup">Sign Up</router-link> |
+      <router-link to="/play">Play</router-link> |
+      <router-link to="/profile">Profile</router-link>
     </div>
     <router-view/>
   </div>
@@ -13,12 +16,12 @@
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  text-align: center;
   color: #2c3e50;
 }
 
 #nav {
   padding: 30px;
+  text-align: center;
 }
 
 #nav a {

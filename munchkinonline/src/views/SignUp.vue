@@ -7,7 +7,7 @@
 <script>
 import Card from '../components/site-interface/Card'
 import firebase from 'firebase'; 
-
+import { userCollection } from '../main.js';
 
 function validateFields(data)  {
     return ((data[0].replace(/\s/g,"") == "") && (data[1].replace(/\s/g,"") == "") && (data[2].replace(/\s/g,"") == "") && (data[3].replace(/\s/g,"") == ""));
@@ -76,12 +76,25 @@ export default {
                         displayName: data[1]
                     })
                     .then( () => {
-                        this.$router.push('/home')
+                        this.$router.push('/profile')
+                        this.addUserToCollection(data);
                     }); 
                 }).catch((error) => {
                     alert(error.message); 
                 });
             }
+        },
+        addUserToCollection(user) {
+            userCollection.add({
+                first: user[0],
+                second: user[1],
+            })
+            .then(function(docRef) {
+                console.log("Document written with ID: ", docRef.id);
+            })
+            .catch(function(error) {
+                console.error("Error adding document: ", error);
+            });
         }
     }
 }; 

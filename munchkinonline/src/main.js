@@ -22,6 +22,14 @@ const firebaseConfig = {
 
 firebase.initializeApp(firebaseConfig);
 
+var db = firebase.firestore();
+var userCollection = db.collection("users");
+
+export {
+  db,
+  userCollection
+}
+
 
 new Vue({
   router,
