@@ -85,9 +85,16 @@ export default {
             }
         },
         addUserToCollection(user) {
+            var today = new Date();
+            var dd = String(today.getDate()).padStart(2, '0');
+            var mm = String(today.getMonth() + 1).padStart(2, '0');
+            var yyyy = today.getFullYear();
+            today = mm + '/' + dd + '/' + yyyy;
+
             userCollection.add({
-                first: user[0],
-                second: user[1],
+                email: user[0],
+                name: user[1],
+                joined: today
             })
             .then(function(docRef) {
                 console.log("Document written with ID: ", docRef.id);

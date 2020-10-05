@@ -1,17 +1,17 @@
 <template>
   <div class = 'container'>
     <div>
-      <b-card class="profileCard" id="profile" title="Profile">
-        <b-card-text>Your Username</b-card-text>
-        <b-card-text>Your Email</b-card-text>
-        <b-card-text>Date Joined:</b-card-text>
+      <b-card class="profileCard" id="profile" title="Your Profile">
+        <b-card-text>Username: {{userData.name}}</b-card-text>
+        <b-card-text>Email: {{userData.email}}</b-card-text>
+        <b-card-text>Date Joined: {{userData.joined}}</b-card-text>
       </b-card>
     </div>
 
     <b-card bg-variant = 'dark' text-variant = 'white' title = 'Historial de Juego'>
       <b-card-text>
-        <p> {{user.displayName}}</p>
-        <p>{{user.email}}</p>
+        <p></p>
+        <p></p>
       </b-card-text>
       <b-button href="#" variant="primary" @click = 'logOut()'>Cerrar sesión</b-button>
     </b-card>
@@ -22,25 +22,39 @@
 // @ is an alias to /src
 import {BCard} from 'bootstrap-vue';
 import firebase from 'firebase'; 
+import { userCollection } from '../main.js';
 
 export default {
-  name: "Profile",
+  name: "profile",
   components: {
     BCard
   },
   data() {
     return {
-      user: null
+      userData: {
+        name: "",
+        email: "",
+        joined: ""
+      }
     }; 
   }, 
   created() {
     firebase.auth().onAuthStateChanged((user) => {
       if (user) {
-        this.user = user; 
+        userCollection.where("email", "==", user.email)
+        .limit(1)
+        .get()
+        .then(querySnapshot => {
+          this.userData = querySnapshot.docs[0].data()
+        })
+        .catch(function(error) {
+            console.log("Error loading user data: ", error)
+          }
+        )
       } else {
-        this.user = null;
+        this.userData = null
       }
-    });
+    })
   }, 
   methods: {
     logOut() {
@@ -71,3 +85,5 @@ export default {
 }
 
 </style>
+
+
