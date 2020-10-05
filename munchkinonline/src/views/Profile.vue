@@ -11,7 +11,9 @@
     <div>
       <b-card id="history" title='Game History'>
         <div class="accordion" role="tablist">
-          <AccordionElement />
+          <div>
+            <AccordionElement />
+          </div>
         </div>
       </b-card>
     </div>
@@ -75,8 +77,7 @@ export default {
       .limit(10)
       .get()
       .then(q => {
-        this.gameHistory = q.docs.map(doc => doc.data())
-        console.log(this.gameHistory)
+        this.gameHistory = q.docs.map(doc => {return {data: doc.data(), id: doc.id}})
       })
       .catch(e => {
         console.log("Error getting game data: ", e)
