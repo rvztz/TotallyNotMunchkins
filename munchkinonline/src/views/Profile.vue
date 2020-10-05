@@ -23,7 +23,7 @@
 import {BCard} from 'bootstrap-vue';
 import firebase from 'firebase';
 import AccordionElement from '../components/site-interface/AccordionElement.vue'
-import { userCollection } from '../main.js';
+import { userCollection, gameCollection } from '../main.js';
 
 export default {
   name: "profile",
@@ -37,22 +37,14 @@ export default {
         name: "",
         email: "",
         joined: ""
-      }
+      },
+      gameHistory: []
     }; 
   }, 
   created() {
     firebase.auth().onAuthStateChanged((user) => {
       if (user) {
-        userCollection.where("email", "==", user.email)
-        .limit(1)
-        .get()
-        .then(querySnapshot => {
-          this.userData = querySnapshot.docs[0].data()
-        })
-        .catch(function(error) {
-            console.log("Error loading user data: ", error)
-          }
-        )
+        this.getUserData(user)
       } else {
         this.userData = null
       }
@@ -64,6 +56,30 @@ export default {
         firebase.auth().onAuthStateChanged(() => {
           this.$router.push('/')
         })
+      })
+    },
+    getUserData(user) {
+      userCollection.where("email", "==", user.email)
+        .limit(1)
+        .get()
+        .then(q => {
+          this.userData = q.docs[0].data()
+          this.getGameHistory()
+        })
+        .catch(e => {
+            console.log("Error loading user data: ", e)
+        })
+    },
+    getGameHistory() {
+      gameCollection.where("emails", "array-contains", this.userData.email)
+      .limit(10)
+      .get()
+      .then(q => {
+        this.gameHistory = q.docs.map(doc => doc.data())
+        console.log(this.gameHistory)
+      })
+      .catch(e => {
+        console.log("Error getting game data: ", e)
       })
     }
   }
