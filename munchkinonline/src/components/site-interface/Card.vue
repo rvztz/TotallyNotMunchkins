@@ -1,6 +1,6 @@
 <template>
-    <b-card v-bind:title="cardData.title" style="width: 25%">
-        <div class="container">
+    <b-card class="container" v-bind:title="cardData.title" style="width: 25%">
+        <div>
             <div v-bind:key="textField.id" v-for="textField in cardData.textFields">
                 <TextField v-bind:fieldData="textField" ref="textfields"/>
             </div>
@@ -40,5 +40,9 @@ export default {
 <style scoped>
     .isHidden {
         display: none;
+    }
+
+    .container {
+        text-align: center;
     }
 </style>
