@@ -1,11 +1,11 @@
 <template>
     <b-card no-body class="mb-1">
         <b-card-header header-tag="header" class="p-1" role="tab">
-            <b-button v-b-toggle.accordion-1 class="button" variant="info">Accordion 1</b-button>
+            <b-button v-b-toggle="entryData.id" class="button" variant="info">{{entryData.data.date}}</b-button>
         </b-card-header>
-        <b-collapse id="accordion-1" accordion="game-history" role="tabpanel">
+        <b-collapse v-bind:id="entryData.id" accordion="game-history" role="tabpanel">
             <b-card-body>
-                TEXT
+                {{entryData.data.usernames}}
             </b-card-body>
         </b-collapse>
     </b-card>
@@ -20,7 +20,8 @@ export default {
         BCard,
         BButton,
         BCollapse
-    }
+    },
+    props: ["entryData"]
 }
 </script>
 

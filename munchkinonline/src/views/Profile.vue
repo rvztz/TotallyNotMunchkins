@@ -11,8 +11,8 @@
     <div>
       <b-card id="history" title='Game History'>
         <div class="accordion" role="tablist">
-          <div>
-            <AccordionElement />
+          <div v-bind:key="entry.id" v-for="entry in gameHistory">
+            <AccordionElement v-bind:entryData="entry" />
           </div>
         </div>
       </b-card>
