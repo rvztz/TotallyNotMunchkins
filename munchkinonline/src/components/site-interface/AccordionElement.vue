@@ -36,7 +36,6 @@ export default {
         generatePositions() {
             var usernames = this.entryData.data.usernames
             var winners = this.entryData.data.winners
-            console.log(usernames, winners)
 
             usernames.forEach((username, index) => {
                 if (winners.includes(username))
