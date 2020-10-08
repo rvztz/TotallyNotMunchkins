@@ -11,7 +11,7 @@
 import {BCard, BCardGroup} from 'bootstrap-vue'
 
 export default {
-    name: 'Hand',
+    name: 'VerticalHand',
     components: {
         BCard,
         BCardGroup
