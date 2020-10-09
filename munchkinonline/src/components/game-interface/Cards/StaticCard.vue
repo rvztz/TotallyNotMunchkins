@@ -1,5 +1,5 @@
 <template>
-    <b-card class="gray m-2">
+    <b-card class="gray mb-1" v-bind:class="{'vertical': vertical}">
     </b-card>
 </template>
 
@@ -7,7 +7,8 @@
 import {BCard} from 'bootstrap-vue'
 
 export default {
-    name: 'InteractableCard',
+    name: 'StaticCard',
+    props: ["vertical"],
     components: {
         BCard
     }
@@ -16,8 +17,12 @@ export default {
 
 <style scoped>
     .gray { 
-        background-color: gray;
-        min-width: 8vh;
-        min-height: 10vh;
+    background-color: gray;
+    width: 8vh;
+    height: 10vh;
+    }
+
+    .vertical {
+        transform: rotate(90deg);
     }
 </style>

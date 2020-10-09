@@ -1,24 +1,32 @@
 <template>
     <div>
         <b-card border-variant="dark">
-            <b-card-group>
-            </b-card-group>
+            <div class="deck">
+                <StaticCard />
+                <StaticCard />
+                <StaticCard />
+                <StaticCard />
+                <StaticCard />
+            </div>
         </b-card>
     </div>
 </template>
 
 <script>
-import {BCard, BCardGroup} from 'bootstrap-vue'
+import {BCard} from 'bootstrap-vue'
 
 export default {
     name: 'OppositeHand',
     components: {
-        BCard,
-        BCardGroup
+        BCard
     }
 }
 </script>
 
 <style scoped>
+
+    .deck {
+        display: flex;
+    }
 
 </style>
