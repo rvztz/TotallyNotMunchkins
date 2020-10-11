@@ -18,9 +18,9 @@ export default class PlayerHand {
         this.addCards = (n, cardWidth, cardHeight) => {
             for(let i = 0; i < n; i++) {
                 let playerCard = new Card(scene)
-                console.log(playerCard.width)
-                playerCard.render(this.dimensions.x + cardWidth/2 + i*75 + 30, this.dimensions.y + cardHeight/2 + 18, 'cardBack')
+                playerCard.render(this.dimensions.x + cardWidth + 1.5*i*cardWidth, this.dimensions.y + this.dimensions.height/2, 'cardBack')
+                console.log(cardHeight)
             }
         }
-    }    
+    }
 }

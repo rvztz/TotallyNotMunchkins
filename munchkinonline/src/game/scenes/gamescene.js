@@ -31,12 +31,15 @@ export default class GameScene extends Phaser.Scene {
 
         this.leftHand = new OpponentHand(this)
         this.leftHand.render(vWidth/2, this.scale.height/2 - vHeight/2 - offset, vWidth, vHeight)
+        this.leftHand.addCards(5, cardWidth, cardHeight, "left")
 
         this.rightHand = new OpponentHand(this)
         this.rightHand.render(this.scale.width - 1.5*vWidth, this.scale.height/2 - vHeight/2 - offset, vWidth, vHeight)
+        this.rightHand.addCards(5, cardWidth, cardHeight, "right")
         
         this.topHand = new OpponentHand(this)
-        this.topHand.render(this.scale.width/2 - hWidth/2, 2, hWidth, hHeight*0.9)
+        this.topHand.render(this.scale.width/2 - hWidth/4, 2, vHeight, hHeight*0.9)
+        this.topHand.addCards(5, cardWidth, cardHeight, "top")
     }
 
     update() {
