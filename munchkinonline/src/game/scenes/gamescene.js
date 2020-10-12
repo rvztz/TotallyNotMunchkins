@@ -68,7 +68,7 @@ export default class GameScene extends Phaser.Scene {
             gameObject.y = dropZone.y;
     
             gameObject.input.enabled = false; 
-            dropZone.clearTint()   
+            dropZone.clearTint();
         });
 
         this.input.on('dragend', function (pointer, gameObject, dropped) {
