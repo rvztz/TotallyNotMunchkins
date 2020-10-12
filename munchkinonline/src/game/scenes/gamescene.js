@@ -1,6 +1,7 @@
 import Phaser from 'phaser'
 import PlayerHand from '../classes/playerHand'
 import OpponentHand from '../classes/opponentHand'
+import Board from '../classes/board'
 
 export default class GameScene extends Phaser.Scene {
     constructor() {
@@ -11,9 +12,14 @@ export default class GameScene extends Phaser.Scene {
 
     preload() {
         this.load.image('cardBack', 'assets/CardBack.jpg')
+        this.load.scenePlugin('rexboardplugin', 'https://raw.githubusercontent.com/rexrainbow/phaser3-rex-notes/master/dist/rexboardplugin.min.js', 'rexBoard', 'rexBoard');
     }
 
     create() {
+        var board = new Board(this, 100, 100)
+
+        console.log(board)
+
         const cardWidth = 50
         const cardHeight = 72.5
 
