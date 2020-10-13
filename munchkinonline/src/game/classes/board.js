@@ -1,6 +1,6 @@
 import Tile from '../classes/tile'
 import Deck from '../classes/deck'
-
+import Discard from '../classes/discard'
 
 export default class Board {
     constructor(scene, x, y, cellWidth, cellHeight) {
@@ -84,6 +84,21 @@ export default class Board {
             }
         ]
 
+        this.discards = [
+            {
+                cardType: 'door',
+                row: 1,
+                col: 1,
+                image: 'doorDiscard'
+            },
+            {
+                cardType: 'treasure',
+                row: 2,
+                col: 3,
+                image: 'treasureDiscard'
+            }
+        ]
+
         this.renderTiles = () => {
             this.tiles.forEach((tile) => {
                 let newTile = new Tile(scene, tile.level)
@@ -95,6 +110,13 @@ export default class Board {
             this.decks.forEach((deck) => {
                 let newDeck = new Deck(scene, deck.cardType)
                 newDeck.render(this.dimensions.x + deck.col * this.dimensions.cellWidth, this.dimensions.y + deck.row * this.dimensions.cellHeight, deck.image, this.dimensions.cellWidth, this.dimensions.cellHeight)
+            })
+        }
+        
+        this.renderDiscards = () => {
+            this.discards.forEach((discard) => {
+                let newDiscard = new Discard(scene, discard.cardType)
+                newDiscard.render(this.dimensions.x + discard.col * this.dimensions.cellWidth, this.dimensions.y + discard.row * this.dimensions.cellHeight, discard.image, this.dimensions.cellWidth, this.dimensions.cellHeight)
             })
         }
     }

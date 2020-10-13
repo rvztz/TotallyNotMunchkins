@@ -21,10 +21,10 @@ export default class PlayerHand {
             this.dropZone.setData({type: "hand"})
         }
 
-        this.addCards = (n) => {
+        this.addCards = (n, cardType, sprite) => {
             for(let i = 0; i < n; i++) {
-                let playerCard = new Card(scene)
-                playerCard.render(this.dimensions.x + this.dimensions.cardWidth + 1.5*i*this.dimensions.cardWidth, this.dimensions.y + this.dimensions.height/2, 'cardBack')
+                let playerCard = new Card(scene, cardType)
+                playerCard.render(this.dimensions.x + this.dimensions.cardWidth + 1.5*i*this.dimensions.cardWidth, this.dimensions.y + this.dimensions.height/2, sprite)
             }
         }
     }
