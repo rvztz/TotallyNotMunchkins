@@ -62,12 +62,7 @@ export default class GameScene extends Phaser.Scene {
     
         }, this);
 
-        this.input.on('drop', function (pointer, gameObject, dropZone) {
-
-            gameObject.x = dropZone.x;
-            gameObject.y = dropZone.y;
-    
-            gameObject.input.enabled = false; 
+        this.input.on('drop', function (pointer, gameObject, dropZone) {    
             dropZone.clearTint();
         });
 

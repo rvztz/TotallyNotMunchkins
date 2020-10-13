@@ -4,6 +4,8 @@ export default class Tile {
 
         this.render = (x, y, sprite, cW, cH) => {
             let tile = scene.add.image(x+cW/2, y+cH/2, sprite).setScale(0.6, 0.6).setInteractive()
+            tile.displayHeight = 0.9*cH
+            tile.displayWidth = 0.9*cW
             tile.input.dropZone = true
             
             let outline = scene.add.graphics()
