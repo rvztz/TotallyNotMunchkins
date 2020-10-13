@@ -1,4 +1,6 @@
 import Tile from '../classes/tile'
+import Deck from '../classes/deck'
+
 
 export default class Board {
     constructor(scene, x, y, cellWidth, cellHeight) {
@@ -67,11 +69,32 @@ export default class Board {
             },
         ]
 
+        this.decks = [
+            {
+                cardType: 'door',
+                row: 0,
+                col: 1,
+                image: 'doorDeck'
+            },
+            {
+                cardType: 'treasure',
+                row: 1,
+                col: 3,
+                image: 'treasureDeck'
+            }
+        ]
+
         this.renderTiles = () => {
             this.tiles.forEach((tile) => {
-                console.log(tile)
                 let newTile = new Tile(scene, tile.level)
                 newTile.render(this.dimensions.x + tile.col * this.dimensions.cellWidth, this.dimensions.y + tile.row * this.dimensions.cellHeight, tile.image, this.dimensions.cellWidth, this.dimensions.cellHeight)
+            })
+        }
+
+        this.renderDecks = () => {
+            this.decks.forEach((deck) => {
+                let newDeck = new Deck(scene, deck.cardType)
+                newDeck.render(this.dimensions.x + deck.col * this.dimensions.cellWidth, this.dimensions.y + deck.row * this.dimensions.cellHeight, deck.image, this.dimensions.cellWidth, this.dimensions.cellHeight)
             })
         }
     }

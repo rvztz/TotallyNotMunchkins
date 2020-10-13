@@ -2,13 +2,16 @@ import Card from './card'
 
 export default class PlayerHand {
     constructor(scene) {
-        this.dimensions = {x: 0, y: 0, width: 0, height: 0}
+        this.dimensions = {x: 0, y: 0, width: 0, height: 0, cardHeight: 0, cardWidth: 0}
 
-        this.render = (x,y,width,height) => {
+        this.render = (x, y, width, height, cardWidth, cardHeight) => {
             this.dimensions.x = x 
             this.dimensions.y = y 
             this.dimensions.width = width 
-            this.dimensions.height = height 
+            this.dimensions.height = height
+            this.dimensions.cardWidth = cardWidth
+            this.dimensions.cardHeight = cardHeight
+
             let outline = scene.add.graphics()
             outline.lineStyle(4, 0x000000)
             outline.strokeRect(x, y, width, height)
@@ -18,19 +21,11 @@ export default class PlayerHand {
             this.dropZone.setData({type: "hand"})
         }
 
-        this.addCards = (n, cardWidth, cardHeight) => {
+        this.addCards = (n) => {
             for(let i = 0; i < n; i++) {
                 let playerCard = new Card(scene)
-                playerCard.render(this.dimensions.x + cardWidth + 1.5*i*cardWidth, this.dimensions.y + this.dimensions.height/2, 'cardBack')
-                console.log(cardHeight)
+                playerCard.render(this.dimensions.x + this.dimensions.cardWidth + 1.5*i*this.dimensions.cardWidth, this.dimensions.y + this.dimensions.height/2, 'cardBack')
             }
         }
     }
 }
-
-/*this.renderZone = () => {
-            let dropZone = scene.add.zone(1100, 250, 900, 250).setRectangleDropZone(900, 250)
-            dropZone.setData({cards: 0})
-            return dropZone
-        }
-*/
