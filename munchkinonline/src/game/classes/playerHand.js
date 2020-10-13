@@ -13,6 +13,9 @@ export default class PlayerHand {
             outline.lineStyle(4, 0x000000)
             outline.strokeRect(x, y, width, height)
             this.dividerLine = scene.add.line(0, 0, x + width*0.4, height/2 + y, x + width*0.4, 1.5*height + y, 0x000)
+
+            this.dropZone = scene.add.zone(x + width*0.2, y + height/2, width*0.4*0.8, height*0.8).setRectangleDropZone(width*0.4*0.8, height*0.8)
+            this.dropZone.setData({type: "hand"})
         }
 
         this.addCards = (n, cardWidth, cardHeight) => {
@@ -24,3 +27,10 @@ export default class PlayerHand {
         }
     }
 }
+
+/*this.renderZone = () => {
+            let dropZone = scene.add.zone(1100, 250, 900, 250).setRectangleDropZone(900, 250)
+            dropZone.setData({cards: 0})
+            return dropZone
+        }
+*/

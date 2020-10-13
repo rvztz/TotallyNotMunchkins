@@ -7,6 +7,7 @@ export default class Tile {
             tile.displayHeight = 0.9*cH
             tile.displayWidth = 0.9*cW
             tile.input.dropZone = true
+            tile.setData({type: "tile"})
             
             let outline = scene.add.graphics()
             outline.lineStyle(4, 0x000000)
