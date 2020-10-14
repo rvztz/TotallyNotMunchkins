@@ -12,6 +12,7 @@ export default class GameScene extends Phaser.Scene {
     }
 
     preload() {
+        /*======================IMAGE LOADING=======================*/
         this.load.image('cardBack', 'assets/cardBack.jpg')
         this.load.image('doorCard', 'assets/door.jpg')
         this.load.image('treasureCard', 'assets/treasure.jpg')
@@ -21,6 +22,10 @@ export default class GameScene extends Phaser.Scene {
         this.load.image('treasureDeck', 'assets/deck.png')
         this.load.image('doorDiscard', 'assets/discard.png')
         this.load.image('treasureDiscard', 'assets/discard.png')
+        this.load.image('slotBG', 'assets/slotBG.png')
+
+        /*======================OTHER DATA LOADING=======================*/
+        this.load.json('cards', 'data/cards.json');
     }
 
     create() {
@@ -46,24 +51,29 @@ export default class GameScene extends Phaser.Scene {
         this.input.on('drop', function (pointer, gameObject, dropZone) {
             if (gameObject.data.get('type') === 'card' && dropZone.data.get('type') === 'hand' ||
                 gameObject.data.get('type') === 'token' && dropZone.data.get('type') === 'tile') {
-                    
-                gameObject.data.set('lastX', gameObject.x)
-                gameObject.data.set('lastY', gameObject.y)
-
+                
+                updateLastPosition(gameObject)
+                
             } else if (gameObject.data.get('type') === 'card' && dropZone.data.get('type') === 'discard') {
                 if (gameObject.data.get('cardType') === dropZone.data.get('cardType')) {
                     gameObject.destroy()
                 } else {
-                    returnToLast(gameObject)
+                    returnToLastPosition(gameObject)
                 }
+            } else if (gameObject.data.get('type') === 'card' && dropZone.data.get('type') === 'slot') {
+                // Later check for equipment type compatibility
+                gameObject.x = dropZone.x
+                gameObject.y = dropZone.y
+
+                updateLastPosition(gameObject)
             } else {
-                returnToLast(gameObject)
+                returnToLastPosition(gameObject)
             }
         });
 
         this.input.on('dragend', function (pointer, gameObject, dropped) {
             if (!dropped) {
-                returnToLast(gameObject)
+                returnToLastPosition(gameObject)
             }
         });
         
@@ -78,8 +88,7 @@ export default class GameScene extends Phaser.Scene {
         this.input.on('dragleave', function (pointer, gameObject, dropZone) {
             if (gameObject.data.get('type') === 'card' && dropZone.data.get('type') === 'hand' ||
                 gameObject.data.get('type') === 'token' && dropZone.data.get('type') === 'tile') {
-                gameObject.data.set('lastX', gameObject.x)
-                gameObject.data.set('lastY', gameObject.y)
+                updateLastPosition(gameObject)
             } else {
                 // Ignore incompatible dropzone; do nothing
             }
@@ -135,7 +144,12 @@ export default class GameScene extends Phaser.Scene {
     /*======================DRAG EVENT HELPER FUNCTIONS=======================*/
 }
 
-function returnToLast(gameObject) {
+function updateLastPosition(gameObject) {
+    gameObject.data.set('lastX', gameObject.x)
+    gameObject.data.set('lastY', gameObject.y)
+}
+
+function returnToLastPosition(gameObject) {
     if (gameObject.data.get('lastX') == null && gameObject.data.get('lastY') == null) {
         gameObject.x = gameObject.input.dragStartX
         gameObject.y = gameObject.input.dragStartY
@@ -144,3 +158,4 @@ function returnToLast(gameObject) {
         gameObject.y = gameObject.data.get('lastY')
     }
 }
+

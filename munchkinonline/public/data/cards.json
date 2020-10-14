@@ -1,0 +1,82 @@
+{
+    "cards": [
+        {
+            "doors": [
+                {
+                    "monsters": [
+                        {
+                            "name": "Pogmin",
+                            "description": "An extremely powerful monster. If you can beat him, that would be a pogmin moment.",
+                            "image": "",
+                            "level": 99,
+                            "levelsGained": 2,
+                            "treasuresDropped": 5
+                        },
+                        {
+                            "name": "Unpogmin",
+                            "image": "",
+                            "description": "The weakest monster ever. If you kill him, you are the monster.",
+                            "level": 0,
+                            "levelsGained": -1,
+                            "treasuresDropped": 0
+                        }
+                    ]
+                },
+                {
+                    "classes": [
+                        {
+                            "name": "Warrior",
+                            "description": "You are a strong boi.",
+                            "image": ""
+                        }
+                    ]
+                },
+                {
+                    "races": [
+                        {
+                            "name": "Elf",
+                            "description": "Easy wins.",
+                            "image": ""
+                        }
+                    ]
+                },
+                {
+                    "curses": [
+                        {
+                            "name": "Duck of Doom",
+                            "description": "Is a duck",
+                            "image": ""
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "treasures": [
+                {
+                    "equipment": [
+                        {
+                            "name": "Diamond Sword",
+                            "description": "This is not Minecraft, Steve.",
+                            "image": "",
+                            "size": "small",
+                            "slotType": "arm",
+                            "statBonus": 5,
+                            "value": 1000
+                        }
+                    ]
+                },
+                {
+                    "items": [
+                        {
+                            "name": "Go Up A Level",
+                            "description": "It's in the name.",
+                            "image": "",
+                            "value": 0
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}

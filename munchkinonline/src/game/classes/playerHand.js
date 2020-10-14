@@ -1,4 +1,5 @@
 import Card from './card'
+import Equipment from '../classes/equipment'
 
 export default class PlayerHand {
     constructor(scene) {
@@ -19,6 +20,9 @@ export default class PlayerHand {
 
             this.dropZone = scene.add.zone(x + width*0.2, y + height/2, width*0.4*0.8, height*0.8).setRectangleDropZone(width*0.4*0.8, height*0.8)
             this.dropZone.setData({type: "hand"})
+
+            this.equipment = new Equipment(scene, x + width*0.4, y, width*0.6, height, cardWidth, cardHeight)
+            this.equipment.renderSlots()
         }
 
         this.addCards = (n, cardType, sprite) => {
