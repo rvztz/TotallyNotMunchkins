@@ -1,4 +1,4 @@
-import Card from '../classes/card'
+import OpponentCard from '../classes/opponentCard'
 
 export default class OppositeHand {
     constructor(scene) {
@@ -18,7 +18,7 @@ export default class OppositeHand {
 
         this.addCards = (n, position, sprite) => {
             for(let i = 0; i < n; i++) {
-                let opponentCard = new Card(scene)
+                let opponentCard = new OpponentCard(scene)
                 let renderedCard = null
                 
                 if (position === "right") {

@@ -1,8 +1,8 @@
 import Phaser from 'phaser'
-import PlayerHand from '../classes/playerHand'
-import OpponentHand from '../classes/opponentHand'
+
 import Board from '../classes/board'
-import Token from '../classes/token'
+import OpponentHand from '../classes/opponentHand'
+import Player from '../classes/player'
 
 export default class GameScene extends Phaser.Scene {
     constructor() {
@@ -25,18 +25,30 @@ export default class GameScene extends Phaser.Scene {
         this.load.image('slotBG', 'assets/slotBG.png')
 
         /*======================OTHER DATA LOADING=======================*/
-        this.load.json('cards', 'data/cards.json');
+        this.load.json('cards', 'data/cards.json')
     }
 
     create() {
+        this.cardList = this.cache.json.get('cards').cards
+
         const hWidth = this.scale.width * (2/3)
         const hHeight = this.scale.height / 6
 
         const vWidth = this.scale.width / 12
         const vHeight = this.scale.height * (2/3)
 
-        this.createHands(hWidth, hHeight, vWidth, vHeight)
-        this.createBoard(hWidth, vHeight)
+        const cardWidth = 50
+        const cardHeight = 72.5
+
+        const offset = 10
+
+        this.player = new Player(this)
+        this.player.renderHand(hWidth, hHeight, cardWidth, cardHeight, offset)
+
+        this.createHands(hWidth, hHeight, vWidth, vHeight, cardWidth, cardHeight, offset)
+        let startTile = this.createBoard(hWidth, vHeight)
+
+        this.player.renderToken(startTile)
 
         /*======================INPUT EVENTS=======================*/
         this.input.on('drag', function (pointer, gameObject, dragX, dragY) {
@@ -100,16 +112,7 @@ export default class GameScene extends Phaser.Scene {
     }
 
     /*======================UI CREATION FUNCTIONS=======================*/
-    createHands(hWidth, hHeight, vWidth, vHeight) {
-        const cardWidth = 50
-        const cardHeight = 72.5
-        
-        const offset = 10
-
-        this.playerHand = new PlayerHand(this)
-        this.playerHand.render(this.scale.width/2 - hWidth/2, this.scale.height - hHeight - offset, hWidth, hHeight, cardWidth, cardHeight)
-        //this.playerHand.addCards(5)
-
+    createHands(hWidth, hHeight, vWidth, vHeight, cardWidth, cardHeight, offset) {
         this.leftHand = new OpponentHand(this)
         this.leftHand.render(vWidth/2, this.scale.height/2 - vHeight/2 - offset, vWidth, vHeight, cardWidth, cardHeight)
         this.leftHand.addCards(5, 'left', 'cardBack')
@@ -127,18 +130,15 @@ export default class GameScene extends Phaser.Scene {
         const numRows = 3
         const numCols = 5
 
-        this.board = new Board(this, this.playerHand.dimensions.x, this.leftHand.dimensions.y, hWidth/numCols, vHeight/numRows)
+        this.board = new Board(this, this.player.playerHand.dimensions.x, this.leftHand.dimensions.y, hWidth/numCols, vHeight/numRows)
         this.board.renderTiles()
         this.board.renderDecks()
         this.board.renderDiscards()
 
-        let startTile = {
+        return {
             x: this.board.dimensions.x + this.board.tiles[0].col * this.board.dimensions.cellWidth,
             y: this.board.dimensions.y + this.board.tiles[0].row * this.board.dimensions.cellHeight
         }
-
-        this.tokenOne = new Token(this)
-        this.tokenOne.render(startTile.x, startTile.y, 'token')
     }
 
     /*======================DRAG EVENT HELPER FUNCTIONS=======================*/

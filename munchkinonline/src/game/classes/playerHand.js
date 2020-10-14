@@ -1,4 +1,4 @@
-import Card from './card'
+import PlayerCard from './playerCard'
 import Equipment from '../classes/equipment'
 
 export default class PlayerHand {
@@ -25,11 +25,9 @@ export default class PlayerHand {
             this.equipment.renderSlots()
         }
 
-        this.addCards = (n, cardType, sprite) => {
-            for(let i = 0; i < n; i++) {
-                let playerCard = new Card(scene, cardType)
-                playerCard.render(this.dimensions.x + this.dimensions.cardWidth + 1.5*i*this.dimensions.cardWidth, this.dimensions.y + this.dimensions.height/2, sprite)
-            }
+        this.addCard = (card, i) => {
+            let playerCard = new PlayerCard(scene, card.type)
+            playerCard.render(this.dimensions.x + this.dimensions.cardWidth + 1.5*i*this.dimensions.cardWidth, this.dimensions.y + this.dimensions.height/2, card)
         }
     }
 }
