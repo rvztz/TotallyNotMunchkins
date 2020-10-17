@@ -15,7 +15,9 @@ export default {
     props: ["fieldData"],
     methods: {
         getValue() {
-            return this.textValue
+            let text = this.textValue
+            this.textValue = ""
+            return text
         }
     },
     data () {

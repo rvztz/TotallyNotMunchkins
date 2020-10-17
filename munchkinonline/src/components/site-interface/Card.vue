@@ -1,12 +1,12 @@
 <template>
-    <b-card v-bind:title="cardData.title" style="width: 25%">
-        <div class="container">
+    <b-card class="container" v-bind:title="cardData.title" style="width: 25%">
+        <div>
             <div v-bind:key="textField.id" v-for="textField in cardData.textFields">
                 <TextField v-bind:fieldData="textField" ref="textfields"/>
             </div>
 
             <div v-bind:key="button.id" v-for="button in cardData.buttons">
-                <SiteButton v-bind:buttonData="button" v-on:btn-click="getTextFieldValues"/>
+                <SiteButton v-bind:buttonData="button" v-on:btn-click="getTextFieldValues(button.eventName)"/>
             </div>
 
             <div class="elem"  v-bind:class="{'isHidden': !cardData.footerLink.display}">
@@ -29,8 +29,8 @@ export default {
         SiteButton
     },
     methods: {
-        getTextFieldValues() {
-            this.$emit('btn-click', this.$refs.textfields.map(tf => tf.getValue()))
+        getTextFieldValues(eventName) {
+            this.$emit(eventName, this.$refs.textfields.map(tf => tf.getValue()))
         }
     },
     props: ["cardData"]    
@@ -40,5 +40,9 @@ export default {
 <style scoped>
     .isHidden {
         display: none;
+    }
+
+    .container {
+        text-align: center;
     }
 </style>

@@ -22,6 +22,16 @@ const firebaseConfig = {
 
 firebase.initializeApp(firebaseConfig);
 
+var db = firebase.firestore();
+var userCollection = db.collection("users");
+var gameCollection = db.collection("games");
+
+export {
+  db,
+  userCollection,
+  gameCollection
+}
+
 
 new Vue({
   router,

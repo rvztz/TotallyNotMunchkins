@@ -1,11 +1,16 @@
 <template>
     <div id="signin">
-        <Card v-bind:cardData="cardData" v-on:btn-click="signInMethod"/>
+        <Card v-bind:cardData="cardData" v-on:login="signInMethod"/>
     </div>
 </template>
 
 <script>
 import Card from '../components/site-interface/Card'
+import firebase from 'firebase'; 
+
+function validateFields(data)  {
+    return ((data[0].replace(/\s/g,"") == "") || (data[1].replace(/\s/g,"") == "")); 
+}
 
 export default {
     name: 'signin',
@@ -29,7 +34,8 @@ export default {
                 buttons: [
                     {
                         id: 201,
-                        buttonText: "Log In"
+                        buttonText: "Log In",
+                        eventName: "login"
                     }
                 ],
                 footerLink : {
@@ -43,8 +49,17 @@ export default {
     methods: {
         //data = ["username", "password"]
         signInMethod(data) {
-            // Sign in function here
-            console.log(data);
+            if(validateFields(data)) {
+                alert('Uno o más campos están vacíos');
+            } else {
+                firebase.auth().signInWithEmailAndPassword(
+                    data[0], data[1]
+                ).then( () => {
+                    this.$router.push('/profile'); 
+                }).catch((error) => {
+                    alert(error.message); 
+                }); 
+            }
         }
     }
 }

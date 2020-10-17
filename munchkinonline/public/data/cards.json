@@ -1,0 +1,80 @@
+{
+    "cards": {
+        "doors": {
+            "monsters": [
+                {
+                    "name": "Pogmin",
+                    "deck": "door",
+                    "description": "An extremely powerful monster. If you can beat him, that would be a pogmin moment.",
+                    "image": "doorCard",
+                    "level": 99,
+                    "levelsGained": 2,
+                    "treasuresDropped": 5,
+                    "type": "monster"
+                },
+                {
+                    "name": "Unpogmin",
+                    "deck": "door",
+                    "image": "doorCard",
+                    "description": "The weakest monster ever. If you kill him, you are the monster.",
+                    "level": 0,
+                    "levelsGained": -1,
+                    "treasuresDropped": 0,
+                    "type": "monster"
+                }
+            ],
+            "classes": [
+                {
+                    "name": "Warrior",
+                    "deck": "door",
+                    "description": "You are a strong boi.",
+                    "image": "",
+                    "type": "class"
+                }
+            ],
+            "races": [
+                {
+                    "name": "Elf",
+                    "deck": "door",
+                    "description": "Easy wins.",
+                    "image": "",
+                    "type": "race"
+                }
+            ],
+            "curses": [
+                {
+                    "name": "Duck of Doom",
+                    "deck": "door",
+                    "description": "Is a duck",
+                    "image": "",
+                    "type": "curse"
+                }
+            ]
+        },
+        "treasures": {
+            "equipment": [
+                {
+                    "name": "Diamond Sword",
+                    "deck": "treasure",
+                    "description": "This is not Minecraft, Steve.",
+                    "image": "treasureCard",
+                    "size": "small",
+                    "slotType": "arm",
+                    "statBonus": 5,
+                    "type": "equipment",
+                    "value": 1000
+                }
+            ],
+            "items": [
+                {
+                    "name": "Go Up A Level",
+                    "deck": "treasure",
+                    "description": "It's in the name.",
+                    "image": "",
+                    "type": "item",
+                    "value": 0
+                }
+            ]
+        }
+    }
+}

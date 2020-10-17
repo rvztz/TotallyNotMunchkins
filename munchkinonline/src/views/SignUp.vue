@@ -1,13 +1,13 @@
 <template>
     <div id="signup">
-        <Card v-bind:cardData="cardData" v-on:btn-click="signUpMethod"/>
+        <Card v-bind:cardData="cardData" v-on:signup="signUpMethod"/>
     </div>
 </template>
 
 <script>
 import Card from '../components/site-interface/Card'
 import firebase from 'firebase'; 
-
+import { userCollection } from '../main.js';
 
 function validateFields(data)  {
     return ((data[0].replace(/\s/g,"") == "") && (data[1].replace(/\s/g,"") == "") && (data[2].replace(/\s/g,"") == "") && (data[3].replace(/\s/g,"") == ""));
@@ -47,7 +47,8 @@ export default {
                 buttons: [
                     {
                         id: 201,
-                        buttonText: "Sign Up"
+                        buttonText: "Sign Up",
+                        eventName: "signup"
                     }
                 ],
                 footerLink : {
@@ -75,12 +76,32 @@ export default {
                         displayName: data[1]
                     })
                     .then( () => {
-                        this.$router.push('/home')
+                        this.$router.push('/profile')
+                        this.addUserToCollection(data);
                     }); 
                 }).catch((error) => {
                     alert(error.message); 
                 });
             }
+        },
+        addUserToCollection(user) {
+            var today = new Date();
+            var dd = String(today.getDate()).padStart(2, '0');
+            var mm = String(today.getMonth() + 1).padStart(2, '0');
+            var yyyy = today.getFullYear();
+            today = mm + '/' + dd + '/' + yyyy;
+
+            userCollection.add({
+                email: user[0],
+                name: user[1],
+                joined: today
+            })
+            .then(function(docRef) {
+                console.log("Document written with ID: ", docRef.id);
+            })
+            .catch(function(error) {
+                console.error("Error adding document: ", error);
+            });
         }
     }
 }; 
