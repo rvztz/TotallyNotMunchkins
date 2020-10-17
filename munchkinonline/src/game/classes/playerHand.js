@@ -26,7 +26,7 @@ export default class PlayerHand {
         }
 
         this.addCard = (card, i) => {
-            let playerCard = new PlayerCard(scene, card.type)
+            let playerCard = new PlayerCard(scene, card.deck)
             playerCard.render(this.dimensions.x + this.dimensions.cardWidth + 1.5*i*this.dimensions.cardWidth, this.dimensions.y + this.dimensions.height/2, card)
         }
     }

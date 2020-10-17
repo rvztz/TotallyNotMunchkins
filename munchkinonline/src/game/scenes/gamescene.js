@@ -67,7 +67,7 @@ export default class GameScene extends Phaser.Scene {
                 updateLastPosition(gameObject)
                 
             } else if (gameObject.data.get('type') === 'card' && dropZone.data.get('type') === 'discard') {
-                if (gameObject.data.get('cardType') === dropZone.data.get('cardType')) {
+                if (gameObject.data.get('deck') === dropZone.data.get('deck')) {
                     gameObject.destroy()
                 } else {
                     returnToLastPosition(gameObject)
