@@ -1,8 +1,8 @@
 import Phaser from 'phaser'
-
 import Board from '../classes/board'
 import OpponentHand from '../classes/opponentHand'
 import Player from '../classes/player'
+import io from 'socket.io-client'
 
 export default class GameScene extends Phaser.Scene {
     constructor() {
@@ -49,6 +49,8 @@ export default class GameScene extends Phaser.Scene {
         let startTile = this.createBoard(hWidth, vHeight)
 
         this.player.renderToken(startTile)
+
+        this.socket = io('http://localhost:3000')
 
         /*======================INPUT EVENTS=======================*/
         this.input.on('drag', function (pointer, gameObject, dragX, dragY) {

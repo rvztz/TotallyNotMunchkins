@@ -1,0 +1,24 @@
+{
+  "name": "totallynotmunchkins",
+  "version": "1.0.0",
+  "description": "Este es un proyecto desarrollado para el Laboratorio de Desarrollo Web en el Tecnológico de Monterrey. Consiste en un juego web basado en las reglas de [Munchkins](https://munchkin.game/new-players/). Esta es la versión de desarrollo, para cualquier pull request refiérase al branch prinicipal.",
+  "main": "index.js",
+  "scripts": {
+    "start": "nodemon server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/RogerVT/TotallyNotMunchkins.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/RogerVT/TotallyNotMunchkins/issues"
+  },
+  "homepage": "https://github.com/RogerVT/TotallyNotMunchkins#readme",
+  "dependencies": {
+    "express": "^4.17.1",
+    "nodemon": "^2.0.5",
+    "socket.io": "^2.3.0"
+  }
+}
