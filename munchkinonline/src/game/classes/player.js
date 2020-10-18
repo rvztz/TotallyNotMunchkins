@@ -28,5 +28,14 @@ export default class Player {
             this.playerHand.addCard(card, i)
             console.log(this.cards)
         }
+
+        this.getData = () => {
+            return {
+                cards: this.cards,
+                level: this.level,
+                equipment: this.equipment,
+                power: this.power
+            }
+        }
     }
 }

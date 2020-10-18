@@ -2,6 +2,9 @@ const server = require('express')()
 const http = require('http').createServer(server)
 const io = require('socket.io')(http)
 
+const {Room} = require('./models/room.js')
+const {TreasureList, DoorList} = require('./models/cardLists.js')
+
 let rooms = []
 
 // Socket IO
@@ -13,15 +16,8 @@ io.on('connection', (socket) => {
             socket.join(name, () => {
                 console.log(`User ${socket.id} connected to room ${name}`)
 			});
-			rooms.push({
-				name: name,
-				players: [],
-				connectionCount: 1,
-				decks: {
-					doorDeck: [],
-					treasureDeck: []
-				}
-			})
+			
+			rooms.push(new Room(name, 1))
         }
 	})
 	
