@@ -1,8 +1,10 @@
+import io from 'socket.io-client'
 import Phaser from 'phaser'
+
 import Board from '../classes/board'
 import OpponentHand from '../classes/opponentHand'
 import Player from '../classes/player'
-import io from 'socket.io-client'
+
 
 export default class GameScene extends Phaser.Scene {
     constructor() {
@@ -51,6 +53,7 @@ export default class GameScene extends Phaser.Scene {
         this.player.renderToken(startTile)
 
         this.socket = io('http://localhost:3000')
+        this.socket.emit(localStorage.getItem('roomEvent'), localStorage.getItem('roomName'))
 
         /*======================INPUT EVENTS=======================*/
         this.input.on('drag', function (pointer, gameObject, dragX, dragY) {

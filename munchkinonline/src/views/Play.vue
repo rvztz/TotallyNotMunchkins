@@ -44,18 +44,54 @@ export default {
     },
     methods: {
         //data = ["roomName"]
-        createGame(data) {
+        async createGame(data) {
             // Game creation here
-            console.log("CREATE GAME");
-            console.log(data);
+            let response = await this.roomExists(data[0])
+            if (response.ans) {
+                // Room exists, so tell the user they can't create it
+                alert("Room already exists.")
+            }
+            else {
+                // Room doesn't exist, so create it and make this user the host
+                localStorage.setItem('roomEvent', 'createRoom')
+                localStorage.setItem('roomName', data[0])
+                this.$router.push('/game')
+            }
         },
-        joinGame(data) {
-            // Join game here
-            console.log("JOIN GAME");
-            console.log(data);
+        async joinGame(data) {
+            let response = await this.roomIsJoinable(data[0])
+            if (response.ans) {
+                // Room exists, so join the room
+                localStorage.setItem('roomEvent', 'joinRoom')
+                localStorage.setItem('roomName', data[0])
+                this.$router.push('/game')
+            } else {
+                alert(response.message)
+            }
+        },
+        async roomExists(roomName) {
+            const url = `http://localhost:3000/api/roomExists?name=${roomName}`
+
+            try {
+                let response = await fetch(url)
+                return await response.json()
+            } catch (error) {
+                console.log("Error: " + error)
+            }
+        },
+        async roomIsJoinable(roomName) {
+            const url = `http://localhost:3000/api/roomIsJoinable?name=${roomName}`
+
+            try {
+                let response = await fetch(url)
+                return await response.json()
+            } catch (error) {
+                console.log("Error: " + error)
+            }
         }
     }
 }
+
 </script>
 
 <style scoped>
