@@ -1,4 +1,4 @@
-import io from 'socket.io-client'
+// import io from 'socket.io-client'
 import Phaser from 'phaser'
 
 import Board from '../classes/board'
@@ -11,6 +11,11 @@ export default class GameScene extends Phaser.Scene {
         super({
             key: 'GameScene'
         })
+    }
+
+    init(data) {
+        this.socket = data.socket
+        this.roomName = data.roomName
     }
 
     preload() {
@@ -26,11 +31,12 @@ export default class GameScene extends Phaser.Scene {
         this.load.image('treasureDiscard', 'assets/discard.png')
         this.load.image('slotBG', 'assets/slotBG.png')
 
+        this.load.image('playButton', 'assets/playButton.png')
         /*======================OTHER DATA LOADING=======================*/
         this.load.json('cards', 'data/cards.json')
     }
 
-    create() {
+    create() {        
         this.cardList = this.cache.json.get('cards').cards
 
         const hWidth = this.scale.width * (2/3)
@@ -52,8 +58,11 @@ export default class GameScene extends Phaser.Scene {
 
         this.player.renderToken(startTile)
 
-        this.socket = io('http://localhost:3000')
-        this.socket.emit(localStorage.getItem('roomEvent'), localStorage.getItem('roomName'))
+        let playButton = this.add.image(0, 0, 'playButton').setInteractive({ cursor: 'pointer' })
+
+        playButton.on('pointerup', () => {
+            this.scene.start('Lobby', {socket: this.socket})
+        })
 
         /*======================INPUT EVENTS=======================*/
         this.input.on('drag', function (pointer, gameObject, dragX, dragY) {

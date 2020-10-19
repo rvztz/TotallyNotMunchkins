@@ -11,24 +11,28 @@ let rooms = []
 io.on('connection', (socket) => {
     console.log('a user connected ' + socket.id)
 
-    socket.on('createRoom', (name) => {
-        if (!(/[^\w.]/.test(name))) {
-            socket.join(name, () => {
-                console.log(`User ${socket.id} connected to room ${name}`)
+    socket.on('createRoom', (roomName) => {
+        if (!(/[^\w.]/.test(roomName))) {
+            socket.join(roomName, () => {
+                console.log(`User ${socket.id} connected to room ${roomName}`)
 			});
 			
-			rooms.push(new Room(name, 1))
+			rooms.push(new Room(roomName, 1))
         }
 	})
 	
-	socket.on('joinRoom', (name) => {
-		if (!(/[^\w.]/.test(name))) {
-			socket.join(name, () => {
-                console.log(`User ${socket.id} connected to room ${name}`)
+	socket.on('joinRoom', (roomName) => {
+		if (!(/[^\w.]/.test(roomName))) {
+			socket.join(roomName, () => {
+                console.log(`User ${socket.id} connected to room ${roomName}`)
 			});
-			let roomIndex = findRoom(name)
+			let roomIndex = findRoom(roomName)
 			rooms[roomIndex].connectionCount++
 		}
+	})
+
+	socket.on('startGame', (roomName) => {
+		io.in(roomName).emit('startGame')
 	})
 
     socket.on('disconnect', () => {
