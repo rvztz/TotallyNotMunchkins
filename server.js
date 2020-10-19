@@ -16,8 +16,9 @@ io.on('connection', (socket) => {
             socket.join(roomName, () => {
                 console.log(`User ${socket.id} connected to room ${roomName}`)
 			});
-			
-			rooms.push(new Room(roomName, 1))
+			let newRoom = new Room(roomName, socket.id)
+			newRoom.addPlayer(socket.id)
+			rooms.push(newRoom)
         }
 	})
 	
@@ -27,12 +28,20 @@ io.on('connection', (socket) => {
                 console.log(`User ${socket.id} connected to room ${roomName}`)
 			});
 			let roomIndex = findRoom(roomName)
-			rooms[roomIndex].connectionCount++
+			rooms[roomIndex].addPlayer(socket.id)
 		}
 	})
 
 	socket.on('startGame', (roomName) => {
-		io.in(roomName).emit('startGame')
+		let roomIndex = findRoom(roomName)
+		if (roomIndex >= 0) {
+			if (socket.id == rooms[roomIndex].hostId) {
+				io.in(roomName).emit('startGame')
+			}
+		} else {
+			console.log("Error: invalid room name")
+		}
+			
 	})
 
     socket.on('disconnect', () => {
@@ -58,7 +67,7 @@ server.get("/api/roomIsJoinable", (req, res, next) => {
 	let message = ""
 
 	if (roomIndex >= 0) {
-		if (rooms[roomIndex].connectionCount < 4) {
+		if (rooms[roomIndex].players.length < 4) {
 			ans = true
 		} else {
 			message = "Room exists but is full."

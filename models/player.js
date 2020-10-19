@@ -1,9 +1,10 @@
 class Player {
-    constructor(data) {
-        this.cards = data.cards
-        this.level = data.level
-        this.equipment = data.equipment
-        this.power = data.power
+    constructor(socketId) {
+        this.socketId = socketId
+        this.cards = []
+        this.level = 1
+        this.equipment = []
+        this.power = 1
     }
 }
 
