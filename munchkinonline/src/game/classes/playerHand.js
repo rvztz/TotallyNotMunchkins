@@ -26,8 +26,10 @@ export default class PlayerHand {
         }
 
         this.addCard = (card, i) => {
+            const maxCards = 3
+
             let playerCard = new PlayerCard(scene, card.deck)
-            playerCard.render(this.dimensions.x + this.dimensions.cardWidth + 1.5*i*this.dimensions.cardWidth, this.dimensions.y + this.dimensions.height/2, card)
+            playerCard.render(this.dimensions.x + this.dimensions.cardWidth + 1.5*i*(this.dimensions.cardWidth/maxCards), this.dimensions.y + this.dimensions.height/2, card)
         }
     }
 }

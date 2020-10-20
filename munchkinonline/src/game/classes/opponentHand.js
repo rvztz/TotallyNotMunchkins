@@ -17,18 +17,20 @@ export default class OppositeHand {
         }
 
         this.addCards = (n, position, sprite) => {
+            const maxCards = 3
+            
             for(let i = 0; i < n; i++) {
                 let opponentCard = new OpponentCard(scene)
                 let renderedCard = null
                 
                 if (position === "right") {
-                    renderedCard = opponentCard.render(this.dimensions.x + this.dimensions.width/2, (this.dimensions.y + this.dimensions.height - this.dimensions.cardHeight) - i*this.dimensions.cardHeight, sprite)
+                    renderedCard = opponentCard.render(this.dimensions.x + this.dimensions.width/2, (this.dimensions.y + this.dimensions.height - this.dimensions.cardHeight) - i*(this.dimensions.cardHeight / maxCards), sprite)
                     renderedCard.angle = 90
                 } else if (position === "left") {
-                    renderedCard = opponentCard.render(this.dimensions.x + this.dimensions.width/2, (this.dimensions.y + this.dimensions.cardHeight) + i*this.dimensions.cardHeight, sprite)
+                    renderedCard = opponentCard.render(this.dimensions.x + this.dimensions.width/2, (this.dimensions.y + this.dimensions.cardHeight) + i*(this.dimensions.cardHeight / maxCards), sprite)
                     renderedCard.angle = -90
                 } else if (position === "top") {
-                    renderedCard = opponentCard.render(this.dimensions.x + this.dimensions.width - this.dimensions.cardWidth - 1.5*i*this.dimensions.cardWidth, this.dimensions.y + this.dimensions.height/2, sprite)
+                    renderedCard = opponentCard.render(this.dimensions.x + this.dimensions.width - this.dimensions.cardWidth - 1.5*i*(this.dimensions.cardWidth/maxCards), this.dimensions.y + this.dimensions.height/2, sprite)
                     renderedCard.angle = 180
                 } else {
                     console.log("Error adding cards to hand: unknown position")
