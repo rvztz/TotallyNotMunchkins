@@ -1,8 +1,11 @@
 import OpponentCard from '../classes/opponentCard'
 
 export default class OppositeHand {
-    constructor(scene) {
+    constructor(scene, position) {
         this.dimensions = {x: 0, y: 0, width: 0, height: 0, cardHeight: 0, cardWidth: 0}
+        this.position = position
+        this.cards = []
+        this.renderedCards = []
 
         this.render = (x, y, width, height, cardWidth, cardHeight) => {
             this.dimensions.x = x 
@@ -16,26 +19,42 @@ export default class OppositeHand {
             outline.strokeRect(x, y, width, height)
         }
 
-        this.addCards = (n, position, sprite) => {
+        this.addCards = (cards) => {
+            this.cards = this.cards.concat(cards)
+            this.loadCards()
+        }
+        
+        this.loadCards = () => {
+            this.destroyRenderedCards()
             const maxCards = 3
             
-            for(let i = 0; i < n; i++) {
+            this.cards.forEach((cardType, i) => {
                 let opponentCard = new OpponentCard(scene)
                 let renderedCard = null
-                
-                if (position === "right") {
+
+                let sprite = (cardType === 'door') ? 'doorCard' : 'treasureCard'
+
+                if (this.position === 'right') {
                     renderedCard = opponentCard.render(this.dimensions.x + this.dimensions.width/2, (this.dimensions.y + this.dimensions.height - this.dimensions.cardHeight) - i*(this.dimensions.cardHeight / maxCards), sprite)
                     renderedCard.angle = 90
-                } else if (position === "left") {
+                } else if (this.position === 'left') {
                     renderedCard = opponentCard.render(this.dimensions.x + this.dimensions.width/2, (this.dimensions.y + this.dimensions.cardHeight) + i*(this.dimensions.cardHeight / maxCards), sprite)
                     renderedCard.angle = -90
-                } else if (position === "top") {
+                } else if (this.position === 'top') {
                     renderedCard = opponentCard.render(this.dimensions.x + this.dimensions.width - this.dimensions.cardWidth - 1.5*i*(this.dimensions.cardWidth/maxCards), this.dimensions.y + this.dimensions.height/2, sprite)
                     renderedCard.angle = 180
                 } else {
                     console.log("Error adding cards to hand: unknown position")
                 }
-            }
+
+                this.renderedCards.push(renderedCard)
+            })
+        }
+
+        this.destroyRenderedCards = () => {
+            this.renderedCards.forEach(card => {
+                card.destroy()
+            })
         }
     }
 }

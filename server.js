@@ -36,7 +36,7 @@ io.on('connection', (socket) => {
 		let roomIndex = findRoom(roomName)
 		if (roomIndex >= 0) {
 			if (socket.id == rooms[roomIndex].hostId) {
-				io.in(roomName).emit('startGame')
+				io.in(roomName).emit('startGame', rooms[roomIndex].getSocketIds())
 			}
 		} else {
 			console.log("Error: invalid room name")

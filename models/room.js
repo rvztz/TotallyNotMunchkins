@@ -12,6 +12,10 @@ class Room {
         this.addPlayer = (socketId) => {
             this.players.push(new Player(socketId))
         }
+        
+        this.getSocketIds = () => {
+            return this.players.map(player => { return player.getSocketId() })
+        }
     }
 }
 

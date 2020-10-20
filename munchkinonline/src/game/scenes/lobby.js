@@ -34,8 +34,8 @@ export default class Lobby extends Phaser.Scene {
             this.socket.emit('startGame', this.roomName)
         })
 
-        this.socket.on('startGame', () => {
-            this.scene.start('GameScene', {socket: this.socket, roomName: this.roomName})
+        this.socket.on('startGame', (socketList) => {
+            this.scene.start('GameScene', {socket: this.socket, roomName: this.roomName, socketList: socketList})
         })
     }
 

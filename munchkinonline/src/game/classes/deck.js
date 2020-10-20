@@ -12,6 +12,8 @@ export default class Deck {
                 chosenCards.forEach((card, index) => {
                     scene.player.addToHand(card, index)
                 })
+
+                //emit event to add card in other opponents' screen
             });
         }
     }

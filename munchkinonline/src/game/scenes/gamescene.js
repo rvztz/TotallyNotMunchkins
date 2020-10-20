@@ -2,7 +2,7 @@
 import Phaser from 'phaser'
 
 import Board from '../classes/board'
-import OpponentHand from '../classes/opponentHand'
+import Opponent from '../classes/opponent'
 import Player from '../classes/player'
 
 
@@ -16,6 +16,7 @@ export default class GameScene extends Phaser.Scene {
     init(data) {
         this.socket = data.socket
         this.roomName = data.roomName
+        this.socketList = data.socketList.filter(id => id != data.socket.id)
     }
 
     preload() {
@@ -36,8 +37,10 @@ export default class GameScene extends Phaser.Scene {
         this.load.json('cards', 'data/cards.json')
     }
 
-    create() {        
+    create() {
         this.cardList = this.cache.json.get('cards').cards
+
+        const positions = ['left', 'top', 'right']
 
         const hWidth = this.scale.width * (2/3)
         const hHeight = this.scale.height / 6
@@ -53,7 +56,16 @@ export default class GameScene extends Phaser.Scene {
         this.player = new Player(this)
         this.player.renderHand(hWidth, hHeight, cardWidth, cardHeight, offset)
 
-        this.createHands(hWidth, hHeight, vWidth, vHeight, cardWidth, cardHeight, offset)
+        this.opponents = []
+
+        this.socketList.forEach((socketId, index) => {
+            this.opponents.push(new Opponent(this, positions[index], socketId))
+        })
+
+        this.opponents.forEach(opponent => { 
+            opponent.renderHand(hWidth, hHeight, vWidth, vHeight, cardWidth, cardHeight, offset) 
+        })
+
         let startTile = this.createBoard(hWidth, vHeight)
 
         this.player.renderToken(startTile)
@@ -126,25 +138,11 @@ export default class GameScene extends Phaser.Scene {
     }
 
     /*======================UI CREATION FUNCTIONS=======================*/
-    createHands(hWidth, hHeight, vWidth, vHeight, cardWidth, cardHeight, offset) {
-        this.leftHand = new OpponentHand(this)
-        this.leftHand.render(vWidth/2, this.scale.height/2 - vHeight/2 - offset, vWidth, vHeight, cardWidth, cardHeight)
-        this.leftHand.addCards(5, 'left', 'cardBack')
-
-        this.rightHand = new OpponentHand(this)
-        this.rightHand.render(this.scale.width - 1.5*vWidth, this.scale.height/2 - vHeight/2 - offset, vWidth, vHeight, cardWidth, cardHeight)
-        this.rightHand.addCards(5, 'right', 'cardBack')
-        
-        this.topHand = new OpponentHand(this)
-        this.topHand.render(this.scale.width/2 - hWidth/4, 2, vHeight, hHeight*0.9, cardWidth, cardHeight)
-        this.topHand.addCards(5, 'top', 'cardBack')
-    }
-
     createBoard(hWidth, vHeight) {
         const numRows = 3
         const numCols = 5
 
-        this.board = new Board(this, this.player.playerHand.dimensions.x, this.leftHand.dimensions.y, hWidth/numCols, vHeight/numRows)
+        this.board = new Board(this, this.player.playerHand.dimensions.x, this.opponents[0].opponentHand.dimensions.y, hWidth/numCols, vHeight/numRows)
         this.board.renderTiles()
         this.board.renderDecks()
         this.board.renderDiscards()
