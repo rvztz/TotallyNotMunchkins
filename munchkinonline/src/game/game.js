@@ -1,5 +1,6 @@
 import Phaser from 'phaser'
 import GameScene from './scenes/gamescene.js'
+import Lobby from './scenes/lobby.js'
 
 function launch(containerId) {
     return new Phaser.Game({
@@ -7,6 +8,7 @@ function launch(containerId) {
         parent: containerId,
         backgroundColor: 0xffffff,
         scene: [
+            Lobby,
             GameScene
         ],
         scale: {
