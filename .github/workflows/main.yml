@@ -9,7 +9,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repo
-        uses: actions/checkout@master
+        uses: actions/checkout@master/munchkinonline
       - name: Install Dependencies
         run: npm install
       - name: Build
@@ -18,7 +18,7 @@ jobs:
         uses: actions/upload-artifact@master
         with:
           name: dist
-          path: dist/munchkinonline/
+          path: dist
   deploy:
     name: Deploy
     needs: build
