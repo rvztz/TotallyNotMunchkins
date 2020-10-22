@@ -9,7 +9,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repo
-        uses: actions/checkout@master/munchkinonline
+        uses: actions/checkout@master
+      - name: Move to directory
+        uses: cd munchkinonline
       - name: Install Dependencies
         run: npm install
       - name: Build
