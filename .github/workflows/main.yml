@@ -14,6 +14,9 @@ jobs:
       - name: Checkout the repository
         uses: actions/checkout@master
       
+      - name: Open folder
+        run: cd ./munchkinonline/
+      
       - name: Deploy to Firebase
         uses: w9jds/firebase-action@master
         with:
