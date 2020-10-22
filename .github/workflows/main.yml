@@ -6,16 +6,16 @@ on:
       - master
 
 jobs:
-  firebase-deploy:
+  deploy_to_firebase_hosting:
+
     runs-on: ubuntu-latest
+    
     steps:
-      - uses: actions/checkout@master
-      - uses: actions/setup-node@master
-      - name: Installing project dependencies
-      - run: npm install --prefix ./munchkinonline/
-      - name: Building the project
-      - run: npm install --prefix ./munchkinonline/
-      - uses: w9jds/firebase-action@master
+      - name: Checkout the repository
+        uses: actions/checkout@master
+      
+      - name: Deploy to Firebase
+        uses: w9jds/firebase-action@master
         with:
           args: deploy --only hosting
         env:
