@@ -2,6 +2,7 @@ import io from 'socket.io-client'
 import Phaser from 'phaser'
 
 import PlayerList from '../classes/playerList'
+import Selection from '../classes/selection'
 
 export default class Lobby extends Phaser.Scene {
     constructor() {
@@ -20,8 +21,15 @@ export default class Lobby extends Phaser.Scene {
     }
     
     preload() {
-        this.load.image('pogmin', 'assets/Pogmin.jpg')
         this.load.image('playButton', 'assets/playButton.png')
+
+        this.load.image('male', 'assets/male.png')
+        this.load.image('female', 'assets/female.png')
+
+        this.load.image('tokenYellow', 'assets/tokenYellow.png')
+        this.load.image('tokenBlue', 'assets/tokenBlue.png')
+        this.load.image('tokenGreen', 'assets/tokenGreen.png')
+        this.load.image('tokenRed', 'assets/tokenRed.png')
     }
 
     create() {
@@ -33,12 +41,16 @@ export default class Lobby extends Phaser.Scene {
         // Add lobby title
         let title = this.add.text(screenWidth/20,0, 'Game Lobby', {fontFamily: 'Avenir, Helvetica, Arial, sans-serif'}).setFontSize(60).setColor('#000')
         
-        //Add player texts
+        // Add player texts
         this.playerList = new PlayerList(this, {x: screenWidth/2, y: title.y + title.displayHeight, width: screenWidth/4})
         this.playerList.addUsername("MVP")
         this.playerList.addUsername("unpogmin")
         this.playerList.addUsername("steve from maincra")
         this.playerList.addUsername("pogmin")
+
+        // Adds token and gender selection buttons
+        this.selection = new Selection(this, {x: screenWidth/2, y: this.playerList.dimensions.y + this.playerList.dimensions.height + 30, width: screenWidth/5})        
+        this.selection.render()
 
         // Add play button
         let playButton = this.add.image(screenWidth/2, 4*screenHeight/5, 'playButton').setInteractive({ cursor: 'pointer' })
