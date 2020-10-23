@@ -16,7 +16,7 @@ export default class GameScene extends Phaser.Scene {
     init(data) {
         this.socket = data.socket
         this.roomName = data.roomName
-        this.socketList = data.socketList.filter(id => id != data.socket.id)
+        this.socketList = data.socketList
     }
 
     preload() {
@@ -25,12 +25,16 @@ export default class GameScene extends Phaser.Scene {
         this.load.image('doorCard', 'assets/door.jpg')
         this.load.image('treasureCard', 'assets/treasure.jpg')
         this.load.image('pogmin', 'assets/Pogmin.jpg')
-        this.load.image('token', 'assets/token.png')
         this.load.image('doorDeck', 'assets/deck.png')
         this.load.image('treasureDeck', 'assets/deck.png')
         this.load.image('doorDiscard', 'assets/discard.png')
         this.load.image('treasureDiscard', 'assets/discard.png')
         this.load.image('slotBG', 'assets/slotBG.png')
+
+        this.load.image('tokenYellow', 'assets/tokenYellow.png')
+        this.load.image('tokenBlue', 'assets/tokenBlue.png')
+        this.load.image('tokenGreen', 'assets/tokenGreen.png')
+        this.load.image('tokenRed', 'assets/tokenRed.png')
 
         this.load.image('playButton', 'assets/playButton.png')
         /*======================OTHER DATA LOADING=======================*/
@@ -53,23 +57,39 @@ export default class GameScene extends Phaser.Scene {
 
         const offset = 10
 
+        // Create player and render its hand
         this.player = new Player(this)
         this.player.renderHand(hWidth, hHeight, cardWidth, cardHeight, offset)
 
+        // Create opponents and render their hands
         this.opponents = []
-
-        this.socketList.forEach((socketId, index) => {
-            this.opponents.push(new Opponent(this, positions[index], socketId))
+        this.socketList.forEach(socketId => {
+            if (socketId != this.socket.id) {
+                this.opponents.push(new Opponent(this, positions.shift(), socketId))
+            }
         })
 
         this.opponents.forEach(opponent => { 
             opponent.renderHand(hWidth, hHeight, vWidth, vHeight, cardWidth, cardHeight, offset) 
         })
-
+        
+        // Create and render the board
         let startTile = this.createBoard(hWidth, vHeight)
-
-        this.player.renderToken(startTile)
-
+        
+        // Render the player's and opponents tokens
+        this.socketList.forEach((socketId, index)=> {
+            if (socketId == this.socket.id) {
+                this.player.renderToken(startTile, index)
+            } else {
+                this.opponents.forEach(opponent => {
+                    if (opponent.socketId == socketId) {
+                        opponent.renderToken(startTile, index)
+                    }
+                })
+            }
+        })
+        
+        // Render new game image and add click event
         let playButton = this.add.image(0, 0, 'playButton').setInteractive({ cursor: 'pointer' })
 
         playButton.on('pointerup', () => {
@@ -149,7 +169,9 @@ export default class GameScene extends Phaser.Scene {
 
         return {
             x: this.board.dimensions.x + this.board.tiles[0].col * this.board.dimensions.cellWidth,
-            y: this.board.dimensions.y + this.board.tiles[0].row * this.board.dimensions.cellHeight
+            y: this.board.dimensions.y + this.board.tiles[0].row * this.board.dimensions.cellHeight,
+            width: this.board.dimensions.cellWidth,
+            height: this.board.dimensions.cellHeight
         }
     }
 
@@ -170,4 +192,3 @@ function returnToLastPosition(gameObject) {
         gameObject.y = gameObject.data.get('lastY')
     }
 }
-

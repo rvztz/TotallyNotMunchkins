@@ -1,9 +1,10 @@
 import OpponentHand from '../classes/opponentHand'
+import Token from '../classes/token'
 
 export default class Opponent {
     constructor (scene, position, socketId) {
         this.opponentHand = new OpponentHand(scene, position)
-        // this.token = new Token(scene)
+        this.token = new Token(scene)
 
         // Data
         this.position = position
@@ -20,6 +21,10 @@ export default class Opponent {
             } else {
                 console.log("Invalid position to render oppponent hand")
             }
+        }
+
+        this.renderToken = (startTile, index) => {
+            this.token.render(startTile, index, /*isPlayerToken */ false, 'tokenRed')
         }
     }
 }

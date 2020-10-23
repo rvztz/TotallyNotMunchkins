@@ -18,8 +18,8 @@ export default class Player {
             this.playerHand.render(scene.scale.width/2 - hWidth/2, scene.scale.height - hHeight - offset, hWidth, hHeight, cardWidth, cardHeight)
         }
 
-        this.renderToken = (startTile) => {
-            this.token.render(startTile.x, startTile.y, 'token')
+        this.renderToken = (startTile, index) => {
+            this.token.render(startTile, index, /*isPlayerToken */ true, 'tokenBlue')
         }
         
         // Logic
