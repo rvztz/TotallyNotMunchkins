@@ -2,7 +2,7 @@ export default class Token {
     constructor(scene) {
 
         this.render = (startTile, index, isPlayerToken, sprite) => {
-            let token = scene.add.image(startTile.x, startTile.y, sprite).setScale(0.1, 0.1)
+            let token = scene.physics.add.image(startTile.x, startTile.y, sprite).setScale(0.1, 0.1)
             let offsets = this.getOffsets(startTile, token, index) // replace 0 with index
             token.x += offsets.x
             token.y += offsets.y

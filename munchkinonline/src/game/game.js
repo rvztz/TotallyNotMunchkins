@@ -7,6 +7,10 @@ function launch(containerId) {
         type: Phaser.AUTO,
         parent: containerId,
         backgroundColor: 0xffffff,
+        physics: {
+            default: 'arcade',
+            arcade: { debug: false }
+        },
         scene: [
             Lobby,
             GameScene
