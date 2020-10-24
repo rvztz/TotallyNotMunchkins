@@ -4,6 +4,7 @@ const io = require('socket.io')(http)
 
 const {Room} = require('./models/room.js')
 const {TreasureList, DoorList} = require('./models/cardLists.js')
+const room = require('./models/room.js')
 
 let rooms = []
 
@@ -29,19 +30,60 @@ io.on('connection', (socket) => {
 			});
 			let roomIndex = findRoom(roomName)
 			rooms[roomIndex].addPlayer(socket.id)
+			socket.emit('updateTokenSelections', rooms[roomIndex].availableTokens)
 		}
+	})
+
+	socket.on('joined', (roomName) => {
+		let roomIndex = findRoom(roomName)
+		socket.emit('updateTokenSelections', rooms[roomIndex].availableTokens)
 	})
 
 	socket.on('startGame', (roomName) => {
 		let roomIndex = findRoom(roomName)
 		if (roomIndex >= 0) {
 			if (socket.id == rooms[roomIndex].hostId) {
-				io.in(roomName).emit('startGame', rooms[roomIndex].getSocketIds())
+				io.in(roomName).emit('startGame', rooms[roomIndex].getInfo())
 			}
 		} else {
 			console.log("Error: invalid room name")
 		}
 			
+	})
+
+	socket.on('selectAttribute', (roomName, type, value) => {
+		let roomIndex = findRoom(roomName)
+		if (roomIndex < 0) {
+			console.log("Error: room doesn't exist")
+			return
+		}
+
+		let playerIndex = findPlayer(rooms[roomIndex], socket.id)
+		if (playerIndex < 0) {
+			console.log("Error: player not found")
+			return
+		}
+
+		if (type === 'token') {
+			if(rooms[roomIndex].players[playerIndex].tokenImage != "") {
+				rooms[roomIndex].availableTokens.push(rooms[roomIndex].players[playerIndex].tokenImage)
+			}
+
+			rooms[roomIndex].players[playerIndex].tokenImage = value
+			rooms[roomIndex].availableTokens = rooms[roomIndex].availableTokens.filter(token => {
+				return token != value
+			})
+
+			io.in(rooms[roomIndex].name).emit('updateTokenSelections', rooms[roomIndex].availableTokens)
+		} else if (type === 'gender'){
+			rooms[roomIndex].players[playerIndex].gender = value
+		} else {
+			console.log("Error: unexpected attribute")
+		}
+	})
+	
+	socket.on('moveToken', (roomName, x, y) => {
+		socket.to(roomName).emit('moveOpponentToken', socket.id, x, y);
 	})
 
     socket.on('disconnect', () => {
@@ -83,6 +125,16 @@ function findRoom(name) {
     let ans = -1
     rooms.forEach((room, i) => {
 		if (room.name === name) {
+			ans = i
+		}
+	})
+	return ans
+}
+
+function findPlayer(room, socketId) {
+	let ans = -1
+	room.players.forEach((player, i) => {
+		if (player.socketId == socketId) {
 			ans = i
 		}
 	})

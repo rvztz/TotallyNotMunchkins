@@ -12,14 +12,15 @@ export default class Player {
         this.level = 1
         this.equipment = []
         this.power = 1
+        this.gender = ""
 
         // Renders
         this.renderHand = (hWidth, hHeight, cardWidth, cardHeight, offset) => {
             this.playerHand.render(scene.scale.width/2 - hWidth/2, scene.scale.height - hHeight - offset, hWidth, hHeight, cardWidth, cardHeight)
         }
 
-        this.renderToken = (startTile, index) => {
-            this.token.render(startTile, index, /*isPlayerToken */ true, 'tokenBlue')
+        this.renderToken = (startTile, index, sprite) => {
+            this.token.render(startTile, index, /*isPlayerToken */ true, sprite + '-' + this.gender)
         }
         
         // Logic

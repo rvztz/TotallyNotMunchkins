@@ -33,10 +33,13 @@ export default class Lobby extends Phaser.Scene {
     }
 
     create() {
+        /*======================INITIAL SOCKET SETUP=======================*/
+        this.roomName = localStorage.getItem('roomName')
+        this.socket.emit('joined', this.roomName)
+
+        /*======================SCENE COMPONENTS CREATION=======================*/
         const screenWidth = this.scale.width
         const screenHeight = this.scale.height
-
-        this.roomName = localStorage.getItem('roomName')
 
         // Add lobby title
         let title = this.add.text(screenWidth/20,0, 'Game Lobby', {fontFamily: 'Avenir, Helvetica, Arial, sans-serif'}).setFontSize(60).setColor('#000')
@@ -61,8 +64,12 @@ export default class Lobby extends Phaser.Scene {
         })
 
         /*======================SOCKET.IO EVENTS=======================*/
-        this.socket.on('startGame', (socketList) => {
-            this.scene.start('GameScene', {socket: this.socket, roomName: this.roomName, socketList: socketList})
+        this.socket.on('startGame', (playerList) => {
+            this.scene.start('GameScene', {socket: this.socket, roomName: this.roomName, playerList: playerList})
+        })
+
+        this.socket.on('updateTokenSelections', (availableTokens) => {
+            this.selection.updateTokens(availableTokens)
         })
     }
 

@@ -4,10 +4,10 @@ export default class Selection {
     constructor(scene, dimensions) {
         this.dimensions = {x: dimensions.x, y: dimensions.y, width: dimensions.width, height: dimensions.width*0.5}
         
-        this.tokenYellow = new SelectionButton(scene, 'token', 'yellow')
-        this.tokenRed = new SelectionButton(scene, 'token', 'red')
-        this.tokenBlue = new SelectionButton(scene, 'token', 'blue')
-        this.tokenGreen = new SelectionButton(scene, 'token', 'green')
+        this.tokenYellow = new SelectionButton(scene, 'token', 'tokenYellow')
+        this.tokenRed = new SelectionButton(scene, 'token', 'tokenRed')
+        this.tokenBlue = new SelectionButton(scene, 'token', 'tokenBlue')
+        this.tokenGreen = new SelectionButton(scene, 'token', 'tokenGreen')
 
         this.genderMale = new SelectionButton(scene, 'gender', 'male')
         this.genderFemale = new SelectionButton(scene, 'gender', 'female')
@@ -55,6 +55,55 @@ export default class Selection {
             } else {
                 console.log("Error: unexpected button type")
             }
+        }
+
+        this.updateTokens = (availableTokens) => {
+            if (!availableTokens.find(token => token === 'tokenYellow')) {
+                if (!this.tokenYellow.selected) {
+                    this.tokenYellow.renderedButton.alpha = 0.5
+                }
+                this.tokenYellow.renderedButton.disableInteractive()
+            } else {
+                this.tokenYellow.renderedButton.alpha = 1
+                this.tokenYellow.renderedButton.setInteractive({ cursor: 'pointer' })
+            }
+            
+            if (!availableTokens.find(token => token ==='tokenRed')) {
+                if(!this.tokenRed.selected) {
+                    this.tokenRed.renderedButton.alpha = 0.5    
+                }
+                this.tokenRed.renderedButton.disableInteractive()
+            } else {
+                this.tokenRed.renderedButton.alpha = 1
+                this.tokenRed.renderedButton.setInteractive({ cursor: 'pointer' })
+            }
+            
+            if (!availableTokens.find(token => token ==='tokenBlue')) {
+                if (!this.tokenBlue.selected) {
+                    this.tokenBlue.renderedButton.alpha = 0.5
+                }
+                this.tokenBlue.renderedButton.disableInteractive()
+            } else {
+                this.tokenBlue.renderedButton.alpha = 1
+                this.tokenBlue.renderedButton.setInteractive({ cursor: 'pointer' })
+            }
+
+            if (!availableTokens.find(token => token ==='tokenGreen')) {
+                if (!this.tokenGreen.selected) {
+                    this.tokenGreen.renderedButton.alpha = 0.5
+                }
+                this.tokenGreen.renderedButton.disableInteractive()
+            } else {
+                this.tokenGreen.renderedButton.alpha = 1
+                this.tokenGreen.renderedButton.setInteractive({ cursor: 'pointer' })
+            }
+        }
+
+        this.deselectTokens = () => {
+            this.tokenYellow.selected = false
+            this.tokenRed.selected = false
+            this.tokenBlue.selected = false
+            this.tokenGreen.selected = false
         }
     }
 }

@@ -6,6 +6,7 @@ class Room {
         this.name = name
         this.hostId = hostId
         this.players = []
+        this.availableTokens = ["tokenRed", "tokenBlue", "tokenGreen", "tokenYellow"]
         this.treasureDeck = new Deck()
         this.doorDeck = new Deck()
     
@@ -13,8 +14,14 @@ class Room {
             this.players.push(new Player(socketId))
         }
         
-        this.getSocketIds = () => {
-            return this.players.map(player => { return player.getSocketId() })
+        this.getInfo = () => {
+            return this.players.map(player => {
+                return {
+                    socketId: player.getSocketId(),
+                    tokenImage: player.getTokenImage(),
+                    gender: player.getGender()
+                }
+            })
         }
     }
 }

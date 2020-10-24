@@ -1,5 +1,6 @@
 export default class Token {
     constructor(scene) {
+        this.renderedToken = null
 
         this.render = (startTile, index, isPlayerToken, sprite) => {
             let token = scene.physics.add.image(startTile.x, startTile.y, sprite).setScale(0.1, 0.1)
@@ -12,7 +13,8 @@ export default class Token {
                 scene.input.setDraggable(token);
             }
             
-            token.setData({type: 'token', level: 1})
+            token.setData({type: 'token', level: 10})
+            this.renderedToken = token
             return token
         }
 

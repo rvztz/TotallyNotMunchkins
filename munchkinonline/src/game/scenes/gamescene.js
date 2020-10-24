@@ -16,7 +16,7 @@ export default class GameScene extends Phaser.Scene {
     init(data) {
         this.socket = data.socket
         this.roomName = data.roomName
-        this.socketList = data.socketList
+        this.playerList = data.playerList
     }
 
     preload() {
@@ -31,10 +31,17 @@ export default class GameScene extends Phaser.Scene {
         this.load.image('treasureDiscard', 'assets/discard.png')
         this.load.image('slotBG', 'assets/slotBG.png')
 
-        this.load.image('tokenYellow', 'assets/tokenYellow.png')
-        this.load.image('tokenBlue', 'assets/tokenBlue.png')
-        this.load.image('tokenGreen', 'assets/tokenGreen.png')
-        this.load.image('tokenRed', 'assets/tokenRed.png')
+        this.load.image('tokenYellow-male', 'assets/tokenYellow-male.png')
+        this.load.image('tokenYellow-female', 'assets/tokenYellow-female.png')
+
+        this.load.image('tokenBlue-male', 'assets/tokenBlue-male.png')
+        this.load.image('tokenBlue-female', 'assets/tokenBlue-female.png')
+
+        this.load.image('tokenGreen-male', 'assets/tokenGreen-male.png')
+        this.load.image('tokenGreen-female', 'assets/tokenGreen-female.png')
+
+        this.load.image('tokenRed-male', 'assets/tokenRed-male.png')
+        this.load.image('tokenRed-female', 'assets/tokenRed-female.png')
 
         this.load.image('playButton', 'assets/playButton.png')
         /*======================OTHER DATA LOADING=======================*/
@@ -63,9 +70,9 @@ export default class GameScene extends Phaser.Scene {
 
         // Create opponents and render their hands
         this.opponents = []
-        this.socketList.forEach(socketId => {
-            if (socketId != this.socket.id) {
-                this.opponents.push(new Opponent(this, positions.shift(), socketId))
+        this.playerList.forEach(player => {
+            if (player.socketId != this.socket.id) {
+                this.opponents.push(new Opponent(this, positions.shift(), player.socketId, player.gender))
             }
         })
 
@@ -77,13 +84,14 @@ export default class GameScene extends Phaser.Scene {
         let startTile = this.createBoard(hWidth, vHeight)
         
         // Render the player's and opponents tokens
-        this.socketList.forEach((socketId, index)=> {
-            if (socketId == this.socket.id) {
-                this.player.renderToken(startTile, index)
+        this.playerList.forEach((player, index)=> {
+            if (player.socketId == this.socket.id) {
+                this.player.gender = player.gender
+                this.player.renderToken(startTile, index, player.tokenImage)
             } else {
                 this.opponents.forEach(opponent => {
-                    if (opponent.socketId == socketId) {
-                        opponent.renderToken(startTile, index)
+                    if (opponent.socketId == player.socketId) {
+                        opponent.renderToken(startTile, index, player.tokenImage)
                     }
                 })
             }
@@ -100,17 +108,25 @@ export default class GameScene extends Phaser.Scene {
         this.input.on('drag', function (pointer, gameObject, dragX, dragY) {
             gameObject.x = dragX;
             gameObject.y = dragY;
-        });
+        })
 
         this.input.on('dragstart', function (pointer, gameObject) {
             this.children.bringToTop(gameObject);
-        }, this);
+        }, this)
 
         this.input.on('drop', function (pointer, gameObject, dropZone) {
-            if (gameObject.data.get('type') === 'card' && dropZone.data.get('type') === 'hand' ||
-                gameObject.data.get('type') === 'token' && dropZone.data.get('type') === 'tile') {
-                
+            if (gameObject.data.get('type') === 'card' && dropZone.data.get('type') === 'hand') {
+ 
                 updateLastPosition(gameObject)
+                
+            } else if (gameObject.data.get('type') === 'token' && dropZone.data.get('type') === 'tile') {
+
+                if (gameObject.data.get('level') == dropZone.data.get('level')) {
+                    updateLastPosition(gameObject)
+                    this.scene.socket.emit('moveToken', this.scene.roomName, gameObject.x, gameObject.y)
+                } else {
+                    returnToLastPosition(gameObject)
+                }
                 
             } else if (gameObject.data.get('type') === 'card' && dropZone.data.get('type') === 'discard') {
                 if (gameObject.data.get('deck') === dropZone.data.get('deck')) {
@@ -144,13 +160,26 @@ export default class GameScene extends Phaser.Scene {
         */
     
         this.input.on('dragleave', function (pointer, gameObject, dropZone) {
-            if (gameObject.data.get('type') === 'card' && dropZone.data.get('type') === 'hand' ||
-                gameObject.data.get('type') === 'token' && dropZone.data.get('type') === 'tile') {
+            if (gameObject.data.get('type') === 'card' && dropZone.data.get('type') === 'hand') {
                 updateLastPosition(gameObject)
+            }
+            else if (gameObject.data.get('type') === 'token' && dropZone.data.get('type') === 'tile') {
+                if (gameObject.data.get('level') == dropZone.data.get('level')) {
+                    updateLastPosition(gameObject)
+                }
             } else {
                 // Ignore incompatible dropzone; do nothing
             }
         });
+
+        /*======================SOCKET EVENTS=======================*/
+        this.socket.on('moveOpponentToken', (socketId, x, y) => {
+            this.opponents.forEach(opponent => {
+                if (opponent.socketId == socketId) {
+                    opponent.moveToken(x, y)
+                }
+            })
+        })
     }
 
     update() {

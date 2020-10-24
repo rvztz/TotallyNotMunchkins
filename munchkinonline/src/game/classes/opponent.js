@@ -2,13 +2,16 @@ import OpponentHand from '../classes/opponentHand'
 import Token from '../classes/token'
 
 export default class Opponent {
-    constructor (scene, position, socketId) {
+    constructor (scene, position, socketId, gender) {
         this.opponentHand = new OpponentHand(scene, position)
         this.token = new Token(scene)
 
         // Data
         this.position = position
         this.socketId = socketId
+        this.gender = gender
+        this.level = 1
+        this.power = 1
         
         // Renders
         this.renderHand = (hWidth, hHeight, vWidth, vHeight, cardWidth, cardHeight, offset) => {
@@ -23,8 +26,13 @@ export default class Opponent {
             }
         }
 
-        this.renderToken = (startTile, index) => {
-            this.token.render(startTile, index, /*isPlayerToken */ false, 'tokenRed')
+        this.renderToken = (startTile, index, sprite) => {
+            this.token.render(startTile, index, /*isPlayerToken */ false, sprite + '-' + this.gender)
+        }
+
+        this.moveToken = (x, y) => {
+            this.token.renderedToken.x = x
+            this.token.renderedToken.y = y
         }
     }
 }
