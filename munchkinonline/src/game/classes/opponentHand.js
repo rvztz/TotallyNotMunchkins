@@ -19,8 +19,8 @@ export default class OppositeHand {
             outline.strokeRect(x, y, width, height)
         }
 
-        this.addCards = (cards) => {
-            this.cards = this.cards.concat(cards)
+        this.updateCards = (cards) => {
+            this.cards = cards
             this.loadCards()
         }
         

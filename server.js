@@ -93,41 +93,61 @@ io.on('connection', (socket) => {
 	/*======================CARD HANDLING=======================*/
 	socket.on('requestCards', (roomName, cardType, n) => {
 		let roomIndex = findRoom(roomName)
+		if (roomIndex < 0) {
+			console.log("Error: room doesn't exist")
+			return
+		}
+
+		let playerIndex = findPlayer(rooms[roomIndex], socket.id)
+		if (playerIndex < 0) {
+			console.log("Error: player not found")
+			return
+		}
+
+		if (cardType !== 'treasure' && cardType !== 'door') {
+			console.log("Error: unexpected card type")			
+			return
+		}
+
 		let response = []
-		if (roomIndex >= 0) {
-			for (let i = 0; i < n; i++) {
-				if (cardType === 'treasure') {
-					response.push(rooms[roomIndex].treasureDeck.pop())
-				} else if (cardType === 'door') {
-					response.push(rooms[roomIndex].doorDeck.pop())
-				} else {
-					console.log("Error: unexpected card type")
-				}
+		for (let i = 0; i < n; i++) {
+			rooms[roomIndex].players[playerIndex].cards.push(cardType)
+			if (cardType === 'treasure') {
+				response.push(rooms[roomIndex].treasureDeck.pop())
+			} else {
+				response.push(rooms[roomIndex].doorDeck.pop())
 			}
-		} else {
-			console.log("Error: invalid room name")
 		}
 
 		socket.emit('addCardsToPlayer', response, cardType)
-		socket.to(roomName).emit('addCardsToOpponent', socket.id, cardType, n);
+		socket.to(roomName).emit('addCardsToOpponent', socket.id, rooms[roomIndex].players[playerIndex].cards)
 	})
 
 	socket.on('distributeCards', roomName => {
 		let roomIndex = findRoom(roomName)
-		let doors = []
-		let treasures = []
-		if (roomIndex >= 0) {
-			for (let i = 0; i < 4; i++) {
-				treasures.push(rooms[roomIndex].treasureDeck.pop())
-				doors.push(rooms[roomIndex].doorDeck.pop())
-			}
-		} else {
-			console.log("Error: invalid room name")
+		if (roomIndex < 0) {
+			console.log("Error: room doesn't exist")
+			return
 		}
 
+		let playerIndex = findPlayer(rooms[roomIndex], socket.id)
+		if (playerIndex < 0) {
+			console.log("Error: player not found")
+			return
+		}
+
+		let doors = []
+		let treasures = []
+		for (let i = 0; i < 4; i++) {
+			treasures.push(rooms[roomIndex].treasureDeck.pop())
+			doors.push(rooms[roomIndex].doorDeck.pop())
+			
+			rooms[roomIndex].players[playerIndex].cards.push('treasure')
+			rooms[roomIndex].players[playerIndex].cards.push('door')
+		}
+		
 		socket.emit('distributeCards', treasures, doors)
-		socket.to(roomName).emit('addCardsToOpponent', socket.id, 'treasure', 4);
-		socket.to(roomName).emit('addCardsToOpponent', socket.id, 'door', 4);
+		socket.to(roomName).emit('addCardsToOpponent', socket.id, rooms[roomIndex].players[playerIndex].cards)
 	})
 	
 	/*======================PLAYER DISCONNECT=======================*/

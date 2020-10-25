@@ -139,6 +139,8 @@ export default class GameScene extends Phaser.Scene {
                 
             } else if (gameObject.data.get('type') === 'card' && dropZone.data.get('type') === 'discard') {
                 if (gameObject.data.get('deck') === dropZone.data.get('deck')) {
+                    
+
                     gameObject.destroy()
                 } else {
                     returnToLastPosition(gameObject)
@@ -207,14 +209,10 @@ export default class GameScene extends Phaser.Scene {
             })
         })
 
-        this.socket.on('addCardsToOpponent', (socketId, cardType, n) => {
-            let cards = []
-            for (let i = 0; i < n; i++) {
-                cards.push(cardType)
-            }
+        this.socket.on('addCardsToOpponent', (socketId, cards) => {
             this.opponents.forEach(opponent => {
                 if (opponent.socketId == socketId) {
-                    opponent.addCards(cards)
+                    opponent.updateCards(cards)
                 }
             })
         })
