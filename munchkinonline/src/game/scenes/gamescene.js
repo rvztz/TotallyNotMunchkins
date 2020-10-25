@@ -191,6 +191,7 @@ export default class GameScene extends Phaser.Scene {
         })
 
         this.socket.on('addCardsToPlayer', (cardNames, cardType) => {
+            console.log(cardNames)
             let cardList = this.getCards(cardNames, cardType)
             cardList.forEach((card, index) => {
                 this.player.addToHand(card, index)

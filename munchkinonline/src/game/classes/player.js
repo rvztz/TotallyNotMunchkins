@@ -27,7 +27,6 @@ export default class Player {
         this.addToHand = (card, i) => {
             this.cards.push(card)
             this.playerHand.addCard(card, i)
-            console.log(this.cards)
         }
 
         this.getData = () => {

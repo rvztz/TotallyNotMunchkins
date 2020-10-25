@@ -107,6 +107,7 @@ io.on('connection', (socket) => {
 		} else {
 			console.log("Error: invalid room name")
 		}
+
 		socket.emit('addCardsToPlayer', response, cardType)
 		socket.to(roomName).emit('addCardsToOpponent', socket.id, cardType, n);
 	})

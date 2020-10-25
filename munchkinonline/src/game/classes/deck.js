@@ -6,15 +6,7 @@ export default class Deck {
             let deck = scene.add.image(x+cW/2, y+cH/2, sprite).setScale(0.7, 0.7).setInteractive({ cursor: 'pointer' })
 
             deck.on('pointerup', () => {
-
-                /*let chosenCards = (cardType === 'door') ? [scene.cardList.doors.monsters[0], scene.cardList.doors.monsters[1]] : [scene.cardList.treasures.equipment[0]] // Get a random card from list in server
-
-                chosenCards.forEach((card, index) => {
-                    scene.player.addToHand(card, index)
-                })*/
-
-                //emit event to add card in other opponents' screen
-                scene.socket.emit('requestCards', scene.socket.roomName, this.cardType, 1)
+                scene.socket.emit('requestCards', scene.roomName, this.cardType, 1)
             });
         }
     }
