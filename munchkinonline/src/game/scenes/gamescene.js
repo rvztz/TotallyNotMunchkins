@@ -49,6 +49,12 @@ export default class GameScene extends Phaser.Scene {
     }
 
     create() {
+        /*======================INITIAL SOCKET SETUP=======================*/
+
+
+        /*======================SCENE COMPONENTS CREATION=======================*/
+        
+        // Add cards object list
         this.cardList = this.cache.json.get('cards').cards
 
         const positions = ['left', 'top', 'right']
@@ -103,6 +109,9 @@ export default class GameScene extends Phaser.Scene {
         playButton.on('pointerup', () => {
             this.scene.start('Lobby', {socket: this.socket})
         })
+
+        // Request initial cards
+        this.socket.emit('distributeCards', this.roomName)
 
         /*======================INPUT EVENTS=======================*/
         this.input.on('drag', function (pointer, gameObject, dragX, dragY) {
@@ -180,6 +189,24 @@ export default class GameScene extends Phaser.Scene {
                 }
             })
         })
+
+        this.socket.on('addCardsToPlayer', (cardNames, cardType) => {
+            let cardList = this.getCards(cardNames, cardType)
+            cardList.forEach((card, index) => {
+                this.player.addToHand(card, index)
+            })
+        })
+
+        this.socket.on('distributeCards', (treasureNames, doorNames) => {
+            let treasureCards = this.getCards(treasureNames, 'treasure')
+            let doorCards = this.getCards(doorNames, 'door')
+            let allCards = treasureCards.concat(doorCards)
+            allCards.forEach((card, index) => {
+                this.player.addToHand(card, index)
+            })
+        })
+
+
     }
 
     update() {
@@ -202,6 +229,26 @@ export default class GameScene extends Phaser.Scene {
             width: this.board.dimensions.cellWidth,
             height: this.board.dimensions.cellHeight
         }
+    }
+
+    getCards(cardNames, cardType) {
+        let cards = []
+        for (let i = 0; i < cardNames.length; i++) {
+            if (cardType === 'door') {
+                for (let j = 0; j < this.cardList.doors.length; j++) {
+                    if (cardNames[i] == this.cardList.doors[j].name) {
+                        cards.push(this.cardList.doors[j])
+                    }
+                }
+            } else {
+                for (let j = 0; j < this.cardList.treasures.length; j++) {
+                    if (cardNames[i] == this.cardList.treasures[j].name) {
+                        cards.push(this.cardList.treasures[j])
+                    }
+                }
+            }
+        }
+        return cards
     }
 
     /*======================DRAG EVENT HELPER FUNCTIONS=======================*/

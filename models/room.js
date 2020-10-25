@@ -23,6 +23,11 @@ class Room {
                 }
             })
         }
+
+        this.shuffleDecks = (treasures, doors) => {
+            this.treasureDeck.shuffleDeck(treasures)
+            this.doorDeck.shuffleDeck(doors)
+        }
     }
 }
 

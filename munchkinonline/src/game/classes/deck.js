@@ -7,13 +7,14 @@ export default class Deck {
 
             deck.on('pointerup', () => {
 
-                let chosenCards = (cardType === 'door') ? [scene.cardList.doors.monsters[0], scene.cardList.doors.monsters[1]] : [scene.cardList.treasures.equipment[0]] // Get a random card from list in server
+                /*let chosenCards = (cardType === 'door') ? [scene.cardList.doors.monsters[0], scene.cardList.doors.monsters[1]] : [scene.cardList.treasures.equipment[0]] // Get a random card from list in server
 
                 chosenCards.forEach((card, index) => {
                     scene.player.addToHand(card, index)
-                })
+                })*/
 
                 //emit event to add card in other opponents' screen
+                scene.socket.emit('requestCards', scene.socket.roomName, this.cardType, 1)
             });
         }
     }

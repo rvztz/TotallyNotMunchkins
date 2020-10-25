@@ -10,8 +10,9 @@ let rooms = []
 
 // Socket IO
 io.on('connection', (socket) => {
-    console.log('a user connected ' + socket.id)
-
+	console.log('a user connected ' + socket.id)
+	
+	/*======================ROOM  MANAGEMENT=======================*/
     socket.on('createRoom', (roomName) => {
         if (!(/[^\w.]/.test(roomName))) {
             socket.join(roomName, () => {
@@ -34,21 +35,10 @@ io.on('connection', (socket) => {
 		}
 	})
 
+	/*======================LOBBY UPDATES=======================*/
 	socket.on('joined', (roomName) => {
 		let roomIndex = findRoom(roomName)
 		socket.emit('updateTokenSelections', rooms[roomIndex].availableTokens)
-	})
-
-	socket.on('startGame', (roomName) => {
-		let roomIndex = findRoom(roomName)
-		if (roomIndex >= 0) {
-			if (socket.id == rooms[roomIndex].hostId) {
-				io.in(roomName).emit('startGame', rooms[roomIndex].getInfo())
-			}
-		} else {
-			console.log("Error: invalid room name")
-		}
-			
 	})
 
 	socket.on('selectAttribute', (roomName, type, value) => {
@@ -81,12 +71,64 @@ io.on('connection', (socket) => {
 			console.log("Error: unexpected attribute")
 		}
 	})
-	
+
+	/*======================GAME MANAGEMENT=======================*/
+	socket.on('startGame', (roomName) => {
+		let roomIndex = findRoom(roomName)
+		if (roomIndex >= 0) {
+			if (socket.id == rooms[roomIndex].hostId) {
+				rooms[roomIndex].shuffleDecks(TreasureList, DoorList)
+				io.in(roomName).emit('startGame', rooms[roomIndex].getInfo())
+			}
+		} else {
+			console.log("Error: invalid room name")
+		}
+	})
+
+	/*======================TOKEN MOVEMENT=======================*/
 	socket.on('moveToken', (roomName, x, y) => {
 		socket.to(roomName).emit('moveOpponentToken', socket.id, x, y);
 	})
 
-    socket.on('disconnect', () => {
+	/*======================CARD HANDLING=======================*/
+	socket.on('requestCards', (roomName, cardType, n) => {
+		let roomIndex = findRoom(roomName)
+		let response = []
+		if (roomIndex >= 0) {
+			for (let i = 0; i < n; i++) {
+				if (cardType === 'treasure') {
+					response.push(rooms[roomIndex].treasureDeck.pop())
+				} else if (cardType === 'door') {
+					response.push(rooms[roomIndex].doorDeck.pop())
+				} else {
+					console.log("Error: unexpected card type")
+				}
+			}
+		} else {
+			console.log("Error: invalid room name")
+		}
+		socket.emit('addCardsToPlayer', response, cardType)
+		socket.to(roomName).emit('addCardsToOpponent', socket.id, cardType, n);
+	})
+
+	socket.on('distributeCards', roomName => {
+		let roomIndex = findRoom(roomName)
+		let doors = []
+		let treasures = []
+		if (roomIndex >= 0) {
+			for (let i = 0; i < 4; i++) {
+				treasures.push(rooms[roomIndex].treasureDeck.pop())
+				doors.push(rooms[roomIndex].doorDeck.pop())
+			}
+		} else {
+			console.log("Error: invalid room name")
+		}
+
+		socket.emit('distributeCards', treasures, doors)
+	})
+	
+	/*======================PLAYER DISCONNECT=======================*/
+	socket.on('disconnect', () => {
         console.log('a user disconnected ' + socket.id)
     })
 })
