@@ -207,7 +207,17 @@ export default class GameScene extends Phaser.Scene {
             })
         })
 
-
+        this.socket.on('addCardsToOpponent', (socketId, cardType, n) => {
+            let cards = []
+            for (let i = 0; i < n; i++) {
+                cards.push(cardType)
+            }
+            this.opponents.forEach(opponent => {
+                if (opponent.socketId == socketId) {
+                    opponent.addCards(cards)
+                }
+            })
+        })
     }
 
     update() {

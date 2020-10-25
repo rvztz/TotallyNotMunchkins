@@ -34,5 +34,9 @@ export default class Opponent {
             this.token.renderedToken.x = x
             this.token.renderedToken.y = y
         }
+
+        this.addCards = (cards) => {
+            this.opponentHand.addCards(cards)
+        }
     }
 }

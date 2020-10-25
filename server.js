@@ -126,6 +126,8 @@ io.on('connection', (socket) => {
 		}
 
 		socket.emit('distributeCards', treasures, doors)
+		socket.to(roomName).emit('addCardsToOpponent', socket.id, 'treasure', 4);
+		socket.to(roomName).emit('addCardsToOpponent', socket.id, 'door', 4);
 	})
 	
 	/*======================PLAYER DISCONNECT=======================*/
