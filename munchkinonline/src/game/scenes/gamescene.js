@@ -44,6 +44,7 @@ export default class GameScene extends Phaser.Scene {
         this.load.image('tokenRed-female', 'assets/tokenRed-female.png')
 
         this.load.image('playButton', 'assets/playButton.png')
+        this.load.image('goUpALevel', 'assets/goUpALevel.jpg')
         /*======================OTHER DATA LOADING=======================*/
         this.load.json('cards', 'data/cards.json')
     }
@@ -139,7 +140,10 @@ export default class GameScene extends Phaser.Scene {
                 
             } else if (gameObject.data.get('type') === 'card' && dropZone.data.get('type') === 'discard') {
                 if (gameObject.data.get('deck') === dropZone.data.get('deck')) {
-                    
+                    let index = this.scene.findCard(gameObject.data.get('data'))
+                    this.scene.player.removeCardAt(index)
+
+                    this.scene.socket.emit('removeCard', this.scene.roomName, gameObject.data.get('data').name, gameObject.data.get('deck'), index)
 
                     gameObject.destroy()
                 } else {
@@ -151,7 +155,9 @@ export default class GameScene extends Phaser.Scene {
                 gameObject.y = dropZone.y
 
                 updateLastPosition(gameObject)
-            } else {
+            } /*else if (gameObject.data.get('type') === 'card' && dropZone.data.get('type') === 'tile') {
+
+            }*/ else {
                 returnToLastPosition(gameObject)
             }
         });
@@ -193,7 +199,6 @@ export default class GameScene extends Phaser.Scene {
         })
 
         this.socket.on('addCardsToPlayer', (cardNames, cardType) => {
-            console.log(cardNames)
             let cardList = this.getCards(cardNames, cardType)
             cardList.forEach((card, index) => {
                 this.player.addToHand(card, index)
@@ -209,7 +214,7 @@ export default class GameScene extends Phaser.Scene {
             })
         })
 
-        this.socket.on('addCardsToOpponent', (socketId, cards) => {
+        this.socket.on('updateOpponentCards', (socketId, cards) => {
             this.opponents.forEach(opponent => {
                 if (opponent.socketId == socketId) {
                     opponent.updateCards(cards)
@@ -240,6 +245,7 @@ export default class GameScene extends Phaser.Scene {
         }
     }
 
+    /*======================OBJECT SEARCH FUNCTIONS=======================*/
     getCards(cardNames, cardType) {
         let cards = []
         for (let i = 0; i < cardNames.length; i++) {
@@ -260,9 +266,39 @@ export default class GameScene extends Phaser.Scene {
         return cards
     }
 
-    /*======================DRAG EVENT HELPER FUNCTIONS=======================*/
+    findCard(card) {
+        for (let i = 0; i < this.player.cards.length; i++) {
+            if (card == this.player.cards[i]) {
+                return i
+            }
+        }
+        return -1
+    }
+
+    /*======================CARD EFFECTS=======================*/
+    /*useCardEffect(card, targetId) {
+        let effect = null
+        switch(card.name) {
+            case "Go Up A Level":
+                effect = () => {
+                    this.levelUp()
+                }
+                break;
+            default:
+                console.log("Error: unexpected card name")
+        }
+        
+        if (targetId == this.socket.id) {
+            this.player.runEffect(effect)
+
+        } else {
+            
+        }
+    }*/
+
 }
 
+/*======================DRAG EVENT HELPER FUNCTIONS=======================*/
 function updateLastPosition(gameObject) {
     gameObject.data.set('lastX', gameObject.x)
     gameObject.data.set('lastY', gameObject.y)

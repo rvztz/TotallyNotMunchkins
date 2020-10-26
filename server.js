@@ -120,7 +120,7 @@ io.on('connection', (socket) => {
 		}
 
 		socket.emit('addCardsToPlayer', response, cardType)
-		socket.to(roomName).emit('addCardsToOpponent', socket.id, rooms[roomIndex].players[playerIndex].cards)
+		socket.to(roomName).emit('updateOpponentCards', socket.id, rooms[roomIndex].players[playerIndex].cards)
 	})
 
 	socket.on('distributeCards', roomName => {
@@ -140,14 +140,38 @@ io.on('connection', (socket) => {
 		let treasures = []
 		for (let i = 0; i < 4; i++) {
 			treasures.push(rooms[roomIndex].treasureDeck.pop())
-			doors.push(rooms[roomIndex].doorDeck.pop())
-			
 			rooms[roomIndex].players[playerIndex].cards.push('treasure')
+		}
+		for (let i = 0; i < 4; i++) {
+			doors.push(rooms[roomIndex].doorDeck.pop())
 			rooms[roomIndex].players[playerIndex].cards.push('door')
 		}
 		
 		socket.emit('distributeCards', treasures, doors)
-		socket.to(roomName).emit('addCardsToOpponent', socket.id, rooms[roomIndex].players[playerIndex].cards)
+		socket.to(roomName).emit('updateOpponentCards', socket.id, rooms[roomIndex].players[playerIndex].cards)
+	})
+
+	socket.on('removeCard', (roomName, cardName, cardType, index) => {
+		let roomIndex = findRoom(roomName)
+		if (roomIndex < 0) {
+			console.log("Error: room doesn't exist")
+			return
+		}
+
+		let playerIndex = findPlayer(rooms[roomIndex], socket.id)
+		if (playerIndex < 0) {
+			console.log("Error: player not found")
+			return
+		}
+		
+		if (cardType === 'treasure') {
+			rooms[roomIndex].treasureDeck.push(cardName)
+		} else {
+			rooms[roomIndex].doorDeck.push(cardName)
+		}
+		
+		rooms[roomIndex].players[playerIndex].removeCardAt(index)
+		socket.to(roomName).emit('updateOpponentCards', socket.id, rooms[roomIndex].players[playerIndex].cards)
 	})
 	
 	/*======================PLAYER DISCONNECT=======================*/

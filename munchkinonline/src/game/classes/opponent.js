@@ -3,7 +3,7 @@ import Token from '../classes/token'
 
 export default class Opponent {
     constructor (scene, position, socketId, gender) {
-        this.opponentHand = new OpponentHand(scene, position)
+        this.opponentHand = new OpponentHand(scene, position, socketId)
         this.token = new Token(scene)
 
         // Data

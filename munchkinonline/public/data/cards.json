@@ -67,7 +67,7 @@
                 "name": "Go Up A Level",
                 "deck": "treasure",
                 "description": "It's in the name.",
-                "image": "treasureCard",
+                "image": "goUpALevel",
                 "type": "item",
                 "value": 0
             }

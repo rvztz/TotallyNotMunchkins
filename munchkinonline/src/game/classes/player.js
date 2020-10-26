@@ -29,6 +29,10 @@ export default class Player {
             this.playerHand.addCard(card, i)
         }
 
+        this.removeCardAt = (index) => {
+            this.cards.splice(index, 1)
+        }
+
         this.getData = () => {
             return {
                 cards: this.cards,

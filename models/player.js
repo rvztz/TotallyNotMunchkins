@@ -11,6 +11,10 @@ class Player {
         this.getSocketId = () => { return this.socketId }
         this.getTokenImage = () => { return this.tokenImage }
         this.getGender = () => { return this.gender }
+
+        this.removeCardAt = (index) => {
+            this.cards.splice(index, 1)
+        }
     }   
 }
 

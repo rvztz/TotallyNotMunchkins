@@ -1,11 +1,12 @@
 import OpponentCard from '../classes/opponentCard'
 
 export default class OppositeHand {
-    constructor(scene, position) {
+    constructor(scene, position, socketId) {
         this.dimensions = {x: 0, y: 0, width: 0, height: 0, cardHeight: 0, cardWidth: 0}
         this.position = position
         this.cards = []
         this.renderedCards = []
+        this.socketId = socketId
 
         this.render = (x, y, width, height, cardWidth, cardHeight) => {
             this.dimensions.x = x 
