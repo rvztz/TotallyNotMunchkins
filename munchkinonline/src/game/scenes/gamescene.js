@@ -125,10 +125,13 @@ export default class GameScene extends Phaser.Scene {
         }, this)
 
         this.input.on('drop', function (pointer, gameObject, dropZone) {
+            
+            // Card on Player Hand
             if (gameObject.data.get('type') === 'card' && dropZone.data.get('type') === 'hand') {
  
                 updateLastPosition(gameObject)
-                
+            
+            // Token on Tile
             } else if (gameObject.data.get('type') === 'token' && dropZone.data.get('type') === 'tile') {
 
                 if (gameObject.data.get('level') == dropZone.data.get('level')) {
@@ -137,7 +140,8 @@ export default class GameScene extends Phaser.Scene {
                 } else {
                     returnToLastPosition(gameObject)
                 }
-                
+            
+            // Card on Discard
             } else if (gameObject.data.get('type') === 'card' && dropZone.data.get('type') === 'discard') {
                 if (gameObject.data.get('deck') === dropZone.data.get('deck')) {
 
@@ -146,12 +150,16 @@ export default class GameScene extends Phaser.Scene {
                 } else {
                     returnToLastPosition(gameObject)
                 }
+            
+            // Card on Equipment Slot
             } else if (gameObject.data.get('type') === 'card' && dropZone.data.get('type') === 'slot') {
                 // Later check for equipment type compatibility
                 gameObject.x = dropZone.x
                 gameObject.y = dropZone.y
 
                 updateLastPosition(gameObject)
+
+            // Card on Tile (use card on self)
             } else if (gameObject.data.get('type') === 'card' && dropZone.data.get('type') === 'tile') {
 
                 if (this.scene.useCard(gameObject.data.get('data'), this.scene.socket.id)) {
@@ -159,7 +167,16 @@ export default class GameScene extends Phaser.Scene {
                 } else {
                     returnToLastPosition(gameObject)
                 }
-                
+            
+            // Card on Opponent Hand (use card on opponent)
+            } else if (gameObject.data.get('type') === 'card' && dropZone.data.get('type') === 'opponentHand') {
+
+                if (this.scene.useCard(gameObject.data.get('data'), dropZone.data.get('ownerId'))) {
+                    this.scene.removeCardFromPlayer(gameObject)
+                } else {
+                    returnToLastPosition(gameObject)
+                }
+
             } else {
                 returnToLastPosition(gameObject)
             }
@@ -305,7 +322,9 @@ export default class GameScene extends Phaser.Scene {
                 this.useCardEffect(card, this.player)
             } else {
                 this.opponents.forEach(opponent => { 
-                    this.useCardEffect(card, opponent)
+                    if (opponent.socketId == targetId) {
+                        this.useCardEffect(card, opponent)
+                    }
                 })
             }
         } else {
