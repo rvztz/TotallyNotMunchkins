@@ -18,6 +18,10 @@ export default class OppositeHand {
             let outline = scene.add.graphics()
             outline.lineStyle(4, 0x000000)
             outline.strokeRect(x, y, width, height)
+
+             //  A drop zone
+            let zone = scene.add.zone(x + width/2, y + height/2, width, height).setRectangleDropZone(width, height)
+            zone.setData({type: 'opponentHand', ownerId: this.socketId})
         }
 
         this.updateCards = (cards) => {

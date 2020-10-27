@@ -173,6 +173,24 @@ io.on('connection', (socket) => {
 		rooms[roomIndex].players[playerIndex].removeCardAt(index)
 		socket.to(roomName).emit('updateOpponentCards', socket.id, rooms[roomIndex].players[playerIndex].cards)
 	})
+
+	/*======================PLAYER UPDATES=======================*/
+	socket.on('updateLevel', (roomName, socketId, level) => {
+		let roomIndex = findRoom(roomName)
+		if (roomIndex < 0) {
+			console.log("Error: room doesn't exist")
+			return
+		}
+
+		let playerIndex = findPlayer(rooms[roomIndex], socketId)
+		if (playerIndex < 0) {
+			console.log("Error: player not found")
+			return
+		}
+
+		rooms[roomIndex].players[playerIndex].level = level
+		socket.to(roomName).emit('updateLevel', socketId, rooms[roomIndex].players[playerIndex].level)
+	})
 	
 	/*======================PLAYER DISCONNECT=======================*/
 	socket.on('disconnect', () => {

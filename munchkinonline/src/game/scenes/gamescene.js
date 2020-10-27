@@ -125,10 +125,13 @@ export default class GameScene extends Phaser.Scene {
         }, this)
 
         this.input.on('drop', function (pointer, gameObject, dropZone) {
+            
+            // Card on Player Hand
             if (gameObject.data.get('type') === 'card' && dropZone.data.get('type') === 'hand') {
  
                 updateLastPosition(gameObject)
-                
+            
+            // Token on Tile
             } else if (gameObject.data.get('type') === 'token' && dropZone.data.get('type') === 'tile') {
 
                 if (gameObject.data.get('level') == dropZone.data.get('level')) {
@@ -137,27 +140,44 @@ export default class GameScene extends Phaser.Scene {
                 } else {
                     returnToLastPosition(gameObject)
                 }
-                
+            
+            // Card on Discard
             } else if (gameObject.data.get('type') === 'card' && dropZone.data.get('type') === 'discard') {
                 if (gameObject.data.get('deck') === dropZone.data.get('deck')) {
-                    let index = this.scene.findCard(gameObject.data.get('data'))
-                    this.scene.player.removeCardAt(index)
 
-                    this.scene.socket.emit('removeCard', this.scene.roomName, gameObject.data.get('data').name, gameObject.data.get('deck'), index)
+                    this.scene.removeCardFromPlayer(gameObject)
 
-                    gameObject.destroy()
                 } else {
                     returnToLastPosition(gameObject)
                 }
+            
+            // Card on Equipment Slot
             } else if (gameObject.data.get('type') === 'card' && dropZone.data.get('type') === 'slot') {
                 // Later check for equipment type compatibility
                 gameObject.x = dropZone.x
                 gameObject.y = dropZone.y
 
                 updateLastPosition(gameObject)
-            } /*else if (gameObject.data.get('type') === 'card' && dropZone.data.get('type') === 'tile') {
 
-            }*/ else {
+            // Card on Tile (use card on self)
+            } else if (gameObject.data.get('type') === 'card' && dropZone.data.get('type') === 'tile') {
+
+                if (this.scene.useCard(gameObject.data.get('data'), this.scene.socket.id)) {
+                    this.scene.removeCardFromPlayer(gameObject)
+                } else {
+                    returnToLastPosition(gameObject)
+                }
+            
+            // Card on Opponent Hand (use card on opponent)
+            } else if (gameObject.data.get('type') === 'card' && dropZone.data.get('type') === 'opponentHand') {
+
+                if (this.scene.useCard(gameObject.data.get('data'), dropZone.data.get('ownerId'))) {
+                    this.scene.removeCardFromPlayer(gameObject)
+                } else {
+                    returnToLastPosition(gameObject)
+                }
+
+            } else {
                 returnToLastPosition(gameObject)
             }
         });
@@ -221,6 +241,18 @@ export default class GameScene extends Phaser.Scene {
                 }
             })
         })
+
+        this.socket.on('updateLevel', (socketId, level) => {
+            if (socketId == this.socket.id) {
+                this.player.updateLevel(level)
+            } else {
+                this.opponents.forEach(opponent => {
+                    if (opponent.socketId == socketId) {
+                        opponent.updateLevel(level)
+                    }
+                })
+            }
+        })
     }
 
     update() {
@@ -275,26 +307,45 @@ export default class GameScene extends Phaser.Scene {
         return -1
     }
 
+    removeCardFromPlayer(cardGameObject) {
+        let index = this.findCard(cardGameObject.data.get('data'))
+        this.player.removeCardAt(index)
+
+        this.socket.emit('removeCard', this.roomName, cardGameObject.data.get('data').name, cardGameObject.data.get('deck'), index)
+
+        cardGameObject.destroy()
+    }
+
+    useCard(card, targetId) {
+        if (card.type === "curse" || card.type === "item") {
+            if (targetId == this.socket.id) {
+                this.useCardEffect(card, this.player)
+            } else {
+                this.opponents.forEach(opponent => { 
+                    if (opponent.socketId == targetId) {
+                        this.useCardEffect(card, opponent)
+                    }
+                })
+            }
+        } else {
+            return false
+        }
+
+        return true
+    }
+
     /*======================CARD EFFECTS=======================*/
-    /*useCardEffect(card, targetId) {
-        let effect = null
+    useCardEffect(card, target) {
+
         switch(card.name) {
             case "Go Up A Level":
-                effect = () => {
-                    this.levelUp()
-                }
+                target.levelUp(1)
                 break;
             default:
                 console.log("Error: unexpected card name")
         }
-        
-        if (targetId == this.socket.id) {
-            this.player.runEffect(effect)
 
-        } else {
-            
-        }
-    }*/
+    }
 
 }
 

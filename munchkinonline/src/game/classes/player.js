@@ -41,5 +41,16 @@ export default class Player {
                 power: this.power
             }
         }
+
+        this.levelUp = (n) => {
+            this.level += n
+            this.token.renderedToken.data.set('level', this.level)
+            scene.socket.emit('updateLevel', scene.roomName, scene.socket.id, this.level)
+        }
+
+        this.updateLevel = (level) => {
+            this.level = level
+            this.token.renderedToken.data.set('level', this.level)
+        }
     }
 }
