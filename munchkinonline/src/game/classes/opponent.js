@@ -38,5 +38,15 @@ export default class Opponent {
         this.updateCards = (cards) => {
             this.opponentHand.updateCards(cards)
         }
+
+        this.levelUp = (n) => {
+            this.level += n
+            this.token.renderedToken.data.set('level', this.level)
+            scene.socket.emit('updateLevel', scene.roomName, this.socketId, this.level)
+        }
+
+        this.updateLevel = (level) => {
+            this.level = level
+        }
     }
 }

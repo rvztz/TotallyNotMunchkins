@@ -14,6 +14,7 @@ export default class Lobby extends Phaser.Scene {
     init(data) {
         if (data.socket == null) {
             this.socket = io('http://localhost:3000')
+            
             this.socket.emit(localStorage.getItem('roomEvent'), localStorage.getItem('roomName'))
         } else {
             this.socket = data.socket   

@@ -13,7 +13,7 @@ export default class Token {
                 scene.input.setDraggable(token);
             }
             
-            token.setData({type: 'token', level: 10})
+            token.setData({type: 'token', level: 1})
             this.renderedToken = token
             return token
         }
