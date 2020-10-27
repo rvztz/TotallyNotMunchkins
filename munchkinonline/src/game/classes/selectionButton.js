@@ -10,10 +10,12 @@ export default class SelectionButton {
 
             button.on('pointerup', () => {
                 scene.selection.loadCircle(button.x, button.y, button.displayWidth, this.type)
-                scene.selection.deselectTokens()
+                if(this.type === 'token') {
+                    scene.selection.deselectTokens()
+                }
                 this.selected = true
                 scene.socket.emit('selectAttribute', scene.roomName , this.type, this.value)
-            });
+            })
 
             this.renderedButton = button
             return button
