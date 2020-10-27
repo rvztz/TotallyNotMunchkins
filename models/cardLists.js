@@ -1,7 +1,33 @@
 
 const TreasureList = [
     "Diamond Sword",
-    "Go Up A Level"
+    "Go Up A Level",
+
+    // Temporary duplicates
+    "Diamond Sword",
+    "Go Up A Level",
+    "Diamond Sword",
+    "Go Up A Level",
+    "Diamond Sword",
+    "Go Up A Level",
+    "Diamond Sword",
+    "Go Up A Level",
+    "Diamond Sword",
+    "Go Up A Level",
+    "Diamond Sword",
+    "Go Up A Level",
+    "Diamond Sword",
+    "Go Up A Level",
+    "Diamond Sword",
+    "Go Up A Level",
+    "Diamond Sword",
+    "Go Up A Level",
+    "Diamond Sword",
+    "Go Up A Level",
+    "Diamond Sword",
+    "Go Up A Level",
+    "Diamond Sword",
+    "Go Up A Level",
 ]
 
 const DoorList = [
@@ -9,7 +35,44 @@ const DoorList = [
     "Unpogmin", 
     "Warrior", 
     "Elf", 
-    "Duck of Doom"
+    "Duck of Doom",
+
+    // Temporary duplicates
+    "Pogmin", 
+    "Unpogmin", 
+    "Warrior", 
+    "Elf", 
+    "Duck of Doom",
+    "Pogmin", 
+    "Unpogmin", 
+    "Warrior", 
+    "Elf", 
+    "Duck of Doom",
+    "Pogmin", 
+    "Unpogmin", 
+    "Warrior", 
+    "Elf", 
+    "Duck of Doom",
+    "Pogmin", 
+    "Unpogmin", 
+    "Warrior", 
+    "Elf", 
+    "Duck of Doom",
+    "Pogmin", 
+    "Unpogmin", 
+    "Warrior", 
+    "Elf", 
+    "Duck of Doom",
+    "Pogmin", 
+    "Unpogmin", 
+    "Warrior", 
+    "Elf", 
+    "Duck of Doom",
+    "Pogmin", 
+    "Unpogmin", 
+    "Warrior", 
+    "Elf", 
+    "Duck of Doom",
 ]
 
 module.exports = { TreasureList, DoorList }

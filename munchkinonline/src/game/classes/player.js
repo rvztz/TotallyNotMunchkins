@@ -12,21 +12,25 @@ export default class Player {
         this.level = 1
         this.equipment = []
         this.power = 1
+        this.gender = ""
 
         // Renders
         this.renderHand = (hWidth, hHeight, cardWidth, cardHeight, offset) => {
             this.playerHand.render(scene.scale.width/2 - hWidth/2, scene.scale.height - hHeight - offset, hWidth, hHeight, cardWidth, cardHeight)
         }
 
-        this.renderToken = (startTile) => {
-            this.token.render(startTile.x, startTile.y, 'token')
+        this.renderToken = (startTile, index, sprite) => {
+            this.token.render(startTile, index, /*isPlayerToken */ true, sprite + '-' + this.gender)
         }
         
         // Logic
         this.addToHand = (card, i) => {
             this.cards.push(card)
             this.playerHand.addCard(card, i)
-            console.log(this.cards)
+        }
+
+        this.removeCardAt = (index) => {
+            this.cards.splice(index, 1)
         }
 
         this.getData = () => {
