@@ -4,9 +4,8 @@
       <router-link to="/">Sign In</router-link> |
       <router-link to="/about">About</router-link> |
       <router-link to="/signup">Sign Up</router-link> |
-      <router-link to="/play">Play</router-link> |
       <router-link to="/profile">Profile</router-link> |
-      <router-link to="/game">Game</router-link>
+      <router-link to="/play">Play</router-link>
     </div>
     <router-view/>
   </div>

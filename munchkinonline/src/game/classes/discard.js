@@ -5,7 +5,7 @@ export default class Discard {
         this.render = (x, y, sprite, cW, cH) => {
             let discard = scene.add.image(x+cW/2, y+cH/2, sprite).setInteractive()
             discard.input.dropZone = true
-            discard.setData({type: 'discard', cardType: this.type})
+            discard.setData({type: 'discard', deck: this.type})
 
             return discard
         }
