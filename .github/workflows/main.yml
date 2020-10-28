@@ -22,7 +22,7 @@ jobs:
           path: dist
   deploy:
     name: Deploy
-    needs: build
+    needs: dist
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repo
@@ -31,7 +31,7 @@ jobs:
         uses: actions/download-artifact@master
         with:
           name: dist
-          path: ./munchkinonline/dist
+          path: dist
       - name: Deploy to Firebase
         uses: w9jds/firebase-action@master
         with:
