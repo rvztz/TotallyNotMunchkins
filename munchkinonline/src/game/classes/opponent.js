@@ -5,6 +5,7 @@ export default class Opponent {
     constructor (scene, position, socketId, gender) {
         this.opponentHand = new OpponentHand(scene, position, socketId)
         this.token = new Token(scene)
+        this.color = null
 
         // Data
         this.position = position
@@ -48,6 +49,30 @@ export default class Opponent {
 
         this.updateLevel = (level) => {
             this.level = level
+        }
+
+        this.chooseColor = (tokenImage) => {
+            switch (tokenImage) {
+                case "tokenYellow":
+                    this.color = 0xD4AF37
+                    this.colorString = "#D4AF37"
+                    break;
+                case "tokenRed":
+                    this.color = 0xCA3013
+                    this.colorString = "#CA3013"
+                    break;
+                case "tokenBlue":
+                    this.color = 0x2D27A6
+                    this.colorString = "#2D27A6"
+                    break;
+                case "tokenGreen":
+                    this.color = 0x1E8000
+                    this.colorString = "#1E8000"
+                    break;
+                default:
+                    console.log("Error: unexpected token color")
+            }
+            this.opponentHand.colorHand(this.color)
         }
     }
 }
