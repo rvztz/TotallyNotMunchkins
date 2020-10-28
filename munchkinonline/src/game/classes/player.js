@@ -44,6 +44,7 @@ export default class Player {
 
         this.levelUp = (n) => {
             this.level += n
+            this.level = Math.min(this.level, 10)
             this.token.renderedToken.data.set('level', this.level)
             scene.socket.emit('updateLevel', scene.roomName, scene.socket.id, this.level)
         }

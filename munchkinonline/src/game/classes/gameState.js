@@ -1,11 +1,17 @@
 export default class GameState {
-    constructor() {
+    constructor(scene) {
         this.inPregame = true
+        this.endGame = false
         this.currentTurn = ""
         this.cardDrawn = false
         
         this.endPregame = () => {
             this.inPregame = false
+        }
+
+        this.finishGame = () => {
+            this.inPregame = true
+            this.endGame = true
         }
 
         this.clearTurn = () => {
@@ -19,6 +25,10 @@ export default class GameState {
 
         this.drewCard = () => {
             this.cardDrawn = true
+        }
+
+        this.isYourTurn = () => {
+            return this.currentTurn === scene.socket.id && !this.inPregame
         }
     }
 }

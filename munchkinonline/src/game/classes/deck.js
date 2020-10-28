@@ -6,7 +6,12 @@ export default class Deck {
             let deck = scene.add.image(x+cW/2, y+cH/2, sprite).setScale(0.7, 0.7).setInteractive({ cursor: 'pointer' })
 
             deck.on('pointerup', () => {
-                scene.socket.emit('requestCards', scene.roomName, this.cardType, 1)
+                if (scene.gameState.isYourTurn() && !scene.gameState.cardDrawn) {
+                    scene.socket.emit('requestCards', scene.roomName, this.cardType, 1)
+                    scene.socket.emit('drewCard', scene.roomName)
+                } else {
+                    alert("You can't pick up a card right now.")
+                }
             });
         }
     }

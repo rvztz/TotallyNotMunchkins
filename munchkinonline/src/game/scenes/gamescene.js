@@ -78,7 +78,7 @@ export default class GameScene extends Phaser.Scene {
         const offset = 10
 
         // Create game state
-        this.gameState = new GameState()
+        this.gameState = new GameState(this)
 
         // Create player and render its hand
         this.player = new Player(this)
@@ -153,6 +153,10 @@ export default class GameScene extends Phaser.Scene {
                 if (gameObject.data.get('level') == dropZone.data.get('level')) {
                     updateLastPosition(gameObject)
                     this.scene.socket.emit('moveToken', this.scene.roomName, gameObject.x, gameObject.y)
+
+                    if (gameObject.data.get('level') == 10) {
+                        this.scene.socket.emit('winGame', this.scene.roomName)
+                    }
                 } else {
                     returnToLastPosition(gameObject)
                 }
@@ -279,6 +283,15 @@ export default class GameScene extends Phaser.Scene {
             this.currentTurnText.text = `${socketId}'s turn`
         })
 
+        this.socket.on('drewCard', () => {
+            this.gameState.drewCard()
+        })
+
+        this.socket.on('endGame', (socketId) => {
+            this.currentTurnText.text = `${socketId} WIINNSSS`
+            this.gameState.finishGame()
+        })
+
     }
 
     update() {
@@ -343,13 +356,18 @@ export default class GameScene extends Phaser.Scene {
     }
 
     useCard(card, targetId) {
+        if (this.gameState.inPregame) {
+            alert("You can't use cards right now.")
+            return false
+        }
+
         if (card.type === "curse" || card.type === "item") {
             if (targetId == this.socket.id) {
-                this.useCardEffect(card, this.player)
+                return this.useCardEffect(card, this.player)
             } else {
                 this.opponents.forEach(opponent => { 
                     if (opponent.socketId == targetId) {
-                        this.useCardEffect(card, opponent)
+                        return this.useCardEffect(card, opponent)
                     }
                 })
             }
@@ -365,10 +383,11 @@ export default class GameScene extends Phaser.Scene {
 
         switch(card.name) {
             case "Go Up A Level":
-                target.levelUp(1)
-                break;
+                target.levelUp(10)
+                return true
             default:
                 console.log("Error: unexpected card name")
+                return false
         }
 
     }

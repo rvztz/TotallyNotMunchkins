@@ -111,6 +111,25 @@ io.on('connection', (socket) => {
 		}
 	})
 
+	socket.on('drewCard', (roomName) => {
+		io.in(roomName).emit('drewCard')
+	})
+
+	socket.on('endTurn', (roomName) => {
+		let roomIndex = findRoom(roomName)
+		if (roomIndex < 0) {
+			console.log("Error: room doesn't exist")
+			return
+		}
+
+		let nextId = rooms[roomIndex].getNextPlayerId()
+		io.in(roomName).emit('changeTurn', nextId)
+	})
+
+	socket.on('winGame', (roomName) => {
+		io.in(roomName).emit('endGame', socket.id)
+	})
+
 	/*======================TOKEN MOVEMENT=======================*/
 	socket.on('moveToken', (roomName, x, y) => {
 		socket.to(roomName).emit('moveOpponentToken', socket.id, x, y);
