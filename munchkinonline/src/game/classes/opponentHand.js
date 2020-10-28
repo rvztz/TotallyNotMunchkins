@@ -6,6 +6,7 @@ export default class OppositeHand {
         this.position = position
         this.cards = []
         this.renderedCards = []
+        this.renderedOutline = null
         this.socketId = socketId
 
         this.render = (x, y, width, height, cardWidth, cardHeight) => {
@@ -18,6 +19,7 @@ export default class OppositeHand {
             let outline = scene.add.graphics()
             outline.lineStyle(4, 0x000000)
             outline.strokeRect(x, y, width, height)
+            this.renderedOutline = outline
 
              //  A drop zone
             let zone = scene.add.zone(x + width/2, y + height/2, width, height).setRectangleDropZone(width, height)
@@ -60,6 +62,13 @@ export default class OppositeHand {
             this.renderedCards.forEach(card => {
                 card.destroy()
             })
+        }
+
+        this.colorHand = (color) => {
+            this.renderedOutline.destroy()
+            this.renderedOutline = scene.add.graphics()
+            this.renderedOutline.lineStyle(4, color)
+            this.renderedOutline.strokeRect(this.dimensions.x, this.dimensions.y, this.dimensions.width, this.dimensions.height)
         }
     }
 }

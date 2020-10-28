@@ -104,10 +104,13 @@ export default class GameScene extends Phaser.Scene {
             if (player.socketId == this.socket.id) {
                 this.player.gender = player.gender
                 this.player.renderToken(startTile, index, player.tokenImage)
+                this.player.chooseColor(player.tokenImage)
+
             } else {
                 this.opponents.forEach(opponent => {
                     if (opponent.socketId == player.socketId) {
                         opponent.renderToken(startTile, index, player.tokenImage)
+                        opponent.chooseColor(player.tokenImage)
                     }
                 })
             }
@@ -280,7 +283,20 @@ export default class GameScene extends Phaser.Scene {
 
         this.socket.on('changeTurn', (socketId) => {
             this.gameState.changeTurn(socketId)
+
+            let color = null
+            if (socketId == this.socket.id) {
+                color = this.player.colorString
+            } else {
+                this.opponents.forEach(opponent => {
+                    if (opponent.socketId == socketId) {
+                        color = opponent.colorString
+                    }
+                })
+            }
+
             this.currentTurnText.text = `${socketId}'s turn`
+            this.currentTurnText.setColor(color)
         })
 
         this.socket.on('drewCard', () => {
@@ -288,7 +304,19 @@ export default class GameScene extends Phaser.Scene {
         })
 
         this.socket.on('endGame', (socketId) => {
+            let color = null
+            if (socketId == this.socket.id) {
+                color = this.player.colorString
+            } else {
+                this.opponents.forEach(opponent => {
+                    if (opponent.socketId == socketId) {
+                        color = opponent.colorString
+                    }
+                })
+            }
+
             this.currentTurnText.text = `${socketId} WIINNSSS`
+            this.currentTurnText.setColor(color)
             this.gameState.finishGame()
         })
 
@@ -383,7 +411,7 @@ export default class GameScene extends Phaser.Scene {
 
         switch(card.name) {
             case "Go Up A Level":
-                target.levelUp(10)
+                target.levelUp(1)
                 return true
             default:
                 console.log("Error: unexpected card name")

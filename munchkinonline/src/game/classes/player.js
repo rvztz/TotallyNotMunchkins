@@ -6,6 +6,8 @@ export default class Player {
         // UI Elements
         this.playerHand = new PlayerHand(scene)
         this.token = new Token(scene)
+        this.color = null
+        this.colorString = null
 
         // Data
         this.cards = []
@@ -52,6 +54,30 @@ export default class Player {
         this.updateLevel = (level) => {
             this.level = level
             this.token.renderedToken.data.set('level', this.level)
+        }
+
+        this.chooseColor = (tokenImage) => {
+            switch (tokenImage) {
+                case "tokenYellow":
+                    this.color = 0xD4AF37
+                    this.colorString = "#D4AF37"
+                    break;
+                case "tokenRed":
+                    this.color = 0xCA3013
+                    this.colorString = "#CA3013"
+                    break;
+                case "tokenBlue":
+                    this.color = 0x2D27A6
+                    this.colorString = "#2D27A6"
+                    break;
+                case "tokenGreen":
+                    this.color = 0x1E8000
+                    this.colorString = "#1E8000"
+                    break;
+                default:
+                    console.log("Error: unexpected token color")
+            }
+            this.playerHand.colorHand(this.color)
         }
     }
 }
