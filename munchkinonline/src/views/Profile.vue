@@ -17,6 +17,10 @@
         </div>
       </b-card>
     </div>
+
+    <div>
+      <SiteButton v-bind:buttonData="buttonData" v-on:btn-click="logOut()"/>
+    </div>
   </div>
 </template>
 
@@ -24,14 +28,16 @@
 // @ is an alias to /src
 import {BCard} from 'bootstrap-vue';
 import firebase from 'firebase';
-import AccordionElement from '../components/site-interface/AccordionElement.vue'
+import SiteButton from '../components/site-interface/SiteButton'
+import AccordionElement from '../components/site-interface/AccordionElement'
 import { userCollection, gameCollection } from '../main.js';
 
 export default {
   name: "profile",
   components: {
     BCard,
-    AccordionElement
+    AccordionElement,
+    SiteButton
   },
   data() {
     return {
@@ -40,7 +46,12 @@ export default {
         email: "",
         joined: ""
       },
-      gameHistory: []
+      gameHistory: [],
+      buttonData: {
+        id: 101,
+        buttonText: "Log Out",
+        eventName: "logout"
+      }
     }; 
   }, 
   created() {
@@ -48,17 +59,24 @@ export default {
       if (user) {
         this.getUserData(user)
       } else {
-        this.userData = null
+        this.userData = {
+          name: "",
+          email: "",
+          joined: ""}
       }
     })
   }, 
   methods: {
     logOut() {
-      firebase.auth().signOut().then(() => {
-        firebase.auth().onAuthStateChanged(() => {
-          this.$router.push('/')
+      if(this.userData.email != "") {
+        firebase.auth().signOut().then(() => {
+          firebase.auth().onAuthStateChanged(() => {
+            this.$router.push('/')
+          })
         })
-      })
+      } else {
+        alert("You have not signed in")
+      }
     },
     getUserData(user) {
       userCollection.where("email", "==", user.email)
