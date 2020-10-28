@@ -1,5 +1,5 @@
 const {Player} = require('./player.js')
-const {Deck} = require('./deck.js')
+const {Deck, shuffleArray} = require('./deck.js')
 
 class Room {
     constructor(name, hostId, connectionCount) {
@@ -9,6 +9,8 @@ class Room {
         this.availableTokens = ["tokenRed", "tokenBlue", "tokenGreen", "tokenYellow"]
         this.treasureDeck = new Deck()
         this.doorDeck = new Deck()
+
+        this.turnIndex = 0
     
         this.addPlayer = (socketId) => {
             this.players.push(new Player(socketId))
@@ -27,6 +29,15 @@ class Room {
         this.shuffleDecks = (treasures, doors) => {
             this.treasureDeck.shuffleDeck(treasures)
             this.doorDeck.shuffleDeck(doors)
+        }
+
+        this.shufflePlayers = () => {
+            this.players = shuffleArray(this.players)
+        }
+
+        this.getNextPlayerId = () => {
+            this.turnIndex += 1
+            return this.players[this.turnIndex % this.players.length].socketId
         }
     }
 }

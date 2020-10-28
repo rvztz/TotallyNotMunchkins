@@ -85,6 +85,51 @@ io.on('connection', (socket) => {
 		}
 	})
 
+	socket.on('endPregame', (roomName) => {
+		let roomIndex = findRoom(roomName)
+		if (roomIndex < 0) {
+			console.log("Error: room doesn't exist")
+			return
+		}
+
+		let playerIndex = findPlayer(rooms[roomIndex], socket.id)
+		if (playerIndex < 0) {
+			console.log("Error: player not found")
+			return
+		}
+
+		if (rooms[roomIndex].players[playerIndex].inPregame) {
+			rooms[roomIndex].players[playerIndex].inPregame = false
+			if (checkPregame(rooms[roomIndex].players)) {
+				// Someone is still in pregame, do nothing
+			} else {
+				rooms[roomIndex].shufflePlayers()
+				let nextId = rooms[roomIndex].getNextPlayerId()
+				io.in(roomName).emit('endPregame')
+				io.in(roomName).emit('changeTurn', nextId)
+			}
+		}
+	})
+
+	socket.on('drewCard', (roomName) => {
+		io.in(roomName).emit('drewCard')
+	})
+
+	socket.on('endTurn', (roomName) => {
+		let roomIndex = findRoom(roomName)
+		if (roomIndex < 0) {
+			console.log("Error: room doesn't exist")
+			return
+		}
+
+		let nextId = rooms[roomIndex].getNextPlayerId()
+		io.in(roomName).emit('changeTurn', nextId)
+	})
+
+	socket.on('winGame', (roomName) => {
+		io.in(roomName).emit('endGame', socket.id)
+	})
+
 	/*======================TOKEN MOVEMENT=======================*/
 	socket.on('moveToken', (roomName, x, y) => {
 		socket.to(roomName).emit('moveOpponentToken', socket.id, x, y);
@@ -191,7 +236,7 @@ io.on('connection', (socket) => {
 		rooms[roomIndex].players[playerIndex].level = level
 		socket.to(roomName).emit('updateLevel', socketId, rooms[roomIndex].players[playerIndex].level)
 	})
-	
+
 	/*======================PLAYER DISCONNECT=======================*/
 	socket.on('disconnect', () => {
         console.log('a user disconnected ' + socket.id)
@@ -235,6 +280,7 @@ function findRoom(name) {
 			ans = i
 		}
 	})
+
 	return ans
 }
 
@@ -245,7 +291,18 @@ function findPlayer(room, socketId) {
 			ans = i
 		}
 	})
+
 	return ans
+}
+
+function checkPregame(players) {
+	for(let i = 0; i < players.length; i++) {
+		if(players[i].inPregame) {
+			return true
+		}
+	}
+
+	return false
 }
 
 http.listen(3000, () => {

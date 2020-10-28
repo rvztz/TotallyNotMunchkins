@@ -7,6 +7,7 @@ class Player {
         this.gender = ""
         this.power = 1
         this.tokenImage = ""
+        this.inPregame = true
 
         this.getSocketId = () => { return this.socketId }
         this.getTokenImage = () => { return this.tokenImage }
@@ -15,7 +16,7 @@ class Player {
         this.removeCardAt = (index) => {
             this.cards.splice(index, 1)
         }
-    }   
+    }
 }
 
 module.exports = { Player }

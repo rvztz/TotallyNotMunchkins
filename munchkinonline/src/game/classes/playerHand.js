@@ -6,7 +6,7 @@ export default class PlayerHand {
         this.dimensions = {x: 0, y: 0, width: 0, height: 0, cardHeight: 0, cardWidth: 0}
 
         this.render = (x, y, width, height, cardWidth, cardHeight) => {
-            this.dimensions.x = x 
+            this.dimensions.x = x
             this.dimensions.y = y 
             this.dimensions.width = width 
             this.dimensions.height = height

@@ -2,8 +2,10 @@
 import Phaser from 'phaser'
 
 import Board from '../classes/board'
+import EndTurnButton from '../classes/endTurnButton'
 import Opponent from '../classes/opponent'
 import Player from '../classes/player'
+import GameState from '../classes/gameState'
 
 
 export default class GameScene extends Phaser.Scene {
@@ -44,6 +46,7 @@ export default class GameScene extends Phaser.Scene {
         this.load.image('tokenRed-female', 'assets/tokenRed-female.png')
 
         this.load.image('playButton', 'assets/playButton.png')
+        this.load.image('endTurn', 'assets/endTurn.png')
         this.load.image('goUpALevel', 'assets/goUpALevel.jpg')
         /*======================OTHER DATA LOADING=======================*/
         this.load.json('cards', 'data/cards.json')
@@ -60,16 +63,22 @@ export default class GameScene extends Phaser.Scene {
 
         const positions = ['left', 'top', 'right']
 
-        const hWidth = this.scale.width * (2/3)
-        const hHeight = this.scale.height / 6
+        const screenWidth = this.scale.width
+        const screenHeight = this.scale.height
 
-        const vWidth = this.scale.width / 12
-        const vHeight = this.scale.height * (2/3)
+        const hWidth = screenWidth * (2/3)
+        const hHeight = screenHeight / 6
+
+        const vWidth = screenWidth / 12
+        const vHeight = screenHeight * (2/3)
 
         const cardWidth = 50
         const cardHeight = 72.5
 
         const offset = 10
+
+        // Create game state
+        this.gameState = new GameState(this)
 
         // Create player and render its hand
         this.player = new Player(this)
@@ -111,6 +120,13 @@ export default class GameScene extends Phaser.Scene {
             this.scene.start('Lobby', {socket: this.socket})
         })
 
+        // Render current turn text
+        this.currentTurnText = this.add.text(screenWidth/22, screenHeight/20, "Pregame", {fontFamily: 'Avenir, Helvetica, Arial, sans-serif'}).setFontSize(24).setColor('#000')
+
+        // Render endTurnBUtton
+        this.endTurnButton = new EndTurnButton(this)
+        this.endTurnButton.render(screenWidth, this.player.playerHand.dimensions.y + this.player.playerHand.dimensions.height/2)
+
         // Request initial cards
         this.socket.emit('distributeCards', this.roomName)
 
@@ -137,6 +153,10 @@ export default class GameScene extends Phaser.Scene {
                 if (gameObject.data.get('level') == dropZone.data.get('level')) {
                     updateLastPosition(gameObject)
                     this.scene.socket.emit('moveToken', this.scene.roomName, gameObject.x, gameObject.y)
+
+                    if (gameObject.data.get('level') == 10) {
+                        this.scene.socket.emit('winGame', this.scene.roomName)
+                    }
                 } else {
                     returnToLastPosition(gameObject)
                 }
@@ -253,6 +273,25 @@ export default class GameScene extends Phaser.Scene {
                 })
             }
         })
+
+        this.socket.on('endPregame', () => {
+            this.gameState.endPregame()
+        })
+
+        this.socket.on('changeTurn', (socketId) => {
+            this.gameState.changeTurn(socketId)
+            this.currentTurnText.text = `${socketId}'s turn`
+        })
+
+        this.socket.on('drewCard', () => {
+            this.gameState.drewCard()
+        })
+
+        this.socket.on('endGame', (socketId) => {
+            this.currentTurnText.text = `${socketId} WIINNSSS`
+            this.gameState.finishGame()
+        })
+
     }
 
     update() {
@@ -317,13 +356,18 @@ export default class GameScene extends Phaser.Scene {
     }
 
     useCard(card, targetId) {
+        if (this.gameState.inPregame) {
+            alert("You can't use cards right now.")
+            return false
+        }
+
         if (card.type === "curse" || card.type === "item") {
             if (targetId == this.socket.id) {
-                this.useCardEffect(card, this.player)
+                return this.useCardEffect(card, this.player)
             } else {
                 this.opponents.forEach(opponent => { 
                     if (opponent.socketId == targetId) {
-                        this.useCardEffect(card, opponent)
+                        return this.useCardEffect(card, opponent)
                     }
                 })
             }
@@ -339,10 +383,11 @@ export default class GameScene extends Phaser.Scene {
 
         switch(card.name) {
             case "Go Up A Level":
-                target.levelUp(1)
-                break;
+                target.levelUp(10)
+                return true
             default:
                 console.log("Error: unexpected card name")
+                return false
         }
 
     }

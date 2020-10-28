@@ -26,4 +26,4 @@ function shuffleArray(array) {
     return array
 }
 
-module.exports = { Deck }
+module.exports = { Deck, shuffleArray }
