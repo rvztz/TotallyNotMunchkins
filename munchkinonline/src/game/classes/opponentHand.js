@@ -10,12 +10,13 @@ export default class OppositeHand {
         this.socketId = socketId
 
         this.render = (x, y, width, height, cardWidth, cardHeight) => {
-            this.dimensions.x = x 
+            this.dimensions.x = x
             this.dimensions.y = y 
             this.dimensions.width = width 
             this.dimensions.height = height
             this.dimensions.cardHeight = cardHeight
             this.dimensions.cardWidth = cardWidth
+
             let outline = scene.add.graphics()
             outline.lineStyle(4, 0x000000)
             outline.strokeRect(x, y, width, height)
