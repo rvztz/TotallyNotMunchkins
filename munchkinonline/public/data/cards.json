@@ -5,9 +5,9 @@
                 "name": "Pogmin",
                 "deck": "door",
                 "description": "An extremely powerful monster. If you can beat him, that would be a pogmin moment.",
-                "image": "doorCard",
+                "image": "pogminMonster",
                 "level": 99,
-                "levelsGained": 2,
+                "levelsGained": 10,
                 "treasuresDropped": 5,
                 "type": "monster"
             },

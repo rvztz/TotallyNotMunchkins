@@ -13,7 +13,7 @@ export default class GameScene extends Phaser.Scene {
         super({
             key: 'GameScene'
         })
-    }
+    } 
 
     init(data) {
         this.socket = data.socket
@@ -33,21 +33,17 @@ export default class GameScene extends Phaser.Scene {
         this.load.image('treasureDiscard', 'assets/discard.png')
         this.load.image('slotBG', 'assets/slotBG.png')
 
-        this.load.image('tokenYellow-male', 'assets/tokenYellow-male.png')
-        this.load.image('tokenYellow-female', 'assets/tokenYellow-female.png')
+        /*======================TOKENS=======================*/
+        this.loadTokens()
 
-        this.load.image('tokenBlue-male', 'assets/tokenBlue-male.png')
-        this.load.image('tokenBlue-female', 'assets/tokenBlue-female.png')
-
-        this.load.image('tokenGreen-male', 'assets/tokenGreen-male.png')
-        this.load.image('tokenGreen-female', 'assets/tokenGreen-female.png')
-
-        this.load.image('tokenRed-male', 'assets/tokenRed-male.png')
-        this.load.image('tokenRed-female', 'assets/tokenRed-female.png')
-
+        /*======================BUTTONS=======================*/
         this.load.image('playButton', 'assets/playButton.png')
         this.load.image('endTurn', 'assets/endTurn.png')
         this.load.image('goUpALevel', 'assets/goUpALevel.jpg')
+
+        /*======================MONSTERS=======================*/
+        this.load.image('pogminMonster', 'assets/pogminMonster.png')
+
         /*======================OTHER DATA LOADING=======================*/
         this.load.json('cards', 'data/cards.json')
     }
@@ -61,7 +57,7 @@ export default class GameScene extends Phaser.Scene {
         // Add cards object list
         this.cardList = this.cache.json.get('cards').cards
 
-        const positions = ['left', 'top', 'right']
+        const positions = ['top', 'left', 'right']
 
         const screenWidth = this.scale.width
         const screenHeight = this.scale.height
@@ -93,7 +89,7 @@ export default class GameScene extends Phaser.Scene {
         })
 
         this.opponents.forEach(opponent => { 
-            opponent.renderHand(hWidth, hHeight, vWidth, vHeight, cardWidth, cardHeight, offset) 
+            opponent.renderHand(hWidth, hHeight, vWidth, vHeight*0.7, cardWidth, cardHeight, offset)
         })
         
         // Create and render the board
@@ -129,6 +125,9 @@ export default class GameScene extends Phaser.Scene {
         // Render endTurnBUtton
         this.endTurnButton = new EndTurnButton(this)
         this.endTurnButton.render(screenWidth, this.player.playerHand.dimensions.y + this.player.playerHand.dimensions.height/2)
+
+        // Render space to view bigger card
+        //this.cardView = this.add.image(100, 100, 'pogminMonster').setScale(0.38, 0.38)
 
         // Request initial cards
         this.socket.emit('distributeCards', this.roomName)
@@ -331,7 +330,7 @@ export default class GameScene extends Phaser.Scene {
         const numRows = 3
         const numCols = 5
 
-        this.board = new Board(this, this.player.playerHand.dimensions.x, this.opponents[0].opponentHand.dimensions.y, hWidth/numCols, vHeight/numRows)
+        this.board = new Board(this, this.player.playerHand.dimensions.x, this.opponents[0].opponentHand.dimensions.y + this.opponents[0].opponentHand.dimensions.height, hWidth/numCols, vHeight/numRows)
         this.board.renderTiles()
         this.board.renderDecks()
         this.board.renderDiscards()
@@ -420,6 +419,20 @@ export default class GameScene extends Phaser.Scene {
 
     }
 
+    /*=================== IMAGE LOADING ===================*/
+    loadTokens() {
+        this.load.image('tokenYellow-male', 'assets/tokenYellow-male.png')
+        this.load.image('tokenYellow-female', 'assets/tokenYellow-female.png')
+        
+        this.load.image('tokenBlue-male', 'assets/tokenBlue-male.png')
+        this.load.image('tokenBlue-female', 'assets/tokenBlue-female.png')
+
+        this.load.image('tokenGreen-male', 'assets/tokenGreen-male.png')
+        this.load.image('tokenGreen-female', 'assets/tokenGreen-female.png')
+
+        this.load.image('tokenRed-male', 'assets/tokenRed-male.png')
+        this.load.image('tokenRed-female', 'assets/tokenRed-female.png')
+    }
 }
 
 /*======================DRAG EVENT HELPER FUNCTIONS=======================*/
