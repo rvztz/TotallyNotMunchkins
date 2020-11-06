@@ -17,8 +17,8 @@ export default class Player {
         this.gender = ""
 
         // Renders
-        this.renderHand = (hWidth, hHeight, cardWidth, cardHeight, offset) => {
-            this.playerHand.render(scene.scale.width/2 - hWidth/2, scene.scale.height - hHeight - offset, hWidth, hHeight, cardWidth, cardHeight)
+        this.renderHand = (x, y, width, height, cardWidth, cardHeight) => {
+            this.playerHand.render(x, y, width, height, cardWidth, cardHeight)
         }
 
         this.renderToken = (startTile, index, sprite) => {

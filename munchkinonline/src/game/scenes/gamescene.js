@@ -58,30 +58,18 @@ export default class GameScene extends Phaser.Scene {
         this.cardList = this.cache.json.get('cards').cards
 
         const positions = ['top', 'left', 'right']
-
-        const screenWidth = this.scale.width
-        const screenHeight = this.scale.height
-
-        const hWidth = screenWidth * (2/3)
-        const hHeight = screenHeight / 6
-
-        const vWidth = screenWidth / 12
-        const vHeight = screenHeight * (2/3)
-
         const cardWidth = 50
         const cardHeight = 72.5
-
-        const offset = 10
 
         // Create game state
         this.gameState = new GameState(this)
 
         // Create player and render its hand
         this.player = new Player(this)
-        this.player.renderHand(hWidth, hHeight, cardWidth, cardHeight, offset)
+        this.player.renderHand(213, 590, 853, 120, cardWidth, cardHeight)
 
         // Create opponents and render their hands
-        this.opponents = []
+        this.opponents = [] 
         this.playerList.forEach(player => {
             if (player.socketId != this.socket.id) {
                 this.opponents.push(new Opponent(this, positions.shift(), player.socketId, player.gender))
@@ -89,11 +77,11 @@ export default class GameScene extends Phaser.Scene {
         })
 
         this.opponents.forEach(opponent => { 
-            opponent.renderHand(hWidth, hHeight, vWidth, vHeight*0.7, cardWidth, cardHeight, offset)
+            opponent.renderHand(cardWidth, cardHeight)
         })
         
         // Create and render the board
-        let startTile = this.createBoard(hWidth, vHeight)
+        let startTile = this.createBoard()
         
         // Render the player's and opponents tokens
         this.playerList.forEach((player, index)=> {
@@ -120,22 +108,22 @@ export default class GameScene extends Phaser.Scene {
         })
 
         // Render current turn text
-        this.currentTurnText = this.add.text(screenWidth/22, screenHeight/20, "Pregame", {fontFamily: 'Avenir, Helvetica, Arial, sans-serif'}).setFontSize(24).setColor('#000')
+        this.currentTurnText = this.add.text(58, 36, "Pregame", {fontFamily: 'Avenir, Helvetica, Arial, sans-serif'}).setFontSize(24).setColor('#000')
 
         // Render endTurnBUtton
         this.endTurnButton = new EndTurnButton(this)
-        this.endTurnButton.render(screenWidth, this.player.playerHand.dimensions.y + this.player.playerHand.dimensions.height/2)
+        this.endTurnButton.render(1280, 650)
 
         // Render space to view bigger card
         //this.cardView = this.add.image(100, 100, 'pogminMonster').setScale(0.38, 0.38)
 
-        // Request initial cards
+        // Request initial cards 
         this.socket.emit('distributeCards', this.roomName)
 
         /*======================INPUT EVENTS=======================*/
         this.input.on('drag', function (pointer, gameObject, dragX, dragY) {
             gameObject.x = dragX;
-            gameObject.y = dragY;
+            gameObject.y = dragY; 
         })
 
         this.input.on('dragstart', function (pointer, gameObject) {
@@ -326,11 +314,11 @@ export default class GameScene extends Phaser.Scene {
     }
 
     /*======================UI CREATION FUNCTIONS=======================*/
-    createBoard(hWidth, vHeight) {
+    createBoard() {
         const numRows = 3
         const numCols = 5
 
-        this.board = new Board(this, this.player.playerHand.dimensions.x, this.opponents[0].opponentHand.dimensions.y + this.opponents[0].opponentHand.dimensions.height, hWidth/numCols, vHeight/numRows)
+        this.board = new Board(this, 213, 110, 853/numCols, 480/numRows)
         this.board.renderTiles()
         this.board.renderDecks()
         this.board.renderDiscards()
