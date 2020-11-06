@@ -17,8 +17,8 @@ function launch(containerId) {
         ],
         scale: {
             mode: Phaser.Scale.FIT,
-            width: 1280,
-            height: 720
+            width: '100%',
+            height: '90%'
         }
     })
 }

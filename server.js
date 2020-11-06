@@ -291,8 +291,8 @@ function findPlayer(room, socketId) {
 			ans = i
 		}
 	})
-  
-	return ans 
+
+	return ans
 }
 
 function checkPregame(players) {
