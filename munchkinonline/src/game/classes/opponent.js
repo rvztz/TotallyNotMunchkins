@@ -21,7 +21,7 @@ export default class Opponent {
             } else if (this.position === 'left') {
                 this.opponentHand.render(83, 110, 106, 336, cardWidth, cardHeight)
             } else if (this.position === 'top') {
-                this.opponentHand.render(426, 2, 336, 108, cardWidth, cardHeight)
+                this.opponentHand.render(472, 2, 336, 106, cardWidth, cardHeight)
             } else {
                 console.log("Invalid position to render oppponent hand")
             }
