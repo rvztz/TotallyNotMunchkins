@@ -35,7 +35,7 @@ export default class Opponent {
             this.token.renderedToken.x = x
             this.token.renderedToken.y = y
         }
- 
+
         this.updateCards = (cards) => {
             this.opponentHand.updateCards(cards)
         }
@@ -45,7 +45,7 @@ export default class Opponent {
             this.level = Math.min(this.level, 10)
             this.token.renderedToken.data.set('level', this.level)
             scene.socket.emit('updateLevel', scene.roomName, this.socketId, this.level)
-        } 
+        }
 
         this.updateLevel = (level) => {
             this.level = level

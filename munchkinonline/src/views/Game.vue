@@ -1,5 +1,5 @@
 <template>
-    <div :id="containerId" v-if="downloaded" class="gameContainer"/>
+    <div :id="containerId" v-if="downloaded"/>
     <div class="placeholder" v-else>
         Downloading...
     </div>
@@ -29,8 +29,4 @@ export default {
 </script>
 
 <style scoped>
-.gameContainer {
-    display: flex;
-    justify-content: center;
-}
 </style>

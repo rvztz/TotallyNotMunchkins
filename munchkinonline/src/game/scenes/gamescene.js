@@ -158,7 +158,7 @@ export default class GameScene extends Phaser.Scene {
                     this.scene.socket.emit('moveToken', this.scene.roomName, gameObject.x, gameObject.y)
 
                     if (gameObject.data.get('level') == 10) {
-                        this.scene.socket.emit('winGame', this.scene.roomName) 
+                        this.scene.socket.emit('winGame', this.scene.roomName)
                     }
                 } else {
                     returnToLastPosition(gameObject)

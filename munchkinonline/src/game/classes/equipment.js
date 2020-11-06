@@ -41,7 +41,7 @@ export default class Equipment {
         this.renderSlots = () => {
             for(let i = 0; i < this.slots.length; i++) {
                 let newSlot = new Slot(scene, this.slots[i].equipmentType)
-                newSlot.render(this.dimensions.x + 0.75*this.dimensions.cardWidth + 1.25*i*this.dimensions.cardWidth, this.dimensions.y + this.dimensions.height/2, this.slots[i].image)
+                newSlot.render(this.dimensions.x + this.dimensions.cardWidth + 1.5*i*this.dimensions.cardWidth, this.dimensions.y + this.dimensions.height/2, this.slots[i].image)
             }
         }
     }
