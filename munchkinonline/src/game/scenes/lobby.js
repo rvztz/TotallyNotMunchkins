@@ -43,7 +43,7 @@ export default class Lobby extends Phaser.Scene {
         const screenHeight = this.scale.height
 
         // Add lobby title
-        let title = this.add.text(screenWidth/20,0, 'Game Lobby', {fontFamily: 'Avenir, Helvetica, Arial, sans-serif'}).setFontSize(60).setColor('#000')
+        let title = this.add.text(screenWidth/20,0, `Lobby: ${this.roomName}`, {fontFamily: 'Avenir, Helvetica, Arial, sans-serif'}).setFontSize(60).setColor('#000')
         
         // Add player texts
         this.playerList = new PlayerList(this, {x: screenWidth/2, y: title.y + title.displayHeight, width: screenWidth/4})
@@ -53,7 +53,7 @@ export default class Lobby extends Phaser.Scene {
         this.playerList.addUsername("pogmin")
 
         // Adds token and gender selection buttons
-        this.selection = new Selection(this, {x: screenWidth/2, y: this.playerList.dimensions.y + this.playerList.dimensions.height + 30, width: screenWidth/5})        
+        this.selection = new Selection(this, {x: screenWidth/2, y: this.playerList.dimensions.y + this.playerList.dimensions.height + 100, width: screenWidth/5})        
         this.selection.render()
 
         // Add play button

@@ -2,7 +2,7 @@ import SelectionButton from './selectionButton'
 
 export default class Selection {
     constructor(scene, dimensions) {
-        this.dimensions = {x: dimensions.x, y: dimensions.y, width: dimensions.width, height: dimensions.width*0.5}
+        this.dimensions = {x: dimensions.x, y: dimensions.y, width: dimensions.width, height: dimensions.width*0.6}
         
         this.tokenYellow = new SelectionButton(scene, 'token', 'tokenYellow')
         this.tokenRed = new SelectionButton(scene, 'token', 'tokenRed')
