@@ -136,7 +136,7 @@ io.on('connection', (socket) => {
 	})
 
 	/*======================CARD HANDLING=======================*/
-	socket.on('requestCards', (roomName, cardType, n) => {
+	socket.on('requestCards', (roomName, cardType, n, isPublic) => {
 		let roomIndex = findRoom(roomName)
 		if (roomIndex < 0) {
 			console.log("Error: room doesn't exist")
@@ -164,7 +164,7 @@ io.on('connection', (socket) => {
 			}
 		}
 
-		socket.emit('addCardsToPlayer', response, cardType)
+		socket.emit('addCardsToPlayer', response, cardType, isPublic)
 		socket.to(roomName).emit('updateOpponentCards', socket.id, rooms[roomIndex].players[playerIndex].cards)
 	})
 
@@ -217,6 +217,10 @@ io.on('connection', (socket) => {
 		
 		rooms[roomIndex].players[playerIndex].removeCardAt(index)
 		socket.to(roomName).emit('updateOpponentCards', socket.id, rooms[roomIndex].players[playerIndex].cards)
+	})
+
+	socket.on('showPublicCard', (roomName, cardImage) => {
+		io.in(roomName).emit('showPublicCard', cardImage)
 	})
 
 	/*======================PLAYER UPDATES=======================*/

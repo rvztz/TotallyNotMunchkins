@@ -7,7 +7,7 @@ export default class Deck {
 
             deck.on('pointerup', () => {
                 if (scene.gameState.isYourTurn() && !scene.gameState.cardDrawn) {
-                    scene.socket.emit('requestCards', scene.roomName, this.cardType, 1)
+                    scene.socket.emit('requestCards', scene.roomName, this.cardType, 1, /* isPublic */ true)
                     scene.socket.emit('drewCard', scene.roomName)
                 } else {
                     alert("You can't pick up a card right now.")

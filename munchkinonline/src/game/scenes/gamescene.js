@@ -212,11 +212,18 @@ export default class GameScene extends Phaser.Scene {
             })
         })
 
-        this.socket.on('addCardsToPlayer', (cardNames, cardType) => {
+        this.socket.on('addCardsToPlayer', (cardNames, cardType, isPublic) => {
             let cardList = this.getCards(cardNames, cardType)
             cardList.forEach((card, index) => {
                 this.player.addToHand(card, index)
+                if (isPublic) {
+                    this.socket.emit('showPublicCard', this.roomName, card.bigImage)
+                }
             })
+        })
+
+        this.socket.on('showPublicCard', (cardImage) => {
+            this.cardView.setTexture(cardImage)
         })
 
         this.socket.on('distributeCards', (treasureNames, doorNames) => {
