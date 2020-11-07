@@ -6,7 +6,7 @@ import EndTurnButton from '../classes/endTurnButton'
 import Opponent from '../classes/opponent'
 import Player from '../classes/player'
 import GameState from '../classes/gameState'
-
+import Battlefield from '../classes/battlefield'
 
 export default class GameScene extends Phaser.Scene {
     constructor() {
@@ -37,7 +37,14 @@ export default class GameScene extends Phaser.Scene {
 
 
         /*======================SCENE COMPONENTS CREATION=======================*/
-        
+        /*
+        addMonster = () => {
+            
+        }
+
+        monsters.center.renderedMonster.destroy();
+
+        */
         // Add cards object list
         this.cardList = this.cache.json.get('cards').cards
 
@@ -101,8 +108,14 @@ export default class GameScene extends Phaser.Scene {
         // Render space to view bigger card 
         this.cardView = this.add.image(10, 436, 'blankCard').setScale(0.38, 0.38).setOrigin(0, 0)
 
+        // Create spaces for monsters in combat
+        this.battlefield = new Battlefield(this)
+        this.battlefield.addMonster({bigImage: 'pogminMonster'})
+
         // Request initial cards 
         this.socket.emit('distributeCards', this.roomName)
+
+        /*====================== TEMP =======================*/
 
         /*======================INPUT EVENTS=======================*/
         this.input.on('drag', function (pointer, gameObject, dragX, dragY) {
