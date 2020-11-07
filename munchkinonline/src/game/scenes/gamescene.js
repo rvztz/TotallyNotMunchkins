@@ -23,26 +23,10 @@ export default class GameScene extends Phaser.Scene {
 
     preload() {
         /*======================IMAGE LOADING=======================*/
-        this.load.image('cardBack', 'assets/cardBack.jpg')
-        this.load.image('doorCard', 'assets/door.jpg')
-        this.load.image('treasureCard', 'assets/treasure.jpg')
-        this.load.image('pogmin', 'assets/Pogmin.jpg')
-        this.load.image('doorDeck', 'assets/deck.png')
-        this.load.image('treasureDeck', 'assets/deck.png')
-        this.load.image('doorDiscard', 'assets/discard.png')
-        this.load.image('treasureDiscard', 'assets/discard.png')
-        this.load.image('slotBG', 'assets/slotBG.png')
-
-        /*======================TOKENS=======================*/
+        this.loadSceneComponents()
         this.loadTokens()
-
-        /*======================BUTTONS=======================*/
-        this.load.image('playButton', 'assets/playButton.png')
-        this.load.image('endTurn', 'assets/endTurn.png')
-        this.load.image('goUpALevel', 'assets/goUpALevel.jpg')
-
-        /*======================MONSTERS=======================*/
-        this.load.image('pogminMonster', 'assets/pogminMonster.png')
+        this.loadButtons()
+        this.loadMonsters()        
 
         /*======================OTHER DATA LOADING=======================*/
         this.load.json('cards', 'data/cards.json')
@@ -114,8 +98,8 @@ export default class GameScene extends Phaser.Scene {
         this.endTurnButton = new EndTurnButton(this)
         this.endTurnButton.render(1280, 650)
 
-        // Render space to view bigger card
-        //this.cardView = this.add.image(100, 100, 'pogminMonster').setScale(0.38, 0.38)
+        // Render space to view bigger card 
+        this.cardView = this.add.image(10, 436, 'blankCard').setScale(0.38, 0.38).setOrigin(0, 0)
 
         // Request initial cards 
         this.socket.emit('distributeCards', this.roomName)
@@ -408,6 +392,18 @@ export default class GameScene extends Phaser.Scene {
     }
 
     /*=================== IMAGE LOADING ===================*/
+    loadSceneComponents() {
+        this.load.image('cardBack', 'assets/cardBack.jpg')
+        this.load.image('doorCard', 'assets/door.jpg')
+        this.load.image('treasureCard', 'assets/treasure.jpg')
+        this.load.image('pogmin', 'assets/Pogmin.jpg')
+        this.load.image('doorDeck', 'assets/deck.png')
+        this.load.image('treasureDeck', 'assets/deck.png')
+        this.load.image('doorDiscard', 'assets/discard.png')
+        this.load.image('treasureDiscard', 'assets/discard.png')
+        this.load.image('slotBG', 'assets/slotBG.png')
+    }
+
     loadTokens() {
         this.load.image('tokenYellow-male', 'assets/tokenYellow-male.png')
         this.load.image('tokenYellow-female', 'assets/tokenYellow-female.png')
@@ -420,6 +416,17 @@ export default class GameScene extends Phaser.Scene {
 
         this.load.image('tokenRed-male', 'assets/tokenRed-male.png')
         this.load.image('tokenRed-female', 'assets/tokenRed-female.png')
+    }
+
+    loadButtons() {
+        this.load.image('playButton', 'assets/playButton.png')
+        this.load.image('endTurn', 'assets/endTurn.png')
+        this.load.image('goUpALevel', 'assets/goUpALevel.jpg')
+    }
+
+    loadMonsters() {
+        this.load.image('blankCard', 'assets/monsters/blankCard.png')
+        this.load.image('pogminMonster', 'assets/monsters/pogminMonster.png')
     }
 }
 
