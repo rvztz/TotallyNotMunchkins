@@ -39,9 +39,15 @@ export default class Battlefield {
 
         this.fight = () => {
             let playerPower = scene.player.getFullStrength()
-            let monsterPower = this.getTargettedMonsterPower()
+            let targettedMonster = this.getTargettedMonster()
 
-            if (playerPower > monsterPower) {
+            if (playerPower > targettedMonster.strength) {
+                scene.player.levelUp(targettedMonster.levelsGained)
+                scene.socket.emit('requestCards', scene.roomName, 'treasure', targettedMonster.treasuresDropped, /* isPublic */ false)
+
+                this.removeTargettedMonster()
+                this.targetFirstMonster()
+
                 console.log("YOU WIN")
             } else {
                 console.log("YOU DIE")
@@ -65,15 +71,50 @@ export default class Battlefield {
             monster.renderedMonster.clearTint()
         }
 
-        this.getTargettedMonsterPower = () => {
-            if (this.center.selected) {
-                return this.center.strength
-            } else if (this.left.selected) {
-                return this.left.strength
-            } else if (this.right.selected) {
-                return this.right.strength
+        this.getTargettedMonster = () => {
+            if (this.center != null && this.center.selected) {
+                return this.center
+            } else if (this.left != null && this.left.selected) {
+                return this.left
+            } else if (this.right != null && this.right.selected) {
+                return this.right
             } else {
                 console.log("Error: unexpected targetted monster")
+            }
+        }
+
+        this.removeTargettedMonster = () => {
+            if (this.center != null && this.center.selected) {
+                this.center.renderedMonster.destroy()
+                this.center = null
+            } else if (this.left != null && this.left.selected) {
+                this.left.renderedMonster.destroy()
+                this.left = null
+            } else if (this.right != null && this.right.selected) {
+                this.right.renderedMonster.destroy()
+                this.right = null
+            } else {
+                console.log("Error: unexpected targetted monster")
+            }
+        }
+
+        this.removeButtons = () => {
+            this.fightButton.destroy()
+            this.runButton.destroy()
+            this.askForHelpButton.destroy()
+            //this.offerHelpButton.destroy()
+        }
+
+        this.targetFirstMonster = () => {
+            if (this.center != null) {
+                this.targetMonster(this.center)
+            } else if (this.left != null) {
+                this.targetMonster(this.left)
+            } else if (this.right != null) {
+                this.targetMonster(this.right)
+            } else {
+                scene.gameState.endCombat()
+                this.removeButtons()
             }
         }
     }

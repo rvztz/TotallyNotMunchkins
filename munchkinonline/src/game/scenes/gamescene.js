@@ -381,7 +381,7 @@ export default class GameScene extends Phaser.Scene {
     }
 
     useCard(card, targetId) {
-        if (this.gameState.inPregame) {
+        if (this.gameState.inPregame || !this.gameState.cardDrawn) {
             alert("You can't use cards right now.")
             return false
         }
