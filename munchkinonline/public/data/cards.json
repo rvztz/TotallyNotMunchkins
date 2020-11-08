@@ -7,7 +7,7 @@
                 "description": "An extremely powerful monster. If you can beat him, that would be a pogmin moment.",
                 "smallImage": "pogminMonster",
                 "bigImage": "pogminMonster",
-                "level": 1,
+                "level": 99,
                 "levelsGained": 10,
                 "treasuresDropped": 5,
                 "type": "monster"

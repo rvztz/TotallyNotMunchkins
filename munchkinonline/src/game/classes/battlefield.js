@@ -42,15 +42,17 @@ export default class Battlefield {
             let targettedMonster = this.getTargettedMonster()
 
             if (playerPower > targettedMonster.strength) {
+                // YOU WIN
                 scene.player.levelUp(targettedMonster.levelsGained)
                 scene.socket.emit('requestCards', scene.roomName, 'treasure', targettedMonster.treasuresDropped, /* isPublic */ false)
 
                 this.removeTargettedMonster()
                 this.targetFirstMonster()
-
-                console.log("YOU WIN")
             } else {
-                console.log("YOU DIE")
+                // YOU LOSE
+                scene.player.die()
+                this.removeAllMonsters()
+                this.endCombat()
             }
         }
 
@@ -83,6 +85,23 @@ export default class Battlefield {
             }
         }
 
+        this.removeAllMonsters = () => {
+            if (this.center != null) {
+                this.center.renderedMonster.destroy()
+                this.center = null
+            }
+            
+            if (this.left != null) {
+                this.left.renderedMonster.destroy()
+                this.left = null
+            } 
+            
+            if (this.right != null) {
+                this.right.renderedMonster.destroy()
+                this.right = null
+            }
+        }
+
         this.removeTargettedMonster = () => {
             if (this.center != null && this.center.selected) {
                 this.center.renderedMonster.destroy()
@@ -105,6 +124,11 @@ export default class Battlefield {
             //this.offerHelpButton.destroy()
         }
 
+        this.endCombat = () => {
+            scene.gameState.endCombat()
+            this.removeButtons()
+        }
+
         this.targetFirstMonster = () => {
             if (this.center != null) {
                 this.targetMonster(this.center)
@@ -113,8 +137,7 @@ export default class Battlefield {
             } else if (this.right != null) {
                 this.targetMonster(this.right)
             } else {
-                scene.gameState.endCombat()
-                this.removeButtons()
+                this.endCombat()
             }
         }
     }
