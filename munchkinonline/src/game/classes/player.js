@@ -30,6 +30,7 @@ export default class Player {
         this.addToHand = (card, i) => {
             this.cards.push(card)
             this.playerHand.addCard(card, i)
+            scene.socket.emit('updatePlayerHand', scene.roomName, card.deck)
         }
 
         this.removeCardAt = (index) => {

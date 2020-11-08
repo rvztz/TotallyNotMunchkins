@@ -34,6 +34,10 @@ export default class Battlefield {
             })
 
             this.runButton = scene.add.image(488, 520, 'runBtn').setInteractive({ cursor: 'pointer' })
+            this.runButton.on('pointerup', () => {
+                this.run()
+            })
+
             this.askForHelpButton = scene.add.image(792, 520, 'askHelpBtn').setInteractive({ cursor: 'pointer' })
         }
 
@@ -42,14 +46,27 @@ export default class Battlefield {
             let targettedMonster = this.getTargettedMonster()
 
             if (playerPower > targettedMonster.strength) {
-                // YOU WIN
                 scene.player.levelUp(targettedMonster.levelsGained)
                 scene.socket.emit('requestCards', scene.roomName, 'treasure', targettedMonster.treasuresDropped, /* isPublic */ false)
 
                 this.removeTargettedMonster()
                 this.targetFirstMonster()
             } else {
-                // YOU LOSE
+                scene.player.die()
+                this.removeAllMonsters()
+                this.endCombat()
+            }
+        }
+
+        this.run = () => {
+            let rng = Math.floor(Math.random() * 6 + 1) 
+            
+            if(rng >= 5) {
+                //YOU ESCAPED
+                this.removeTargettedMonster()
+                this.targetFirstMonster()
+            } else {
+                // YOU DIE
                 scene.player.die()
                 this.removeAllMonsters()
                 this.endCombat()
@@ -87,16 +104,19 @@ export default class Battlefield {
 
         this.removeAllMonsters = () => {
             if (this.center != null) {
+                scene.socket.emit('returnCard', scene.roomName, this.center.name, 'door')
                 this.center.renderedMonster.destroy()
                 this.center = null
             }
             
             if (this.left != null) {
+                scene.socket.emit('returnCard', scene.roomName, this.left.name, 'door')
                 this.left.renderedMonster.destroy()
                 this.left = null
             } 
             
             if (this.right != null) {
+                scene.socket.emit('returnCard', scene.roomName, this.right.name, 'door')
                 this.right.renderedMonster.destroy()
                 this.right = null
             }
@@ -104,12 +124,15 @@ export default class Battlefield {
 
         this.removeTargettedMonster = () => {
             if (this.center != null && this.center.selected) {
+                scene.socket.emit('returnCard', scene.roomName, this.center.name, 'door')
                 this.center.renderedMonster.destroy()
                 this.center = null
             } else if (this.left != null && this.left.selected) {
+                scene.socket.emit('returnCard', scene.roomName, this.left.name, 'door')
                 this.left.renderedMonster.destroy()
                 this.left = null
             } else if (this.right != null && this.right.selected) {
+                scene.socket.emit('returnCard', scene.roomName, this.right.name, 'door')
                 this.right.renderedMonster.destroy()
                 this.right = null
             } else {

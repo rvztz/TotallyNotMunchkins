@@ -151,7 +151,7 @@ export default class GameScene extends Phaser.Scene {
             } else if (gameObject.data.get('type') === 'card' && dropZone.data.get('type') === 'discard') {
                 if (gameObject.data.get('deck') === dropZone.data.get('deck')) {
 
-                    this.scene.removeCardFromPlayer(gameObject)
+                    this.scene.removeAndReturnCardFromPlayer(gameObject)
 
                 } else {
                     returnToLastPosition(gameObject)
@@ -169,7 +169,7 @@ export default class GameScene extends Phaser.Scene {
             } else if (gameObject.data.get('type') === 'card' && dropZone.data.get('type') === 'tile') {
 
                 if (this.scene.useCard(gameObject.data.get('data'), this.scene.socket.id)) {
-                    this.scene.removeCardFromPlayer(gameObject)
+                    this.scene.removeAndReturnCardFromPlayer(gameObject)
                 } else {
                     returnToLastPosition(gameObject)
                 }
@@ -178,7 +178,7 @@ export default class GameScene extends Phaser.Scene {
             } else if (gameObject.data.get('type') === 'card' && dropZone.data.get('type') === 'opponentHand') {
 
                 if (this.scene.useCard(gameObject.data.get('data'), dropZone.data.get('ownerId'))) {
-                    this.scene.removeCardFromPlayer(gameObject)
+                    this.scene.removeAndReturnCardFromPlayer(gameObject)
                 } else {
                     returnToLastPosition(gameObject)
                 }
@@ -227,16 +227,17 @@ export default class GameScene extends Phaser.Scene {
         this.socket.on('addCardsToPlayer', (cardNames, cardType, isPublic) => {
             let cardList = this.getCards(cardNames, cardType)
             cardList.forEach((card, index) => {
-                this.player.addToHand(card, index)
-                if (isPublic) {
-                    if(card.type == "monster") {
-                        this.gameState.startCombat();
-                        this.battlefield.renderButtons();
-                        this.battlefield.addMonster(card);
-                        this.battlefield.addMonster(card);
-                        this.battlefield.addMonster(card);
-                    }
+
+                if (card.type == "monster" && isPublic) {
+                    this.gameState.startCombat();
+                    this.battlefield.renderButtons();
+                    this.battlefield.addMonster(card);
                     this.socket.emit('showPublicCard', this.roomName, card.bigImage)
+                } else {
+                    if (isPublic) {
+                        this.socket.emit('showPublicCard', this.roomName, card.bigImage)
+                    }
+                    this.player.addToHand(card, index)
                 }
             })
         })
@@ -244,7 +245,7 @@ export default class GameScene extends Phaser.Scene {
         this.socket.on('showPublicCard', (cardImage) => {
             this.cardView.setTexture(cardImage)
         })
-
+ 
         this.socket.on('distributeCards', (treasureNames, doorNames) => {
             let treasureCards = this.getCards(treasureNames, 'treasure')
             let doorCards = this.getCards(doorNames, 'door')
@@ -371,11 +372,23 @@ export default class GameScene extends Phaser.Scene {
         return -1
     }
 
+    /*
     removeCardFromPlayer(cardGameObject) {
         let index = this.findCard(cardGameObject.data.get('data'))
         this.player.removeCardAt(index)
 
-        this.socket.emit('removeCard', this.roomName, cardGameObject.data.get('data').name, cardGameObject.data.get('deck'), index)
+        this.socket.emit('removeCard', this.roomName, index)
+
+        cardGameObject.destroy()
+    }
+    */
+
+    removeAndReturnCardFromPlayer(cardGameObject) {
+        let index = this.findCard(cardGameObject.data.get('data'))
+        this.player.removeCardAt(index)
+
+        this.socket.emit('removeCard', this.roomName, index)
+        this.socket.emit('returnCard', this.roomName, cardGameObject.data.get('data').name, cardGameObject.data.get('deck'))
 
         cardGameObject.destroy()
     }
