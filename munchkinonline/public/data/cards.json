@@ -15,8 +15,8 @@
             {
                 "name": "Unpogmin",
                 "deck": "door",
-                "smallImage": "doorCard",
-                "bigImage": "doorCard",
+                "smallImage": "unpogminMonster",
+                "bigImage": "unpogminMonster",
                 "description": "The weakest monster ever. If you kill him, you are the monster.",
                 "level": 0,
                 "levelsGained": -1,

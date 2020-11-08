@@ -22,7 +22,7 @@ export default class Lobby extends Phaser.Scene {
     }
     
     preload() {
-        this.load.image('playButton', 'assets/playButton.png')
+        this.load.image('playButton', 'assets/buttons/playButton.png')
 
         this.load.image('male', 'assets/male.png')
         this.load.image('female', 'assets/female.png')

@@ -110,7 +110,6 @@ export default class GameScene extends Phaser.Scene {
 
         // Create spaces for monsters in combat
         this.battlefield = new Battlefield(this)
-        this.battlefield.addMonster({bigImage: 'pogminMonster'})
 
         // Request initial cards 
         this.socket.emit('distributeCards', this.roomName)
@@ -230,6 +229,13 @@ export default class GameScene extends Phaser.Scene {
             cardList.forEach((card, index) => {
                 this.player.addToHand(card, index)
                 if (isPublic) {
+                    if(card.type == "monster") {
+                        this.gameState.startCombat();
+                        this.battlefield.renderButtons();
+                        this.battlefield.addMonster(card);
+                        this.battlefield.addMonster(card);
+                        this.battlefield.addMonster(card);
+                    }
                     this.socket.emit('showPublicCard', this.roomName, card.bigImage)
                 }
             })
@@ -439,14 +445,19 @@ export default class GameScene extends Phaser.Scene {
     }
 
     loadButtons() {
-        this.load.image('playButton', 'assets/playButton.png')
-        this.load.image('endTurn', 'assets/endTurn.png')
-        this.load.image('goUpALevel', 'assets/goUpALevel.jpg')
+        this.load.image('playButton', 'assets/buttons/playButton.png')
+        this.load.image('endTurn', 'assets/buttons/endTurn.png')
+        this.load.image('fightBtn', 'assets/buttons/fightBtn.png')
+        this.load.image('runBtn', 'assets/buttons/runBtn.jpg')
+        this.load.image('askHelpBtn', 'assets/buttons/askHelpBtn.png')
     }
 
     loadMonsters() {
         this.load.image('blankCard', 'assets/monsters/blankCard.png')
         this.load.image('pogminMonster', 'assets/monsters/pogminMonster.png')
+        this.load.image('unpogminMonster', 'assets/monsters/unpogminMonster.png')
+
+        this.load.image('goUpALevel', 'assets/goUpALevel.jpg')
     }
 }
 

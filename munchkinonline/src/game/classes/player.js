@@ -13,8 +13,9 @@ export default class Player {
         this.cards = []
         this.level = 1
         this.equipment = []
-        this.power = 1
+        this.strength = 1
         this.gender = ""
+        this.effects = 0
 
         // Renders
         this.renderHand = (x, y, width, height, cardWidth, cardHeight) => {
@@ -35,14 +36,16 @@ export default class Player {
             this.cards.splice(index, 1)
         }
 
+        /*
         this.getData = () => {
             return {
                 cards: this.cards,
                 level: this.level,
                 equipment: this.equipment,
-                power: this.power
+                strength: this.strength
             }
         }
+        */
 
         this.levelUp = (n) => {
             this.level += n
@@ -78,6 +81,18 @@ export default class Player {
                     console.log("Error: unexpected token color")
             }
             this.playerHand.colorHand(this.color)
+        }
+
+        this.getEquipmentPower = () => {
+            let total = 0
+            this.equipment.forEach(equipment => {
+                total += equipment.statBonus
+            })
+            return total
+        }
+
+        this.getFullStrength = () => {
+            return this.level + this.getEquipmentPower() + this.effects
         }
     }
 }

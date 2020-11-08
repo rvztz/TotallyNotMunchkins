@@ -5,7 +5,7 @@ class Player {
         this.level = 1
         this.equipment = []
         this.gender = ""
-        this.power = 1
+        this.strength = 1
         this.tokenImage = ""
         this.inPregame = true
 
