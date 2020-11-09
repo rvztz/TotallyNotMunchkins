@@ -5,7 +5,6 @@ export default class GameState {
         this.currentTurn = ""
         this.cardDrawn = false
         this.inCombat = false
-        this.wasInCombat = false
         this.canLootTheRoom = false
         
         this.endPregame = () => {
@@ -20,7 +19,6 @@ export default class GameState {
         this.clearTurn = () => {
             this.cardDrawn = false
             this.inCombat = false
-            this.wasInCombat = false
             this.canLootTheRoom = false
         }
         
@@ -43,7 +41,6 @@ export default class GameState {
 
         this.endCombat = () => {
             this.inCombat = false
-            this.wasInCombat = true
         }
 
         this.enableLootTheRoom = () => {

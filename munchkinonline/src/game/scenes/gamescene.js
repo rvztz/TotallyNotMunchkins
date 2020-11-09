@@ -174,7 +174,11 @@ export default class GameScene extends Phaser.Scene {
             } else if (gameObject.data.get('type') === 'card' && dropZone.data.get('type') === 'tile') {
 
                 if (this.scene.useCard(gameObject.data.get('data'), this.scene.socket.id)) {
-                    this.scene.removeAndReturnCardFromPlayer(gameObject)
+                    if (gameObject.data.get('data').type === "monster") {
+                        this.scene.removeCardFromPlayer(gameObject)
+                    } else {
+                        this.scene.removeAndReturnCardFromPlayer(gameObject)
+                    }
                 } else {
                     returnToLastPosition(gameObject)
                 }
@@ -421,7 +425,7 @@ export default class GameScene extends Phaser.Scene {
         return -1
     }
 
-    /*
+
     removeCardFromPlayer(cardGameObject) {
         let index = this.findCard(cardGameObject.data.get('data'))
         this.player.removeCardAt(index)
@@ -430,7 +434,6 @@ export default class GameScene extends Phaser.Scene {
 
         cardGameObject.destroy()
     }
-    */
 
     removeAndReturnCardFromPlayer(cardGameObject) {
         let index = this.findCard(cardGameObject.data.get('data'))
@@ -448,7 +451,15 @@ export default class GameScene extends Phaser.Scene {
             return false
         }
 
-        if (card.type === "curse" || card.type === "item") {
+        if (card.type === "monster" && this.gameState.isYourTurn() && this.gameState.canLootTheRoom) {
+            if (targetId == this.socket.id) {
+                this.battlefield.beginCombat(card)
+                return true
+            } else {
+                // Not yet implemented
+                return false
+            }
+        } else if (card.type === "curse" || card.type === "item") {
             if (targetId == this.socket.id) {
                 return this.useCardEffect(card, this.player)
             } else {
@@ -459,6 +470,7 @@ export default class GameScene extends Phaser.Scene {
                 })
             }
         } else {
+            alert("You can't use that card right now.")
             return false
         }
 
