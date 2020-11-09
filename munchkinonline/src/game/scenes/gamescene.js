@@ -261,6 +261,7 @@ export default class GameScene extends Phaser.Scene {
                     this.socket.emit('showPublicCard', this.roomName, card.bigImage)
                 } else {
                     if (isPublic) {
+                        this.socket.emit('enabledLoot', this.roomName)
                         this.socket.emit('showPublicCard', this.roomName, card.bigImage)
                     }
                     this.player.addToHand(card, index)
@@ -339,6 +340,14 @@ export default class GameScene extends Phaser.Scene {
 
         this.socket.on('drewCard', () => {
             this.gameState.drewCard()
+        })
+
+        this.socket.on('enabledLoot', () => {
+            this.gameState.enableLootTheRoom()
+        })
+
+        this.socket.on('disabledLoot', () => {
+            this.gameState.disableLootTheRoom()
         })
 
         this.socket.on('endGame', (socketId) => {

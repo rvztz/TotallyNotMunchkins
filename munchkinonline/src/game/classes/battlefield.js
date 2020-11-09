@@ -149,6 +149,7 @@ export default class Battlefield {
 
         this.beginCombat = (card) => {
             scene.gameState.startCombat()
+            scene.socket.emit('disabledLoot', scene.roomName)
             scene.combatBackground = scene.add.rectangle(212, 109, 855, 482, 0x999999).setAlpha(0.6).setOrigin(0, 0)
             this.renderButtons()
             this.addMonster(card)

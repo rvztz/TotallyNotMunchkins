@@ -115,6 +115,14 @@ io.on('connection', (socket) => {
 		io.in(roomName).emit('drewCard')
 	})
 
+	socket.on('enabledLoot', (roomName) => {
+		io.in(roomName).emit('enabledLoot')
+	})
+
+	socket.on('disabledLoot', (roomName) => {
+		io.in(roomName).emit('disabledLoot')
+	})
+
 	socket.on('endTurn', (roomName) => {
 		let roomIndex = findRoom(roomName)
 		if (roomIndex < 0) {
