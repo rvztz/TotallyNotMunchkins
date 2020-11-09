@@ -104,7 +104,7 @@ export default class GameScene extends Phaser.Scene {
 
         // Render strength text
         this.add.text(1106, 426, "Strength", {fontFamily: 'Avenir, Helvetica, Arial, sans-serif'}).setFontSize(20).setColor('#000')
-        this.strengthText = this.add.text(1127, 456, "99", {fontFamily: 'Avenir, Helvetica, Arial, sans-serif'}).setFontSize(28).setColor('#000')
+        this.strengthText = this.add.text(1127, 456, "", {fontFamily: 'Avenir, Helvetica, Arial, sans-serif'}).setFontSize(28).setColor('#000')
  
         // Render endTurnBUtton
         this.endTurnButton = new EndTurnButton(this)
@@ -257,9 +257,7 @@ export default class GameScene extends Phaser.Scene {
             cardList.forEach((card, index) => {
 
                 if (card.type == "monster" && isPublic) {
-                    this.gameState.startCombat();
-                    this.battlefield.renderButtons();
-                    this.battlefield.addMonster(card);
+                    this.battlefield.beginCombat(card)
                     this.socket.emit('showPublicCard', this.roomName, card.bigImage)
                 } else {
                     if (isPublic) {
@@ -472,7 +470,6 @@ export default class GameScene extends Phaser.Scene {
                 console.log("Error: unexpected card name")
                 return false
         }
-
     }
 
     /*=================== IMAGE LOADING ===================*/

@@ -147,9 +147,17 @@ export default class Battlefield {
             //this.offerHelpButton.destroy()
         }
 
+        this.beginCombat = (card) => {
+            scene.gameState.startCombat()
+            scene.combatBackground = scene.add.rectangle(212, 109, 855, 482, 0x999999).setAlpha(0.6).setOrigin(0, 0)
+            this.renderButtons()
+            this.addMonster(card)
+        }
+
         this.endCombat = () => {
             scene.gameState.endCombat()
             this.removeButtons()
+            scene.combatBackground.destroy()
         }
 
         this.targetFirstMonster = () => {
