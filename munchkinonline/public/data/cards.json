@@ -72,12 +72,27 @@
             {
                 "name": "Go Up A Level",
                 "deck": "treasure",
-                "description": "It's in the name.",
+                "description": "Go Up A Level",
                 "smallImage": "goUpALevel",
                 "bigImage": "goUpALevel",
                 "type": "item",
+                "usableOnPlayer": true,
+                "usableOnMonster": false,
                 "value": 0
+            },
+
+            {
+                "name": "Stand Arrow",
+                "deck": "treasure",
+                "description": "A Golden Experience",
+                "smallImage": "standArrow",
+                "bigImage": "standArrow",
+                "type": "item",
+                "usableOnPlayer": true,
+                "usableOnMonster": true,
+                "statBonus": 8,
+                "value": 800
             }
-        ]  
+        ]
     }
 }

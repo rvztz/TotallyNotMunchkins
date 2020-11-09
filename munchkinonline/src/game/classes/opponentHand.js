@@ -25,6 +25,22 @@ export default class OppositeHand {
              //  A drop zone
             let zone = scene.add.zone(x + width/2, y + height/2, width, height).setRectangleDropZone(width, height)
             zone.setData({type: 'opponentHand', ownerId: this.socketId})
+
+            zone.on('pointerover', () => {
+                let strength = null
+                let color = null
+                scene.opponents.forEach(opponent => {
+                    if (opponent.socketId == socketId) {
+                        strength = opponent.strength
+                        color = opponent.colorString
+                    }
+                })
+                scene.strengthText.text = `${strength}`
+                if (scene.player.getFullStrength() < 10) {
+                    scene.strengthText.text = '0' + scene.strengthText.text
+                }
+                scene.strengthText.setColor(color)
+            })
         }
 
         this.updateCards = (cards) => {

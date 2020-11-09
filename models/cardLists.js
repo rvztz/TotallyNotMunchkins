@@ -2,9 +2,9 @@
 const TreasureList = [
     "Diamond Sword",
     "Go Up A Level",
+    "Stand Arrow",
 
     // Temporary duplicates
-    "Diamond Sword",
     "Go Up A Level",
     "Diamond Sword",
     "Go Up A Level",
@@ -18,16 +18,15 @@ const TreasureList = [
     "Go Up A Level",
     "Diamond Sword",
     "Go Up A Level",
-    "Diamond Sword",
-    "Go Up A Level",
-    "Diamond Sword",
-    "Go Up A Level",
-    "Diamond Sword",
-    "Go Up A Level",
-    "Diamond Sword",
-    "Go Up A Level",
-    "Diamond Sword",
-    "Go Up A Level",
+    "Stand Arrow",
+    "Stand Arrow",
+    "Stand Arrow",
+    "Stand Arrow",
+    "Stand Arrow",
+    "Stand Arrow",
+    "Stand Arrow",
+    "Stand Arrow",
+    "Stand Arrow",
 ]
 
 const DoorList = [

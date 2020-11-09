@@ -14,14 +14,14 @@ export default class Battlefield {
         this.addMonster = (cardData) => {
             if (this.center == null) {
                 this.center = new Monster(scene, cardData)
-                this.center.render(640, 300)
+                this.center.render(640, 300, 'center')
                 this.targetMonster(this.center)
             } else if (this.left == null) {
                 this.left = new Monster(scene, cardData)
-                this.left.render(380, 300)
+                this.left.render(380, 300, 'left')
             } else if (this.right == null) {
                 this.right = new Monster(scene, cardData)
-                this.right.render(900, 300)
+                this.right.render(900, 300, 'right')
             } else {
                 console.log("Error: monster limit exceeded")
             }

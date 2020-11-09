@@ -12,7 +12,7 @@ export default class Opponent {
         this.socketId = socketId
         this.gender = gender
         this.level = 1 
-        this.power = 1
+        this.strength = 1
          
         // Renders
         this.renderHand = (cardWidth, cardHeight) => {
@@ -41,14 +41,19 @@ export default class Opponent {
         }
 
         this.levelUp = (n) => {
-            this.level += n
-            this.level = Math.min(this.level, 10)
-            this.token.renderedToken.data.set('level', this.level)
-            scene.socket.emit('updateLevel', scene.roomName, this.socketId, this.level)
-        } 
+            scene.socket.emit('levelUpPlayer', this.socketId, n)
+        }
 
         this.updateLevel = (level) => {
             this.level = level
+        }
+
+        this.buff = (amount) => {
+            scene.socket.emit('buffPlayer', this.socketId, amount)
+        }
+
+        this.updateStrength = (strength) => {
+            this.strength = strength
         }
 
         this.chooseColor = (tokenImage) => {

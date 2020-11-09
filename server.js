@@ -244,21 +244,46 @@ io.on('connection', (socket) => {
 	})
 
 	/*======================PLAYER UPDATES=======================*/
-	socket.on('updateLevel', (roomName, socketId, level) => {
+	socket.on('levelUpPlayer', (socketId, n) => {
+		io.to(socketId).emit('levelUpPlayer', n)
+	})
+	
+	socket.on('updateLevel', (roomName, level) => {
 		let roomIndex = findRoom(roomName)
 		if (roomIndex < 0) {
 			console.log("Error: room doesn't exist")
 			return
 		}
 
-		let playerIndex = findPlayer(rooms[roomIndex], socketId)
+		let playerIndex = findPlayer(rooms[roomIndex], socket.id)
 		if (playerIndex < 0) {
 			console.log("Error: player not found")
 			return
 		}
 
 		rooms[roomIndex].players[playerIndex].level = level
-		socket.to(roomName).emit('updateLevel', socketId, rooms[roomIndex].players[playerIndex].level)
+		socket.to(roomName).emit('updateLevel', socket.id, rooms[roomIndex].players[playerIndex].level)
+	})
+
+	socket.on('buffPlayer', (socketId, amount) => {
+		io.to(socketId).emit('buffPlayer', amount)
+	})
+
+	socket.on('updateStrength', (roomName, strength) => {
+		let roomIndex = findRoom(roomName)
+		if (roomIndex < 0) {
+			console.log("Error: room doesn't exist")
+			return
+		}
+
+		let playerIndex = findPlayer(rooms[roomIndex], socket.id)
+		if (playerIndex < 0) {
+			console.log("Error: player not found")
+			return
+		}
+
+		rooms[roomIndex].players[playerIndex].strength = strength
+		socket.to(roomName).emit('updateStrength', socket.id, rooms[roomIndex].players[playerIndex].strength)
 	})
 
 	/*======================PLAYER DISCONNECT=======================*/

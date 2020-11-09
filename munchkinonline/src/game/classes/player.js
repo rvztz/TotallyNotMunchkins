@@ -53,18 +53,25 @@ export default class Player {
             this.level = Math.min(this.level, 10)
             this.level = Math.max(this.level, 1)
             this.token.renderedToken.data.set('level', this.level)
-            scene.socket.emit('updateLevel', scene.roomName, scene.socket.id, this.level)
+            scene.socket.emit('updateLevel', scene.roomName, this.level)
+            scene.socket.emit('updateStrength', scene.roomName, this.getFullStrength())
         }
 
         this.resetLevel = () => {
             this.level = 1
             this.token.renderedToken.data.set('level', this.level)
-            scene.socket.emit('updateLevel', scene.roomName, scene.socket.id, this.level)
+            scene.socket.emit('updateLevel', scene.roomName, this.level)
+            scene.socket.emit('updateStrength', scene.roomName, this.getFullStrength())
         }
 
         this.updateLevel = (level) => {
             this.level = level
             this.token.renderedToken.data.set('level', this.level)
+        }
+
+        this.buff = (amount) => {
+            this.effects += amount
+            scene.socket.emit('updateStrength', scene.roomName, this.getFullStrength())
         }
 
         this.chooseColor = (tokenImage) => {

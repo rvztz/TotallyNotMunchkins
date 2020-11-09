@@ -26,7 +26,8 @@ export default class GameScene extends Phaser.Scene {
         this.loadSceneComponents()
         this.loadTokens()
         this.loadButtons()
-        this.loadMonsters()        
+        this.loadMonsters()     
+        this.loadItems()   
 
         /*======================OTHER DATA LOADING=======================*/
         this.load.json('cards', 'data/cards.json')
@@ -48,7 +49,7 @@ export default class GameScene extends Phaser.Scene {
         // Add cards object list
         this.cardList = this.cache.json.get('cards').cards
 
-        const positions = ['top', 'left', 'right']
+        const positions = ['right', 'top', 'left']
         const cardWidth = 50
         const cardHeight = 72.5
 
@@ -101,6 +102,10 @@ export default class GameScene extends Phaser.Scene {
         // Render current turn text
         this.currentTurnText = this.add.text(58, 36, "Pregame", {fontFamily: 'Avenir, Helvetica, Arial, sans-serif'}).setFontSize(24).setColor('#000')
 
+        // Render strength text
+        this.add.text(1106, 426, "Strength", {fontFamily: 'Avenir, Helvetica, Arial, sans-serif'}).setFontSize(20).setColor('#000')
+        this.strengthText = this.add.text(1127, 456, "99", {fontFamily: 'Avenir, Helvetica, Arial, sans-serif'}).setFontSize(28).setColor('#000')
+ 
         // Render endTurnBUtton
         this.endTurnButton = new EndTurnButton(this)
         this.endTurnButton.render(1280, 650)
@@ -183,6 +188,26 @@ export default class GameScene extends Phaser.Scene {
                     returnToLastPosition(gameObject)
                 }
 
+            // Card on Monster (use card on monster)
+            } else if (gameObject.data.get('type') === 'card' && dropZone.data.get('type') === 'monster') {
+                let position = dropZone.data.get('position')
+                let monster = null
+                switch (position) {
+                    case 'center': monster = this.scene.battlefield.center
+                        break
+                    case 'left': monster = this.scene.battlefield.left
+                        break
+                    case 'right': monster = this.scene.battlefield.right
+                        break
+                    default: console.log("Error: unexpected position")
+                }
+
+                if (monster.useCard(gameObject.data.get('data'))) {
+                    this.scene.removeAndReturnCardFromPlayer(gameObject)
+                } else {
+                    returnToLastPosition(gameObject)
+                }
+
             } else {
                 returnToLastPosition(gameObject)
             }
@@ -216,6 +241,8 @@ export default class GameScene extends Phaser.Scene {
         });
 
         /*======================SOCKET EVENTS=======================*/
+
+        /*======================TOKEN EVENTS=======================*/
         this.socket.on('moveOpponentToken', (socketId, x, y) => {
             this.opponents.forEach(opponent => {
                 if (opponent.socketId == socketId) {
@@ -224,6 +251,7 @@ export default class GameScene extends Phaser.Scene {
             })
         })
 
+        /*======================CARD MANAGEMENT=======================*/
         this.socket.on('addCardsToPlayer', (cardNames, cardType, isPublic) => {
             let cardList = this.getCards(cardNames, cardType)
             cardList.forEach((card, index) => {
@@ -263,18 +291,32 @@ export default class GameScene extends Phaser.Scene {
             })
         })
 
+        /*======================PLAYER UPDATE EVENTS=======================*/
+        this.socket.on('levelUpPlayer', (n) => {
+            this.player.levelUp(n)
+        })
+        
         this.socket.on('updateLevel', (socketId, level) => {
-            if (socketId == this.socket.id) {
-                this.player.updateLevel(level)
-            } else {
-                this.opponents.forEach(opponent => {
-                    if (opponent.socketId == socketId) {
-                        opponent.updateLevel(level)
-                    }
-                })
-            }
+            this.opponents.forEach(opponent => {
+                if (opponent.socketId == socketId) {
+                    opponent.updateLevel(level)
+                }
+            })
         })
 
+        this.socket.on('buffPlayer', (amount) => {
+            this.player.buff(amount)
+        })
+
+        this.socket.on('updateStrength', (socketId, strength) => {
+            this.opponents.forEach(opponent => {
+                if (opponent.socketId == socketId) {
+                    opponent.updateStrength(strength)
+                }
+            })
+        })
+
+        /*======================GAMESTATE EVENTS=======================*/
         this.socket.on('endPregame', () => {
             this.gameState.endPregame()
         })
@@ -423,6 +465,9 @@ export default class GameScene extends Phaser.Scene {
             case "Go Up A Level":
                 target.levelUp(1)
                 return true
+            case "Stand Arrow":
+                target.buff(card.statBonus)
+                return true
             default:
                 console.log("Error: unexpected card name")
                 return false
@@ -469,8 +514,11 @@ export default class GameScene extends Phaser.Scene {
         this.load.image('blankCard', 'assets/monsters/blankCard.png')
         this.load.image('pogminMonster', 'assets/monsters/pogminMonster.png')
         this.load.image('unpogminMonster', 'assets/monsters/unpogminMonster.png')
+    }
 
-        this.load.image('goUpALevel', 'assets/goUpALevel.jpg')
+    loadItems() {
+        this.load.image('goUpALevel', 'assets/items/goUpALevel.png')
+        this.load.image('standArrow', 'assets/items/standArrow.png')
     }
 }
 

@@ -24,6 +24,14 @@ export default class PlayerHand {
             this.dropZone = scene.add.zone(x + width*0.2, y + height/2, width*0.4*0.8, height*0.8).setRectangleDropZone(width*0.4*0.8, height*0.8)
             this.dropZone.setData({type: "hand"})
 
+            this.dropZone.on('pointerover', () => {
+                scene.strengthText.text = `${scene.player.getFullStrength()}`
+                if (scene.player.getFullStrength() < 10) {
+                    scene.strengthText.text = '0' + scene.strengthText.text
+                }
+                scene.strengthText.setColor(scene.player.colorString)
+            })
+
             this.equipment = new Equipment(scene, x + width*0.4, y, width*0.6, height, cardWidth, cardHeight)
             this.equipment.renderSlots()
         }
