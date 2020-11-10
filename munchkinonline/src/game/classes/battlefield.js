@@ -15,7 +15,8 @@ export default class Battlefield {
             if (this.center == null) {
                 this.center = new Monster(scene, cardData)
                 this.center.render(640, 300, 'center')
-                this.targetMonster(this.center)
+                this.targetMonsterAt('center')
+                scene.socket.emit('targetMonsterAt', scene.roomName, 'center')
             } else if (this.left == null) {
                 this.left = new Monster(scene, cardData)
                 this.left.render(380, 300, 'left')
@@ -52,7 +53,7 @@ export default class Battlefield {
                 this.removeTargettedMonster()
             } else {
                 scene.player.die()
-                this.removeAllMonsters()
+                this.returnCards()
                 scene.socket.emit('endCombat', scene.roomName)
             }
         }
@@ -67,12 +68,12 @@ export default class Battlefield {
             } else {
                 // YOU DIE
                 scene.player.die()
-                this.removeAllMonsters()
+                this.returnCards()
                 scene.socket.emit('endCombat', scene.roomName)
             }
         }
 
-        this.targetMonster = (monster) => {
+        this.targetMonsterAt = (position) => {
             if (this.center != null) {
                 this.center.deselect()
             }
@@ -85,8 +86,21 @@ export default class Battlefield {
                 this.right.deselect()
             }
 
-            monster.selected = true
-            monster.renderedMonster.clearTint()
+            switch (position) {
+                case 'center':
+                    this.center.selected = true
+                    this.center.renderedMonster.clearTint()   
+                    break
+                case 'left':
+                    this.left.selected = true
+                    this.left.renderedMonster.clearTint()   
+                    break
+                case 'right':
+                    this.right.selected = true
+                    this.right.renderedMonster.clearTint()
+                    break
+                default: console.log("Error: unexpected position")
+            }
         }
 
         this.getTargettedMonster = () => {
@@ -100,21 +114,35 @@ export default class Battlefield {
                 console.log("Error: unexpected targetted monster")
             }
         }
-
-        this.removeAllMonsters = () => {
+        
+        this.returnCards = () => {
             if (this.center != null) {
                 scene.socket.emit('returnCard', scene.roomName, this.center.name, 'door')
-                scene.socket.emit('removeMonsterAt', scene.roomName, 'center')
             }
             
             if (this.left != null) {
                 scene.socket.emit('returnCard', scene.roomName, this.left.name, 'door')
-                scene.socket.emit('removeMonsterAt', scene.roomName, 'left')
             } 
             
             if (this.right != null) {
                 scene.socket.emit('returnCard', scene.roomName, this.right.name, 'door')
-                scene.socket.emit('removeMonsterAt', scene.roomName, 'right')
+            }
+        }
+
+        this.removeAllMonsters = () => {
+            if (this.center != null) {
+                this.center.renderedMonster.destroy()
+                this.center = null
+            }
+            
+            if (this.left != null) {
+                this.left.renderedMonster.destroy()
+                this.left = null
+            } 
+            
+            if (this.right != null) {
+                this.right.renderedMonster.destroy()
+                this.right = null
             }
         }
 
@@ -138,8 +166,6 @@ export default class Battlefield {
                 case 'center':
                     this.center.renderedMonster.destroy()
                     this.center = null
-                    console.log("After remove monster at")
-                    console.log(this.center)
                     break
                 case 'left':
                     this.left.renderedMonster.destroy()
@@ -171,12 +197,11 @@ export default class Battlefield {
                 this.renderButtons()
             }
             this.addMonster(card)
-            this.addMonster(card)
-            this.addMonster(card)
         }
 
         this.endCombat = () => {
             scene.gameState.endCombat()
+            this.removeAllMonsters()
             if (scene.gameState.isYourTurn()) {
                 this.removeButtons()
             }
@@ -185,17 +210,14 @@ export default class Battlefield {
 
         this.targetFirstMonster = () => {
             if (this.center != null) {
-                console.log('First target center: ')
-                console.log(this.center)
-                this.targetMonster(this.center)
+                this.targetMonsterAt('center')
+                scene.socket.emit('targetMonsterAt', scene.roomName, 'center')
             } else if (this.left != null) {
-                console.log('First target left: ')
-                console.log(this.left)
-                this.targetMonster(this.left)
+                this.targetMonsterAt('left')
+                scene.socket.emit('targetMonsterAt', scene.roomName, 'left')
             } else if (this.right != null) {
-                console.log('First target right: ')
-                console.log(this.right)
-                this.targetMonster(this.right)
+                this.targetMonsterAt('right')
+                scene.socket.emit('targetMonsterAt', scene.roomName, 'right')
             } else {
                 scene.socket.emit('endCombat', scene.roomName)
             }

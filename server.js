@@ -147,6 +147,10 @@ io.on('connection', (socket) => {
 		io.in(roomName).emit('removeMonsterAt', position)
 	})
 
+	socket.on('targetMonsterAt', (roomName, position) => {
+		socket.to(roomName).emit('targetMonsterAt', position)
+	})
+
 	socket.on('endCombat', (roomName) => {
 		io.in(roomName).emit('endCombat')
 	})

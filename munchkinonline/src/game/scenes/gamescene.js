@@ -49,7 +49,7 @@ export default class GameScene extends Phaser.Scene {
         // Add cards object list
         this.cardList = this.cache.json.get('cards').cards
 
-        const positions = ['right', 'top', 'left']
+        const positions = ['top', 'left', 'right']
         const cardWidth = 50
         const cardHeight = 72.5
 
@@ -352,6 +352,10 @@ export default class GameScene extends Phaser.Scene {
 
         this.socket.on('removeMonsterAt', (position) => {
             this.battlefield.removeMonsterAt(position)
+        }) 
+
+        this.socket.on('targetMonsterAt', (position) => {
+            this.battlefield.targetMonsterAt(position)
         })
 
         this.socket.on('endCombat', () => {

@@ -16,9 +16,13 @@ export default class Monster {
             monster.input.dropZone = true
             monster.setData({type: 'monster', position: position})
 
-            monster.on('pointerup', () => {
-                scene.battlefield.targetMonster(this)
-            })
+            if(scene.gameState.isYourTurn()) {
+                monster.on('pointerup', () => {
+                    scene.battlefield.targetMonsterAt(position)
+                    scene.socket.emit('targetMonsterAt', scene.roomName, position)
+                })
+            }
+            
 
             monster.on('drop', (pointer, gameObject, dropZone) => {
                 console.log(gameObject.data.get('type'))
