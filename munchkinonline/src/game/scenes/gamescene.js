@@ -261,7 +261,7 @@ export default class GameScene extends Phaser.Scene {
             cardList.forEach((card, index) => {
 
                 if (card.type == "monster" && isPublic) {
-                    this.battlefield.beginCombat(card)
+                    this.socket.emit('startCombat', this.roomName, card)
                     this.socket.emit('showPublicCard', this.roomName, card.bigImage)
                 } else {
                     if (isPublic) {
@@ -344,6 +344,18 @@ export default class GameScene extends Phaser.Scene {
 
         this.socket.on('drewCard', () => {
             this.gameState.drewCard()
+        })
+
+        this.socket.on('startCombat', (card) => {
+            this.battlefield.beginCombat(card)
+        })
+
+        this.socket.on('removeMonsterAt', (position) => {
+            this.battlefield.removeMonsterAt(position)
+        })
+
+        this.socket.on('endCombat', () => {
+            this.battlefield.endCombat()
         })
 
         this.socket.on('enabledLoot', () => {
@@ -453,7 +465,7 @@ export default class GameScene extends Phaser.Scene {
 
         if (card.type === "monster" && this.gameState.isYourTurn() && this.gameState.canLootTheRoom) {
             if (targetId == this.socket.id) {
-                this.battlefield.beginCombat(card)
+                this.socket.emit('startCombat', this.roomName, card)
                 return true
             } else {
                 // Not yet implemented

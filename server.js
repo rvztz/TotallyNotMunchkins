@@ -138,6 +138,19 @@ io.on('connection', (socket) => {
 		io.in(roomName).emit('endGame', socket.id)
 	})
 
+	/*======================COMBAT EVENTS=======================*/
+	socket.on('startCombat', (roomName, card) => {
+		io.in(roomName).emit('startCombat', card)
+	})
+
+	socket.on('removeMonsterAt', (roomName, position) => {
+		io.in(roomName).emit('removeMonsterAt', position)
+	})
+
+	socket.on('endCombat', (roomName) => {
+		io.in(roomName).emit('endCombat')
+	})
+
 	/*======================TOKEN MOVEMENT=======================*/
 	socket.on('moveToken', (roomName, x, y) => {
 		socket.to(roomName).emit('moveOpponentToken', socket.id, x, y);
