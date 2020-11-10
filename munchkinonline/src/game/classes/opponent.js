@@ -11,17 +11,17 @@ export default class Opponent {
         this.position = position
         this.socketId = socketId
         this.gender = gender
-        this.level = 1
-        this.power = 1
-        
+        this.level = 1 
+        this.strength = 1
+         
         // Renders
-        this.renderHand = (hWidth, hHeight, vWidth, vHeight, cardWidth, cardHeight, offset) => {
+        this.renderHand = (cardWidth, cardHeight) => {
             if (this.position === 'right') {
-                this.opponentHand.render(scene.scale.width - 1.5*vWidth, scene.scale.height/2 - vHeight/2 - offset, vWidth, vHeight, cardWidth, cardHeight)
+                this.opponentHand.render(1090, 110, 106, 296, cardWidth, cardHeight)
             } else if (this.position === 'left') {
-                this.opponentHand.render(vWidth/2, scene.scale.height/2 - vHeight/2 - offset, vWidth, vHeight, cardWidth, cardHeight)
+                this.opponentHand.render(83, 110, 106, 296, cardWidth, cardHeight)
             } else if (this.position === 'top') {
-                this.opponentHand.render(scene.scale.width/2 - hWidth/4, 2, vHeight, hHeight*0.9, cardWidth, cardHeight)
+                this.opponentHand.render(472, 2, 336, 106, cardWidth, cardHeight)
             } else {
                 console.log("Invalid position to render oppponent hand")
             }
@@ -41,14 +41,19 @@ export default class Opponent {
         }
 
         this.levelUp = (n) => {
-            this.level += n
-            this.level = Math.min(this.level, 10)
-            this.token.renderedToken.data.set('level', this.level)
-            scene.socket.emit('updateLevel', scene.roomName, this.socketId, this.level)
-        } 
+            scene.socket.emit('levelUpPlayer', this.socketId, n)
+        }
 
         this.updateLevel = (level) => {
             this.level = level
+        }
+
+        this.buff = (amount) => {
+            scene.socket.emit('buffPlayer', this.socketId, amount)
+        }
+
+        this.updateStrength = (strength) => {
+            this.strength = strength
         }
 
         this.chooseColor = (tokenImage) => {

@@ -10,12 +10,13 @@ export default class OppositeHand {
         this.socketId = socketId
 
         this.render = (x, y, width, height, cardWidth, cardHeight) => {
-            this.dimensions.x = x 
+            this.dimensions.x = x
             this.dimensions.y = y 
             this.dimensions.width = width 
             this.dimensions.height = height
             this.dimensions.cardHeight = cardHeight
             this.dimensions.cardWidth = cardWidth
+
             let outline = scene.add.graphics()
             outline.lineStyle(4, 0x000000)
             outline.strokeRect(x, y, width, height)
@@ -24,6 +25,22 @@ export default class OppositeHand {
              //  A drop zone
             let zone = scene.add.zone(x + width/2, y + height/2, width, height).setRectangleDropZone(width, height)
             zone.setData({type: 'opponentHand', ownerId: this.socketId})
+
+            zone.on('pointerover', () => {
+                let strength = null
+                let color = null
+                scene.opponents.forEach(opponent => {
+                    if (opponent.socketId == socketId) {
+                        strength = opponent.strength
+                        color = opponent.colorString
+                    }
+                })
+                scene.strengthText.text = `${strength}`
+                if (scene.player.getFullStrength() < 10) {
+                    scene.strengthText.text = '0' + scene.strengthText.text
+                }
+                scene.strengthText.setColor(color)
+            })
         }
 
         this.updateCards = (cards) => {
@@ -42,10 +59,10 @@ export default class OppositeHand {
                 let sprite = (cardType === 'door') ? 'doorCard' : 'treasureCard'
 
                 if (this.position === 'right') {
-                    renderedCard = opponentCard.render(this.dimensions.x + this.dimensions.width/2, (this.dimensions.y + this.dimensions.height - this.dimensions.cardHeight) - i*(this.dimensions.cardHeight / maxCards), sprite)
+                    renderedCard = opponentCard.render(this.dimensions.x + this.dimensions.width/2, (this.dimensions.y + this.dimensions.height - this.dimensions.cardWidth) - i*(this.dimensions.cardHeight / maxCards), sprite)
                     renderedCard.angle = 90
                 } else if (this.position === 'left') {
-                    renderedCard = opponentCard.render(this.dimensions.x + this.dimensions.width/2, (this.dimensions.y + this.dimensions.cardHeight) + i*(this.dimensions.cardHeight / maxCards), sprite)
+                    renderedCard = opponentCard.render(this.dimensions.x + this.dimensions.width/2, (this.dimensions.y + this.dimensions.cardWidth) + i*(this.dimensions.cardHeight / maxCards), sprite)
                     renderedCard.angle = -90
                 } else if (this.position === 'top') {
                     renderedCard = opponentCard.render(this.dimensions.x + this.dimensions.width - this.dimensions.cardWidth - 1.5*i*(this.dimensions.cardWidth/maxCards), this.dimensions.y + this.dimensions.height/2, sprite)

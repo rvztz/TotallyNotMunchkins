@@ -13,12 +13,13 @@ export default class Player {
         this.cards = []
         this.level = 1
         this.equipment = []
-        this.power = 1
+        this.strength = 1
         this.gender = ""
+        this.effects = 0
 
         // Renders
-        this.renderHand = (hWidth, hHeight, cardWidth, cardHeight, offset) => {
-            this.playerHand.render(scene.scale.width/2 - hWidth/2, scene.scale.height - hHeight - offset, hWidth, hHeight, cardWidth, cardHeight)
+        this.renderHand = (x, y, width, height, cardWidth, cardHeight) => {
+            this.playerHand.render(x, y, width, height, cardWidth, cardHeight)
         }
 
         this.renderToken = (startTile, index, sprite) => {
@@ -29,31 +30,48 @@ export default class Player {
         this.addToHand = (card, i) => {
             this.cards.push(card)
             this.playerHand.addCard(card, i)
+            scene.socket.emit('updatePlayerHand', scene.roomName, card.deck)
         }
 
         this.removeCardAt = (index) => {
             this.cards.splice(index, 1)
         }
 
+        /*
         this.getData = () => {
             return {
                 cards: this.cards,
                 level: this.level,
                 equipment: this.equipment,
-                power: this.power
+                strength: this.strength
             }
         }
+        */
 
         this.levelUp = (n) => {
             this.level += n
             this.level = Math.min(this.level, 10)
+            this.level = Math.max(this.level, 1)
             this.token.renderedToken.data.set('level', this.level)
-            scene.socket.emit('updateLevel', scene.roomName, scene.socket.id, this.level)
+            scene.socket.emit('updateLevel', scene.roomName, this.level)
+            scene.socket.emit('updateStrength', scene.roomName, this.getFullStrength())
+        }
+
+        this.resetLevel = () => {
+            this.level = 1
+            this.token.renderedToken.data.set('level', this.level)
+            scene.socket.emit('updateLevel', scene.roomName, this.level)
+            scene.socket.emit('updateStrength', scene.roomName, this.getFullStrength())
         }
 
         this.updateLevel = (level) => {
             this.level = level
             this.token.renderedToken.data.set('level', this.level)
+        }
+
+        this.buff = (amount) => {
+            this.effects += amount
+            scene.socket.emit('updateStrength', scene.roomName, this.getFullStrength())
         }
 
         this.chooseColor = (tokenImage) => {
@@ -78,6 +96,22 @@ export default class Player {
                     console.log("Error: unexpected token color")
             }
             this.playerHand.colorHand(this.color)
+        }
+
+        this.getEquipmentPower = () => {
+            let total = 0
+            this.equipment.forEach(equipment => {
+                total += equipment.statBonus
+            })
+            return total
+        }
+
+        this.getFullStrength = () => {
+            return this.level + this.getEquipmentPower() + this.effects
+        }
+
+        this.die = () => {
+            this.resetLevel()
         }
     }
 }

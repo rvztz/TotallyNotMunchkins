@@ -70,14 +70,14 @@ io.on('connection', (socket) => {
 		} else {
 			console.log("Error: unexpected attribute")
 		}
-	})
+	}) 
 
 	/*======================GAME MANAGEMENT=======================*/
 	socket.on('startGame', (roomName) => {
 		let roomIndex = findRoom(roomName)
 		if (roomIndex >= 0) {
 			if (socket.id == rooms[roomIndex].hostId) {
-				rooms[roomIndex].shuffleDecks(TreasureList, DoorList)
+				rooms[roomIndex].shuffleDecks([...TreasureList], [...DoorList])
 				io.in(roomName).emit('startGame', rooms[roomIndex].getInfo())
 			}
 		} else {
@@ -115,6 +115,14 @@ io.on('connection', (socket) => {
 		io.in(roomName).emit('drewCard')
 	})
 
+	socket.on('enabledLoot', (roomName) => {
+		io.in(roomName).emit('enabledLoot')
+	})
+
+	socket.on('disabledLoot', (roomName) => {
+		io.in(roomName).emit('disabledLoot')
+	})
+
 	socket.on('endTurn', (roomName) => {
 		let roomIndex = findRoom(roomName)
 		if (roomIndex < 0) {
@@ -130,13 +138,30 @@ io.on('connection', (socket) => {
 		io.in(roomName).emit('endGame', socket.id)
 	})
 
+	/*======================COMBAT EVENTS=======================*/
+	socket.on('startCombat', (roomName, card) => {
+		io.in(roomName).emit('startCombat', card)
+	})
+
+	socket.on('removeMonsterAt', (roomName, position) => {
+		io.in(roomName).emit('removeMonsterAt', position)
+	})
+
+	socket.on('targetMonsterAt', (roomName, position) => {
+		socket.to(roomName).emit('targetMonsterAt', position)
+	})
+
+	socket.on('endCombat', (roomName) => {
+		io.in(roomName).emit('endCombat')
+	})
+
 	/*======================TOKEN MOVEMENT=======================*/
 	socket.on('moveToken', (roomName, x, y) => {
 		socket.to(roomName).emit('moveOpponentToken', socket.id, x, y);
 	})
 
 	/*======================CARD HANDLING=======================*/
-	socket.on('requestCards', (roomName, cardType, n) => {
+	socket.on('requestCards', (roomName, cardType, n, isPublic) => {
 		let roomIndex = findRoom(roomName)
 		if (roomIndex < 0) {
 			console.log("Error: room doesn't exist")
@@ -156,7 +181,6 @@ io.on('connection', (socket) => {
 
 		let response = []
 		for (let i = 0; i < n; i++) {
-			rooms[roomIndex].players[playerIndex].cards.push(cardType)
 			if (cardType === 'treasure') {
 				response.push(rooms[roomIndex].treasureDeck.pop())
 			} else {
@@ -164,7 +188,23 @@ io.on('connection', (socket) => {
 			}
 		}
 
-		socket.emit('addCardsToPlayer', response, cardType)
+		socket.emit('addCardsToPlayer', response, cardType, isPublic)
+	})
+
+	socket.on('updatePlayerHand', (roomName, cardType) => {
+		let roomIndex = findRoom(roomName)
+		if (roomIndex < 0) {
+			console.log("Error: room doesn't exist")
+			return
+		}
+
+		let playerIndex = findPlayer(rooms[roomIndex], socket.id)
+		if (playerIndex < 0) {
+			console.log("Error: player not found")
+			return
+		}
+		
+		rooms[roomIndex].players[playerIndex].cards.push(cardType)
 		socket.to(roomName).emit('updateOpponentCards', socket.id, rooms[roomIndex].players[playerIndex].cards)
 	})
 
@@ -185,18 +225,15 @@ io.on('connection', (socket) => {
 		let treasures = []
 		for (let i = 0; i < 4; i++) {
 			treasures.push(rooms[roomIndex].treasureDeck.pop())
-			rooms[roomIndex].players[playerIndex].cards.push('treasure')
 		}
-		for (let i = 0; i < 4; i++) {
+		for (let i = 0; i < 4; i++) { 
 			doors.push(rooms[roomIndex].doorDeck.pop())
-			rooms[roomIndex].players[playerIndex].cards.push('door')
 		}
 		
 		socket.emit('distributeCards', treasures, doors)
-		socket.to(roomName).emit('updateOpponentCards', socket.id, rooms[roomIndex].players[playerIndex].cards)
 	})
 
-	socket.on('removeCard', (roomName, cardName, cardType, index) => {
+	socket.on('removeCard', (roomName, index) => {
 		let roomIndex = findRoom(roomName)
 		if (roomIndex < 0) {
 			console.log("Error: room doesn't exist")
@@ -209,32 +246,69 @@ io.on('connection', (socket) => {
 			return
 		}
 		
+		rooms[roomIndex].players[playerIndex].removeCardAt(index)
+		socket.to(roomName).emit('updateOpponentCards', socket.id, rooms[roomIndex].players[playerIndex].cards)
+	})
+
+	socket.on('returnCard', (roomName, cardName, cardType) => {
+		let roomIndex = findRoom(roomName)
+		if (roomIndex < 0) {
+			console.log("Error: room doesn't exist")
+			return
+		}
+		
 		if (cardType === 'treasure') {
 			rooms[roomIndex].treasureDeck.push(cardName)
 		} else {
 			rooms[roomIndex].doorDeck.push(cardName)
 		}
-		
-		rooms[roomIndex].players[playerIndex].removeCardAt(index)
-		socket.to(roomName).emit('updateOpponentCards', socket.id, rooms[roomIndex].players[playerIndex].cards)
+	})
+
+	socket.on('showPublicCard', (roomName, cardImage) => {
+		io.in(roomName).emit('showPublicCard', cardImage)
 	})
 
 	/*======================PLAYER UPDATES=======================*/
-	socket.on('updateLevel', (roomName, socketId, level) => {
+	socket.on('levelUpPlayer', (socketId, n) => {
+		io.to(socketId).emit('levelUpPlayer', n)
+	})
+	
+	socket.on('updateLevel', (roomName, level) => {
 		let roomIndex = findRoom(roomName)
 		if (roomIndex < 0) {
 			console.log("Error: room doesn't exist")
 			return
 		}
 
-		let playerIndex = findPlayer(rooms[roomIndex], socketId)
+		let playerIndex = findPlayer(rooms[roomIndex], socket.id)
 		if (playerIndex < 0) {
 			console.log("Error: player not found")
 			return
 		}
 
 		rooms[roomIndex].players[playerIndex].level = level
-		socket.to(roomName).emit('updateLevel', socketId, rooms[roomIndex].players[playerIndex].level)
+		socket.to(roomName).emit('updateLevel', socket.id, rooms[roomIndex].players[playerIndex].level)
+	})
+
+	socket.on('buffPlayer', (socketId, amount) => {
+		io.to(socketId).emit('buffPlayer', amount)
+	})
+
+	socket.on('updateStrength', (roomName, strength) => {
+		let roomIndex = findRoom(roomName)
+		if (roomIndex < 0) {
+			console.log("Error: room doesn't exist")
+			return
+		}
+
+		let playerIndex = findPlayer(rooms[roomIndex], socket.id)
+		if (playerIndex < 0) {
+			console.log("Error: player not found")
+			return
+		}
+
+		rooms[roomIndex].players[playerIndex].strength = strength
+		socket.to(roomName).emit('updateStrength', socket.id, rooms[roomIndex].players[playerIndex].strength)
 	})
 
 	/*======================PLAYER DISCONNECT=======================*/
