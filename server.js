@@ -143,6 +143,10 @@ io.on('connection', (socket) => {
 		io.in(roomName).emit('startCombat', card)
 	})
 
+	socket.on('askForHelp', (roomName) => {
+		socket.to(roomName).emit('askForHelp')
+	})
+
 	socket.on('removeMonsterAt', (roomName, position) => {
 		io.in(roomName).emit('removeMonsterAt', position)
 	})

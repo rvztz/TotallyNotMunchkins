@@ -346,6 +346,7 @@ export default class GameScene extends Phaser.Scene {
             this.gameState.drewCard()
         })
 
+        /*======================COMBAT EVENTS=======================*/
         this.socket.on('startCombat', (card) => {
             this.battlefield.beginCombat(card)
         })
@@ -356,6 +357,10 @@ export default class GameScene extends Phaser.Scene {
 
         this.socket.on('targetMonsterAt', (position) => {
             this.battlefield.targetMonsterAt(position)
+        })
+
+        this.socket.on('askForHelp', () => {
+            this.battlefield.renderOfferHelpButton()
         })
 
         this.socket.on('endCombat', () => {
@@ -542,6 +547,7 @@ export default class GameScene extends Phaser.Scene {
         this.load.image('fightBtn', 'assets/buttons/fightBtn.png')
         this.load.image('runBtn', 'assets/buttons/runBtn.jpg')
         this.load.image('askHelpBtn', 'assets/buttons/askHelpBtn.png')
+        this.load.image('offerHelpBtn', 'assets/buttons/offerHelpBtn.png')
     }
 
     loadMonsters() {
