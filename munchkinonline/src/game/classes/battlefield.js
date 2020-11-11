@@ -81,14 +81,26 @@ export default class Battlefield {
         }
 
         this.run = () => {
+            if(scene.player.helper) {
+                let helperRng = rng = Math.floor(Math.random() * 6 + 1) 
+                if(helperRng < 5) {
+                    console.log("Ur helper died")
+                    scene.socket.emit('killHelper', scene.player.helper)
+                    scene.player.helper = null
+                } else {
+                    console.log("Ur helper escaped")
+                }
+            }
+            
             let rng = Math.floor(Math.random() * 6 + 1) 
             
             if(rng >= 5) {
                 //YOU ESCAPED
-                this.removeTargettedMonster()
-                this.targetFirstMonster()
-            } else {
+                console.log("U escaped")
+                this.removeTargettedMonster() 
+            } else { 
                 // YOU DIE
+                console.log("U died")
                 scene.player.die()
                 this.returnCards()
                 scene.socket.emit('endCombat', scene.roomName)
@@ -181,7 +193,7 @@ export default class Battlefield {
             } else {
                 console.log("Error: unexpected targetted monster")
             }
-        }
+        } 
 
         this.removeMonsterAt = (position) => {
             switch (position) {
@@ -207,7 +219,6 @@ export default class Battlefield {
             this.fightButton.destroy()
             this.runButton.destroy()
             this.askForHelpButton.destroy()
-            //this.offerHelpButton.destroy()
         }
 
         this.beginCombat = (card) => {
@@ -218,6 +229,8 @@ export default class Battlefield {
             if (scene.gameState.isYourTurn()) {
                 this.renderButtons()
             }
+            this.addMonster(card)
+            this.addMonster(card)
             this.addMonster(card)
         }
 
