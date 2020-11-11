@@ -365,10 +365,14 @@ export default class GameScene extends Phaser.Scene {
 
         this.socket.on('offerHelp', (socketId) => {
             if (this.gameState.isYourTurn()) {
-                console.log("U got help from " + socketId)
+                this.player.helper = socketId
             } else {
                 this.battlefield.offerHelpButton.destroy()
             }
+        })
+
+        this.socket.on('sendTreasuresToHelper', (treasures) => {
+            this.socket.emit('requestCards', this.roomName, 'treasure', treasures, /* isPublic */ false)
         })
 
         this.socket.on('endCombat', () => {
@@ -562,12 +566,13 @@ export default class GameScene extends Phaser.Scene {
         this.load.image('blankCard', 'assets/monsters/blankCard.png')
         this.load.image('pogminMonster', 'assets/monsters/pogminMonster.png')
         this.load.image('unpogminMonster', 'assets/monsters/unpogminMonster.png')
+        this.load.image('mikeWazowski', 'assets/monsters/mikeWazowski.png')
     }
 
     loadItems() {
         this.load.image('goUpALevel', 'assets/items/goUpALevel.png')
         this.load.image('standArrow', 'assets/items/standArrow.png')
-    }
+    } 
 }
 
 /*======================DRAG EVENT HELPER FUNCTIONS=======================*/

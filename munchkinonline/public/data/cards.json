@@ -23,6 +23,17 @@
                 "treasuresDropped": 0,
                 "type": "monster"
             },
+            {
+                "name": "Mike Wazowski",
+                "deck": "door",
+                "smallImage": "mikeWazowski",
+                "bigImage": "mikeWazowski",
+                "description": "Would you listen to this? Blame it on the little guy, how original. He must've read the schedule wrong with his one eye!",
+                "level": 2,
+                "levelsGained": 1,
+                "treasuresDropped": 1,
+                "type": "monster"
+            },
  
 
             {

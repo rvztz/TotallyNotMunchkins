@@ -56,11 +56,18 @@ export default class Battlefield {
 
         this.fight = () => {
             let playerPower = scene.player.getFullStrength()
+            let helperPower = scene.player.getHelperStrength()
             let targettedMonster = this.getTargettedMonster()
 
-            if (playerPower > targettedMonster.strength) {
+            if (playerPower + helperPower > targettedMonster.strength) {
                 scene.player.levelUp(targettedMonster.levelsGained)
-                scene.socket.emit('requestCards', scene.roomName, 'treasure', targettedMonster.treasuresDropped, /* isPublic */ false)
+                
+                if(scene.player.helper) {
+                    scene.socket.emit('requestCards', scene.roomName, 'treasure', Math.floor(targettedMonster.treasuresDropped / 2), /* isPublic */ false)
+                    scene.socket.emit('sendTreasuresToHelper', scene.player.helper, Math.ceil(targettedMonster.treasuresDropped / 2))
+                } else {
+                    scene.socket.emit('requestCards', scene.roomName, 'treasure', targettedMonster.treasuresDropped, /* isPublic */ false)
+                }
 
                 this.removeTargettedMonster()
             } else {
@@ -215,6 +222,7 @@ export default class Battlefield {
             scene.gameState.endCombat()
             this.removeAllMonsters()
             if (scene.gameState.isYourTurn()) {
+                scene.player.helper = null
                 this.removeButtons()
             }
             scene.combatBackground.destroy()

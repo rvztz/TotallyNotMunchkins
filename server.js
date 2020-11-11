@@ -163,6 +163,10 @@ io.on('connection', (socket) => {
 		io.in(roomName).emit('endCombat')
 	})
 
+	socket.on('sendTreasuresToHelper', (socketId, treasures) => {
+		io.to(socketId).emit('sendTreasuresToHelper', treasures)
+	})
+
 	/*======================TOKEN MOVEMENT=======================*/
 	socket.on('moveToken', (roomName, x, y) => {
 		socket.to(roomName).emit('moveOpponentToken', socket.id, x, y);
