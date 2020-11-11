@@ -16,6 +16,7 @@ export default class Player {
         this.strength = 1
         this.gender = ""
         this.effects = 0
+        this.helper = null
 
         // Renders
         this.renderHand = (x, y, width, height, cardWidth, cardHeight) => {
@@ -109,6 +110,20 @@ export default class Player {
         this.getFullStrength = () => {
             return this.level + this.getEquipmentPower() + this.effects
         }
+
+        this.getHelperStrength = () => {
+            let strength = 0
+
+            if (this.helper) {
+                scene.opponents.forEach(opponent => {
+                    if (opponent.socketId == this.helper) {
+                        strength = opponent.strength
+                    }
+                })
+            }
+
+            return strength
+        } 
 
         this.die = () => {
             this.resetLevel()

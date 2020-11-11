@@ -36,9 +36,9 @@ export default class OppositeHand {
                     }
                 })
                 scene.strengthText.text = `${strength}`
-                if (scene.player.getFullStrength() < 10) {
+                if (strength < 10) {
                     scene.strengthText.text = '0' + scene.strengthText.text
-                }
+                } 
                 scene.strengthText.setColor(color)
             })
         }

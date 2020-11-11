@@ -32,7 +32,8 @@ export default class EndTurnButton {
         this.turnCanEnd = () => {
             return scene.gameState.isYourTurn() &&
                    scene.gameState.cardDrawn &&
-                   !scene.gameState.inPregame
+                   !scene.gameState.inPregame &&
+                   scene.player.cards.length <= 5
         }
 
         this.alertTurnCantEnd = () => {
@@ -42,6 +43,8 @@ export default class EndTurnButton {
                 alert("You haven't drawn a card yet")
             } else if (scene.gameState.inPregame) {
                 alert("It's still the pregame")
+            }  else if (scene.player.cards.length > 5) {
+                alert("You can't have more than 5 cards in your hand")
             } else {
                 console.log("Error: unexpected game state")
             }

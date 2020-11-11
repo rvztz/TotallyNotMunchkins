@@ -143,6 +143,14 @@ io.on('connection', (socket) => {
 		io.in(roomName).emit('startCombat', card)
 	})
 
+	socket.on('askForHelp', (roomName) => {
+		socket.to(roomName).emit('askForHelp')
+	})
+
+	socket.on('offerHelp', (roomName) => {
+		socket.to(roomName).emit('offerHelp', socket.id)
+	})
+
 	socket.on('removeMonsterAt', (roomName, position) => {
 		io.in(roomName).emit('removeMonsterAt', position)
 	})
@@ -151,8 +159,20 @@ io.on('connection', (socket) => {
 		socket.to(roomName).emit('targetMonsterAt', position)
 	})
 
+	socket.on('killHelper', (socketId) => {
+		io.to(socketId).emit('killHelper')
+	})
+
+	socket.on('useCardOnMonster', (roomName, card, position) => {
+		socket.to(roomName).emit('useCardOnMonster', card, position)
+	})
+
 	socket.on('endCombat', (roomName) => {
 		io.in(roomName).emit('endCombat')
+	})
+
+	socket.on('sendTreasuresToHelper', (socketId, treasures) => {
+		io.to(socketId).emit('sendTreasuresToHelper', treasures)
 	})
 
 	/*======================TOKEN MOVEMENT=======================*/

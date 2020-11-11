@@ -346,6 +346,7 @@ export default class GameScene extends Phaser.Scene {
             this.gameState.drewCard()
         })
 
+        /*======================COMBAT EVENTS=======================*/
         this.socket.on('startCombat', (card) => {
             this.battlefield.beginCombat(card)
         })
@@ -356,6 +357,42 @@ export default class GameScene extends Phaser.Scene {
 
         this.socket.on('targetMonsterAt', (position) => {
             this.battlefield.targetMonsterAt(position)
+        })
+
+        this.socket.on('askForHelp', () => {
+            this.battlefield.renderOfferHelpButton()
+        })
+
+        this.socket.on('offerHelp', (socketId) => {
+            if (this.gameState.isYourTurn()) {
+                this.player.helper = socketId
+            } else {
+                this.battlefield.offerHelpButton.destroy()
+            }
+        })
+
+        this.socket.on('killHelper', () => {
+            this.player.die()
+        })
+
+        this.socket.on('useCardOnMonster', (card, position) => {
+            let monster = null
+            switch (position) {
+                case 'center': monster = this.battlefield.center
+                break
+                case 'left': monster = this.battlefield.left
+                break
+                case 'right': monster = this.battlefield.right
+                break
+                default: console.log("Error: unexpected position")
+                return
+            }
+
+            this.useCardEffect(card, monster)
+        })
+
+        this.socket.on('sendTreasuresToHelper', (treasures) => {
+            this.socket.emit('requestCards', this.roomName, 'treasure', treasures, /* isPublic */ false)
         })
 
         this.socket.on('endCombat', () => {
@@ -542,18 +579,20 @@ export default class GameScene extends Phaser.Scene {
         this.load.image('fightBtn', 'assets/buttons/fightBtn.png')
         this.load.image('runBtn', 'assets/buttons/runBtn.jpg')
         this.load.image('askHelpBtn', 'assets/buttons/askHelpBtn.png')
+        this.load.image('offerHelpBtn', 'assets/buttons/offerHelpBtn.png')
     }
 
     loadMonsters() {
         this.load.image('blankCard', 'assets/monsters/blankCard.png')
         this.load.image('pogminMonster', 'assets/monsters/pogminMonster.png')
         this.load.image('unpogminMonster', 'assets/monsters/unpogminMonster.png')
+        this.load.image('mikeWazowski', 'assets/monsters/mikeWazowski.png')
     }
 
     loadItems() {
         this.load.image('goUpALevel', 'assets/items/goUpALevel.png')
         this.load.image('standArrow', 'assets/items/standArrow.png')
-    }
+    } 
 }
 
 /*======================DRAG EVENT HELPER FUNCTIONS=======================*/

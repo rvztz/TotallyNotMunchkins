@@ -40,33 +40,67 @@ export default class Battlefield {
             })
 
             this.askForHelpButton = scene.add.image(792, 520, 'askHelpBtn').setInteractive({ cursor: 'pointer' })
+            this.askForHelpButton.on('pointerup', () => {
+                scene.socket.emit('askForHelp', scene.roomName)
+                this.askForHelpButton.destroy()
+            })
+        }
+
+        this.renderOfferHelpButton = () => {
+            this.offerHelpButton = scene.add.image(640, 520, 'offerHelpBtn').setInteractive({ cursor: 'pointer' })
+            this.offerHelpButton.on('pointerup', () => {
+                scene.socket.emit('offerHelp', scene.roomName)
+                this.offerHelpButton.destroy()
+            }) 
         }
 
         this.fight = () => {
             let playerPower = scene.player.getFullStrength()
+            let helperPower = scene.player.getHelperStrength()
             let targettedMonster = this.getTargettedMonster()
 
-            if (playerPower > targettedMonster.strength) {
+            if (playerPower + helperPower > targettedMonster.strength) {
                 scene.player.levelUp(targettedMonster.levelsGained)
-                scene.socket.emit('requestCards', scene.roomName, 'treasure', targettedMonster.treasuresDropped, /* isPublic */ false)
+                
+                if(scene.player.helper) {
+                    scene.socket.emit('requestCards', scene.roomName, 'treasure', Math.floor(targettedMonster.treasuresDropped / 2), /* isPublic */ false)
+                    scene.socket.emit('sendTreasuresToHelper', scene.player.helper, Math.ceil(targettedMonster.treasuresDropped / 2))
+                } else {
+                    scene.socket.emit('requestCards', scene.roomName, 'treasure', targettedMonster.treasuresDropped, /* isPublic */ false)
+                }
 
                 this.removeTargettedMonster()
             } else {
                 scene.player.die()
+                if (scene.player.helper) {
+                    scene.socket.emit('killHelper', scene.player.helper)
+                }
                 this.returnCards()
                 scene.socket.emit('endCombat', scene.roomName)
             }
         }
 
         this.run = () => {
+            if(scene.player.helper) {
+                let helperRng = rng = Math.floor(Math.random() * 6 + 1) 
+                if(helperRng < 5) {
+                    console.log("Ur helper died")
+                    scene.socket.emit('killHelper', scene.player.helper)
+                    scene.player.helper = null
+                } else {
+                    console.log("Ur helper escaped")
+                }
+            }
+            
             let rng = Math.floor(Math.random() * 6 + 1) 
             
             if(rng >= 5) {
                 //YOU ESCAPED
-                this.removeTargettedMonster()
-                this.targetFirstMonster()
-            } else {
+                console.log("U escaped")
+                this.removeTargettedMonster() 
+            } else { 
                 // YOU DIE
+                console.log("U died")
                 scene.player.die()
                 this.returnCards()
                 scene.socket.emit('endCombat', scene.roomName)
@@ -159,7 +193,7 @@ export default class Battlefield {
             } else {
                 console.log("Error: unexpected targetted monster")
             }
-        }
+        } 
 
         this.removeMonsterAt = (position) => {
             switch (position) {
@@ -185,7 +219,6 @@ export default class Battlefield {
             this.fightButton.destroy()
             this.runButton.destroy()
             this.askForHelpButton.destroy()
-            //this.offerHelpButton.destroy()
         }
 
         this.beginCombat = (card) => {
@@ -197,12 +230,15 @@ export default class Battlefield {
                 this.renderButtons()
             }
             this.addMonster(card)
+            this.addMonster(card)
+            this.addMonster(card)
         }
 
         this.endCombat = () => {
             scene.gameState.endCombat()
             this.removeAllMonsters()
             if (scene.gameState.isYourTurn()) {
+                scene.player.helper = null
                 this.removeButtons()
             }
             scene.combatBackground.destroy()
