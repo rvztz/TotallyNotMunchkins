@@ -117,7 +117,6 @@ export default class Player {
             if (this.helper) {
                 scene.opponents.forEach(opponent => {
                     if (opponent.socketId == this.helper) {
-                        console.log("Helper's strength: " + opponent.strength)
                         strength = opponent.strength
                     }
                 })

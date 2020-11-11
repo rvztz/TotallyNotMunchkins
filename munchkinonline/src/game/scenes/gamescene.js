@@ -375,6 +375,22 @@ export default class GameScene extends Phaser.Scene {
             this.player.die()
         })
 
+        this.socket.on('useCardOnMonster', (card, position) => {
+            let monster = null
+            switch (position) {
+                case 'center': monster = this.battlefield.center
+                break
+                case 'left': monster = this.battlefield.left
+                break
+                case 'right': monster = this.battlefield.right
+                break
+                default: console.log("Error: unexpected position")
+                return
+            }
+
+            this.useCardEffect(card, monster)
+        })
+
         this.socket.on('sendTreasuresToHelper', (treasures) => {
             this.socket.emit('requestCards', this.roomName, 'treasure', treasures, /* isPublic */ false)
         })

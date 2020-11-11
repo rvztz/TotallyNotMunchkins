@@ -22,12 +22,6 @@ export default class Monster {
                     scene.socket.emit('targetMonsterAt', scene.roomName, position)
                 })
             }
-            
-
-            monster.on('drop', (pointer, gameObject, dropZone) => {
-                console.log(gameObject.data.get('type'))
-                console.log(dropZone.data.get('type'))
-            });
 
             monster.on('pointerover', () => {
                 scene.strengthText.text = `${this.strength}`
@@ -51,8 +45,13 @@ export default class Monster {
                 alert("You can't use this card on a monster.")
                 return false
             }
-            
-            return scene.useCardEffect(card, this)
+
+            if(scene.useCardEffect(card, this)) {
+                scene.socket.emit('useCardOnMonster', scene.roomName, card, this.renderedMonster.data.get('position'))
+                return true
+            }
+
+            return false
         }
 
         this.buff = (bonus) => {
