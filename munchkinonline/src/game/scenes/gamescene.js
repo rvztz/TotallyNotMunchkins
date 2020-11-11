@@ -371,6 +371,10 @@ export default class GameScene extends Phaser.Scene {
             }
         })
 
+        this.socket.on('killHelper', () => {
+            this.player.die()
+        })
+
         this.socket.on('sendTreasuresToHelper', (treasures) => {
             this.socket.emit('requestCards', this.roomName, 'treasure', treasures, /* isPublic */ false)
         })

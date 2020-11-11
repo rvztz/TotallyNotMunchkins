@@ -159,6 +159,10 @@ io.on('connection', (socket) => {
 		socket.to(roomName).emit('targetMonsterAt', position)
 	})
 
+	socket.on('killHelper', (socketId) => {
+		io.to(socketId).emit('killHelper')
+	})
+
 	socket.on('endCombat', (roomName) => {
 		io.in(roomName).emit('endCombat')
 	})

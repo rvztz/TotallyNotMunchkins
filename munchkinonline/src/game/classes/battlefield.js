@@ -72,6 +72,9 @@ export default class Battlefield {
                 this.removeTargettedMonster()
             } else {
                 scene.player.die()
+                if (scene.player.helper) {
+                    scene.socket.emit('killHelper', scene.player.helper)
+                }
                 this.returnCards()
                 scene.socket.emit('endCombat', scene.roomName)
             }
