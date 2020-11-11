@@ -147,6 +147,10 @@ io.on('connection', (socket) => {
 		socket.to(roomName).emit('askForHelp')
 	})
 
+	socket.on('offerHelp', (roomName) => {
+		socket.to(roomName).emit('offerHelp', socket.id)
+	})
+
 	socket.on('removeMonsterAt', (roomName, position) => {
 		io.in(roomName).emit('removeMonsterAt', position)
 	})

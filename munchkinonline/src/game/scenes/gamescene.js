@@ -363,6 +363,14 @@ export default class GameScene extends Phaser.Scene {
             this.battlefield.renderOfferHelpButton()
         })
 
+        this.socket.on('offerHelp', (socketId) => {
+            if (this.gameState.isYourTurn()) {
+                console.log("U got help from " + socketId)
+            } else {
+                this.battlefield.offerHelpButton.destroy()
+            }
+        })
+
         this.socket.on('endCombat', () => {
             this.battlefield.endCombat()
         })
