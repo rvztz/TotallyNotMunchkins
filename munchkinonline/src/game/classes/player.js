@@ -36,6 +36,7 @@ export default class Player {
 
         this.removeCardAt = (index) => {
             this.cards.splice(index, 1)
+
         }
 
         /*
@@ -63,6 +64,19 @@ export default class Player {
             this.token.renderedToken.data.set('level', this.level)
             scene.socket.emit('updateLevel', scene.roomName, this.level)
             scene.socket.emit('updateStrength', scene.roomName, this.getFullStrength())
+        }
+
+        this.resetHand = () => {
+            this.playerHand.renderedCards.forEach(renderedCard => {
+                renderedCard.destroy()
+            })
+            this.playerHand.renderedCards = []
+
+            while (this.cards.length > 0) {
+                scene.socket.emit('removeCard', scene.roomName, 0)
+                scene.socket.emit('returnCard', scene.roomName, this.cards[0].name, this.cards[0].deck)
+                this.removeCardAt(0)
+            }
         }
 
         this.updateLevel = (level) => {
@@ -127,6 +141,8 @@ export default class Player {
 
         this.die = () => {
             this.resetLevel()
+
+            this.resetHand()
         }
     }
 }
