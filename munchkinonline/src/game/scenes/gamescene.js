@@ -319,6 +319,10 @@ export default class GameScene extends Phaser.Scene {
             })
         })
 
+        this.socket.on('resetEffects', () => {
+            this.player.buff(this.player.effects * -1) 
+        })
+
         /*======================GAMESTATE EVENTS=======================*/
         this.socket.on('endPregame', () => {
             this.gameState.endPregame()
@@ -330,6 +334,11 @@ export default class GameScene extends Phaser.Scene {
             let color = null
             if (socketId == this.socket.id) {
                 color = this.player.colorString
+                if (this.player.isDead) {
+                    this.player.resurrect()
+                    this.gameState.drewCard()
+                    this.socket.emit('distributeCards', this.roomName)
+                }
             } else {
                 this.opponents.forEach(opponent => {
                     if (opponent.socketId == socketId) {
@@ -391,8 +400,8 @@ export default class GameScene extends Phaser.Scene {
             this.useCardEffect(card, monster)
         })
 
-        this.socket.on('sendTreasuresToHelper', (treasures) => {
-            this.socket.emit('requestCards', this.roomName, 'treasure', treasures, /* isPublic */ false)
+        this.socket.on('sendTreasuresToHelper', (n) => {
+            this.socket.emit('requestCards', this.roomName, 'treasure', n, /* isPublic */ false)
         })
 
         this.socket.on('endCombat', () => {

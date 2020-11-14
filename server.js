@@ -314,6 +314,10 @@ io.on('connection', (socket) => {
 		io.to(socketId).emit('buffPlayer', amount)
 	})
 
+	socket.on('resetEffects', (socketId) => {
+		io.to(socketId).emit('resetEffects')
+	})
+
 	socket.on('updateStrength', (roomName, strength) => {
 		let roomIndex = findRoom(roomName)
 		if (roomIndex < 0) {

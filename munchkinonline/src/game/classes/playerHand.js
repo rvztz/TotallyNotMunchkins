@@ -5,6 +5,7 @@ export default class PlayerHand {
     constructor(scene) {
         this.dimensions = {x: 0, y: 0, width: 0, height: 0, cardHeight: 0, cardWidth: 0}
         this.renderedOutline = null
+        this.renderedCards = []
 
         this.render = (x, y, width, height, cardWidth, cardHeight) => {
             this.dimensions.x = x
@@ -40,7 +41,8 @@ export default class PlayerHand {
             const maxCards = 3
 
             let playerCard = new PlayerCard(scene, card.deck)
-            playerCard.render(this.dimensions.x + this.dimensions.cardWidth + 1.5*i*(this.dimensions.cardWidth/maxCards), this.dimensions.y + this.dimensions.height/2, card)
+            let renderedCard = playerCard.render(this.dimensions.x + this.dimensions.cardWidth + 1.5*i*(this.dimensions.cardWidth/maxCards), this.dimensions.y + this.dimensions.height/2, card)
+            this.renderedCards.push(renderedCard)
         }
 
         this.colorHand = (color) => {

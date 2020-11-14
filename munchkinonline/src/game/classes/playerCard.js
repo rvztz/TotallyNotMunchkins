@@ -9,7 +9,7 @@ export default class PlayerCard {
             })
 
             newCard.setData({type: 'card', deck: deck, data: card})
-            return card
+            return newCard
         }
     }
 }
