@@ -319,6 +319,10 @@ export default class GameScene extends Phaser.Scene {
             })
         })
 
+        this.socket.on('resetEffects', () => {
+            this.player.buff(this.player.effects * -1) 
+        })
+
         /*======================GAMESTATE EVENTS=======================*/
         this.socket.on('endPregame', () => {
             this.gameState.endPregame()

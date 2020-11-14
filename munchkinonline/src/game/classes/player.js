@@ -141,7 +141,7 @@ export default class Player {
 
         this.die = () => {
             this.resetLevel()
-
+            this.buff(this.effects * -1)
             this.resetHand()
         }
     }

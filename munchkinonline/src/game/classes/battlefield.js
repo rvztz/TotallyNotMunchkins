@@ -55,6 +55,7 @@ export default class Battlefield {
         }
 
         this.fight = () => {
+            let helper = scene.player.helper
             let playerPower = scene.player.getFullStrength()
             let helperPower = scene.player.getHelperStrength()
             let targettedMonster = this.getTargettedMonster()
@@ -62,9 +63,9 @@ export default class Battlefield {
             if (playerPower + helperPower > targettedMonster.strength) {
                 scene.player.levelUp(targettedMonster.levelsGained)
                 
-                if(scene.player.helper) {
+                if(helper) {
                     scene.socket.emit('requestCards', scene.roomName, 'treasure', Math.floor(targettedMonster.treasuresDropped / 2), /* isPublic */ false)
-                    scene.socket.emit('sendTreasuresToHelper', scene.player.helper, Math.ceil(targettedMonster.treasuresDropped / 2))
+                    scene.socket.emit('sendTreasuresToHelper', helper, Math.ceil(targettedMonster.treasuresDropped / 2))
                 } else {
                     scene.socket.emit('requestCards', scene.roomName, 'treasure', targettedMonster.treasuresDropped, /* isPublic */ false)
                 }
@@ -72,12 +73,15 @@ export default class Battlefield {
                 this.removeTargettedMonster()
             } else {
                 scene.player.die()
-                if (scene.player.helper) {
-                    scene.socket.emit('killHelper', scene.player.helper)
+                if (helper) {
+                    scene.socket.emit('killHelper', helper)
+                    scene.player.helper = null
                 }
                 this.returnCards()
                 scene.socket.emit('endCombat', scene.roomName)
-            }
+            } 
+            
+            this.resetPlayerEffects(helper)
         }
 
         this.run = () => {
@@ -105,6 +109,8 @@ export default class Battlefield {
                 this.returnCards()
                 scene.socket.emit('endCombat', scene.roomName)
             }
+
+            this.resetPlayerEffects(scene.player.helper)
         }
 
         this.targetMonsterAt = (position) => {
@@ -257,6 +263,14 @@ export default class Battlefield {
             } else {
                 scene.socket.emit('endCombat', scene.roomName)
             }
+        }
+
+        this.resetPlayerEffects = (helper) => {
+            console.log("ITS HAPPENIN OH MY GOD")
+            if (helper) {
+                scene.socket.emit('resetEffects', helper)
+            }
+            scene.player.buff(scene.player.effects * -1)
         }
     }
 }
