@@ -17,6 +17,7 @@ export default class Player {
         this.gender = ""
         this.effects = 0
         this.helper = null
+        this.isDead = false
 
         // Renders
         this.renderHand = (x, y, width, height, cardWidth, cardHeight) => {
@@ -143,6 +144,11 @@ export default class Player {
             this.resetLevel()
             this.buff(this.effects * -1)
             this.resetHand()
+            this.isDead = true
+        }
+
+        this.resurrect = () => {
+            this.isDead = false
         }
     }
 }

@@ -236,8 +236,6 @@ export default class Battlefield {
                 this.renderButtons()
             }
             this.addMonster(card)
-            this.addMonster(card)
-            this.addMonster(card)
         }
 
         this.endCombat = () => {
