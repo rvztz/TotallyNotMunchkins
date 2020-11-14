@@ -244,7 +244,10 @@ export default class Battlefield {
             if (scene.gameState.isYourTurn()) {
                 scene.player.helper = null
                 this.removeButtons()
+            } else {
+                this.offerHelpButton.destroy()
             }
+
             scene.combatBackground.destroy()
         }
 
