@@ -328,7 +328,7 @@ export default class GameScene extends Phaser.Scene {
             this.gameState.endPregame()
         })
 
-        this.socket.on('changeTurn', (socketId) => {
+        this.socket.on('changeTurn', (socketId, userName) => {
             this.gameState.changeTurn(socketId)
 
             let color = null
@@ -347,7 +347,7 @@ export default class GameScene extends Phaser.Scene {
                 })
             }
 
-            this.currentTurnText.text = `${socketId}'s turn`
+            this.currentTurnText.text = `${userName}'s turn`
             this.currentTurnText.setColor(color)
         })
 
@@ -416,7 +416,7 @@ export default class GameScene extends Phaser.Scene {
             this.gameState.disableLootTheRoom()
         })
 
-        this.socket.on('endGame', (socketId) => {
+        this.socket.on('endGame', (socketId, userName) => {
             let color = null
             if (socketId == this.socket.id) {
                 color = this.player.colorString
@@ -428,7 +428,7 @@ export default class GameScene extends Phaser.Scene {
                 })
             }
 
-            this.currentTurnText.text = `${socketId} WIINNSSS`
+            this.currentTurnText.text = `${userName} WINS`
             this.currentTurnText.setColor(color)
             this.gameState.finishGame()
         })
@@ -544,7 +544,7 @@ export default class GameScene extends Phaser.Scene {
 
         switch(card.name) {
             case "Go Up A Level":
-                target.levelUp(1)
+                target.levelUp(10)
                 return true
             case "Stand Arrow":
                 target.buff(card.statBonus)

@@ -22,21 +22,28 @@ export default class PlayerList {
         }
 
         this.deleteUsername = (text) => {
-             let index;
-             this.usernames.forEach((user, i) => {
-                if (user.text === text) {
-                    index = i
-                } else {
-                    console.log("Error: username not found")
-                }
-             })
+            let index;
+            this.usernames.forEach((user, i) => {
+               if (user.text === text) {
+                   index = i
+               } else {
+                   console.log("Error: username not found")
+               }
+            })
 
-            for (let i = this.usernames.length - 1; i > index; i--) {
-                this.usernames[i].x = this.usernames[i - 1].x
-                this.usernames[i].y = this.usernames[i - 1].y
+           for (let i = this.usernames.length - 1; i > index; i--) {
+               this.usernames[i].x = this.usernames[i - 1].x
+               this.usernames[i].y = this.usernames[i - 1].y
+           }
+
+           this.usernames[index].destroy()
+           this.usernames.splice(index, 1)
+       }
+
+        this.deleteAll = () => {
+            while (this.usernames.length > 0) {
+                this.deleteUsername(this.usernames[0].text)
             }
-
-            this.usernames[index].destroy()
         }
     }
 }
