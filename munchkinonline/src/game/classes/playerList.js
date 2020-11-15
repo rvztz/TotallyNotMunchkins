@@ -4,6 +4,7 @@ export default class PlayerList {
         this.usernames = []
 
         this.addUsername = (text) => {
+            console.log(text)
             let startY = 0;
             if (this.usernames.length >= 4) {
                 console.log("Error: no more than 4 players allowed in the room.")
@@ -30,13 +31,20 @@ export default class PlayerList {
                     console.log("Error: username not found")
                 }
              })
-
+ 
             for (let i = this.usernames.length - 1; i > index; i--) {
                 this.usernames[i].x = this.usernames[i - 1].x
                 this.usernames[i].y = this.usernames[i - 1].y
             }
 
             this.usernames[index].destroy()
+            this.usernames.splice(index, 1)
+        }
+
+        this.deleteAll = () => {
+            while (this.usernames.length > 0) {
+                this.deleteUsername(this.usernames[0].text)
+            }
         }
     }
 }

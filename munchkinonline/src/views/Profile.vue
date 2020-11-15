@@ -71,6 +71,8 @@ export default {
       if(this.userData.email != "") {
         firebase.auth().signOut().then(() => {
           firebase.auth().onAuthStateChanged(() => {
+            localStorage.removeItem("userName")
+            localStorage.removeItem("userEmail")
             this.$router.push('/')
           })
         })
@@ -85,6 +87,8 @@ export default {
         .then(q => {
           this.userData = q.docs[0].data()
           this.getGameHistory()
+          localStorage.setItem("userName", this.userData.name)
+          localStorage.setItem("userEmail", this.userData.email)
         })
         .catch(e => {
             console.log("Error loading user data: ", e)

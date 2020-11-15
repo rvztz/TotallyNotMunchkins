@@ -17,9 +17,11 @@ export default class Lobby extends Phaser.Scene {
             
             this.socket.emit(localStorage.getItem('roomEvent'), localStorage.getItem('roomName'))
         } else {
-            this.socket = data.socket   
+            this.socket = data.socket
+
+            this.socket.emit('joinRoom', localStorage.getItem('roomName'))
         }
-    }
+    } 
     
     preload() {
         this.load.image('playButton', 'assets/buttons/playButton.png')
@@ -36,7 +38,10 @@ export default class Lobby extends Phaser.Scene {
     create() {
         /*======================INITIAL SOCKET SETUP=======================*/
         this.roomName = localStorage.getItem('roomName')
-        this.socket.emit('joined', this.roomName)
+        this.userName = localStorage.getItem('userName')
+        this.userEmail = localStorage.getItem('userEmail')
+
+        this.socket.emit('joined', this.roomName, this.userName, this.userEmail)
 
         /*======================SCENE COMPONENTS CREATION=======================*/
         const screenWidth = this.scale.width
@@ -47,10 +52,6 @@ export default class Lobby extends Phaser.Scene {
         
         // Add player texts
         this.playerList = new PlayerList(this, {x: screenWidth/2, y: title.y + title.displayHeight, width: screenWidth/4})
-        this.playerList.addUsername("MVP")
-        this.playerList.addUsername("unpogmin")
-        this.playerList.addUsername("steve from maincra")
-        this.playerList.addUsername("pogmin")
 
         // Adds token and gender selection buttons
         this.selection = new Selection(this, {x: screenWidth/2, y: this.playerList.dimensions.y + this.playerList.dimensions.height + 100, width: screenWidth/5})        
@@ -71,6 +72,14 @@ export default class Lobby extends Phaser.Scene {
 
         this.socket.on('updateTokenSelections', (availableTokens) => {
             this.selection.updateTokens(availableTokens)
+        })
+
+        this.socket.on('addUsername', (text) => {
+            this.playerList.addUsername(text)
+        })
+
+        this.socket.on('cleanPlayerList', () => {
+            this.playerList.deleteAll()
         })
     }
 

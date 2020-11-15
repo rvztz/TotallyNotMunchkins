@@ -17,7 +17,7 @@ io.on('connection', (socket) => {
         if (!(/[^\w.]/.test(roomName))) {
             socket.join(roomName, () => {
                 console.log(`User ${socket.id} connected to room ${roomName}`)
-			});
+			})
 			let newRoom = new Room(roomName, socket.id)
 			newRoom.addPlayer(socket.id)
 			rooms.push(newRoom)
@@ -28,7 +28,7 @@ io.on('connection', (socket) => {
 		if (!(/[^\w.]/.test(roomName))) {
 			socket.join(roomName, () => {
                 console.log(`User ${socket.id} connected to room ${roomName}`)
-			});
+			})
 			let roomIndex = findRoom(roomName)
 			rooms[roomIndex].addPlayer(socket.id)
 			socket.emit('updateTokenSelections', rooms[roomIndex].availableTokens)
@@ -36,8 +36,34 @@ io.on('connection', (socket) => {
 	})
 
 	/*======================LOBBY UPDATES=======================*/
-	socket.on('joined', (roomName) => {
+	socket.on('joined', (roomName, userName, userEmail) => {
+
 		let roomIndex = findRoom(roomName)
+		if (roomIndex < 0) {
+			console.log("Error: room doesn't exist")
+			return
+		}
+
+		let playerIndex = findPlayer(rooms[roomIndex], socket.id)
+		if (playerIndex < 0) {
+			console.log("Error: player not found")
+			return
+		}
+
+		rooms[roomIndex].players[playerIndex].userName = userName
+		rooms[roomIndex].players[playerIndex].userEmail = userEmail
+
+		console.log(rooms[roomIndex].players)
+		console.log("LENGTH 1: " + rooms[roomIndex].players.length)
+
+		io.in(roomName).emit('cleanPlayerList')
+		rooms[roomIndex].players.forEach(player => {
+			console.log("IN FOR EACH, FOR: " + socket.id +" WE SEND: " + player.userName)
+			io.in(roomName).emit('addUsername', player.userName)
+		})
+
+		console.log("LENGTH 2: " + rooms[roomIndex].players.length)
+		
 		socket.emit('updateTokenSelections', rooms[roomIndex].availableTokens)
 	})
 
@@ -104,9 +130,9 @@ io.on('connection', (socket) => {
 				// Someone is still in pregame, do nothing
 			} else {
 				rooms[roomIndex].shufflePlayers()
-				let nextId = rooms[roomIndex].getNextPlayerId()
+				const {id, name} = rooms[roomIndex].getNextPlayerIdAndName() 
 				io.in(roomName).emit('endPregame')
-				io.in(roomName).emit('changeTurn', nextId)
+				io.in(roomName).emit('changeTurn', id, name)
 			}
 		}
 	})
@@ -130,12 +156,42 @@ io.on('connection', (socket) => {
 			return
 		}
 
-		let nextId = rooms[roomIndex].getNextPlayerId()
-		io.in(roomName).emit('changeTurn', nextId)
+		const {id, name} = rooms[roomIndex].getNextPlayerIdAndName()
+		io.in(roomName).emit('changeTurn', id, name)
 	})
 
 	socket.on('winGame', (roomName) => {
-		io.in(roomName).emit('endGame', socket.id)
+		let roomIndex = findRoom(roomName)
+		if (roomIndex < 0) {
+			console.log("Error: room doesn't exist")
+			return
+		}
+
+		let playerIndex = findPlayer(rooms[roomIndex], socket.id)
+		if (playerIndex < 0) {
+			console.log("Error: player not found")
+			return
+		}
+
+		rooms[roomIndex].winnerId = socket.id
+
+		io.to(rooms[roomIndex].hostId).emit('displayExitButton')
+		io.in(roomName).emit('endGame', socket.id, rooms[roomIndex].players[playerIndex].userName)
+	})
+
+	socket.on('returnToLobby', (roomName) => {
+		let roomIndex = findRoom(roomName)
+		if (roomIndex < 0) {
+			console.log("Error: room doesn't exist")
+			return
+		}
+		let hostId = rooms[roomIndex].hostId
+		rooms.splice(roomIndex, 1)
+
+		let newRoom = new Room(roomName, hostId)
+		rooms.push(newRoom)
+
+		io.in(roomName).emit('returnToLobby')
 	})
 
 	/*======================COMBAT EVENTS=======================*/
@@ -249,7 +305,8 @@ io.on('connection', (socket) => {
 		for (let i = 0; i < 4; i++) { 
 			doors.push(rooms[roomIndex].doorDeck.pop())
 		}
-		
+
+		console.log("DISTRIBUTE CARDS TO SOCKET: " + socket.id + "WITH USERNAME: " + rooms[roomIndex].players[playerIndex].userName)
 		socket.emit('distributeCards', treasures, doors)
 	})
 
