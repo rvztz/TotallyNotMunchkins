@@ -166,10 +166,14 @@ io.on('connection', (socket) => {
 			return
 		}
 
-		// rooms[roomIndex].winnerId = socket.id
+		rooms[roomIndex].winnerId = socket.id
 
-		// io.to(rooms[roomIndex].hostId).emit('displayExitButton')
+		io.to(rooms[roomIndex].hostId).emit('displayExitButton')
 		io.in(roomName).emit('endGame', socket.id, rooms[roomIndex].players[playerIndex].userName)
+	})
+
+	socket.on('returnToLobby', (roomName) => {
+		io.in(roomName).emit('returnToLobby')
 	})
 
 	/*======================COMBAT EVENTS=======================*/

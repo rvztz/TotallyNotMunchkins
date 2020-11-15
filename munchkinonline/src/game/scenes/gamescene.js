@@ -91,13 +91,6 @@ export default class GameScene extends Phaser.Scene {
                 })
             }
         })
-        
-        // Render new game image and add click event
-        let playButton = this.add.image(0, 0, 'playButton').setInteractive({ cursor: 'pointer' })
-
-        playButton.on('pointerup', () => {
-            this.scene.start('Lobby', {socket: this.socket})
-        })
 
         // Render current turn text
         this.currentTurnText = this.add.text(58, 36, "Pregame", {fontFamily: 'Avenir, Helvetica, Arial, sans-serif'}).setFontSize(24).setColor('#000')
@@ -355,6 +348,19 @@ export default class GameScene extends Phaser.Scene {
             this.gameState.drewCard()
         })
 
+        this.socket.on('displayExitButton', () => {
+            // Render new game image and add click event
+            this.exitButton = this.add.image(0, 0, 'exitBtn').setInteractive({ cursor: 'pointer' })
+
+            this.exitButton.on('pointerup', () => {
+                this.socket.emit("returnToLobby", this.roomName)
+            })
+        })
+
+        this.socket.on('returnToLobby', () => {
+            this.scene.start('Lobby', {socket: this.socket})
+        })
+
         /*======================COMBAT EVENTS=======================*/
         this.socket.on('startCombat', (card) => {
             this.battlefield.beginCombat(card)
@@ -589,6 +595,7 @@ export default class GameScene extends Phaser.Scene {
         this.load.image('runBtn', 'assets/buttons/runBtn.jpg')
         this.load.image('askHelpBtn', 'assets/buttons/askHelpBtn.png')
         this.load.image('offerHelpBtn', 'assets/buttons/offerHelpBtn.png')
+        this.load.image('exitBtn', 'assets/buttons/exitButton.png')
     }
 
     loadMonsters() {
