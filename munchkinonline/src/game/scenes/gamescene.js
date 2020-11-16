@@ -91,13 +91,6 @@ export default class GameScene extends Phaser.Scene {
                 })
             }
         })
-        
-        // Render new game image and add click event
-        let playButton = this.add.image(0, 0, 'playButton').setInteractive({ cursor: 'pointer' })
-
-        playButton.on('pointerup', () => {
-            this.scene.start('Lobby', {socket: this.socket})
-        })
 
         // Render current turn text
         this.currentTurnText = this.add.text(58, 36, "Pregame", {fontFamily: 'Avenir, Helvetica, Arial, sans-serif'}).setFontSize(24).setColor('#000')
@@ -328,7 +321,7 @@ export default class GameScene extends Phaser.Scene {
             this.gameState.endPregame()
         })
 
-        this.socket.on('changeTurn', (socketId) => {
+        this.socket.on('changeTurn', (socketId, userName) => {
             this.gameState.changeTurn(socketId)
 
             let color = null
@@ -347,12 +340,21 @@ export default class GameScene extends Phaser.Scene {
                 })
             }
 
-            this.currentTurnText.text = `${socketId}'s turn`
+            this.currentTurnText.text = `${userName}'s turn`
             this.currentTurnText.setColor(color)
         })
 
         this.socket.on('drewCard', () => {
             this.gameState.drewCard()
+        })
+
+        this.socket.on('displayExitButton', () => {
+            // Render new game image and add click event
+            this.exitButton = this.add.image(0, 0, 'exitBtn').setInteractive({ cursor: 'pointer' })
+
+            this.exitButton.on('pointerup', () => {
+                console.log("Not yet implemented")
+            })
         })
 
         /*======================COMBAT EVENTS=======================*/
@@ -416,7 +418,7 @@ export default class GameScene extends Phaser.Scene {
             this.gameState.disableLootTheRoom()
         })
 
-        this.socket.on('endGame', (socketId) => {
+        this.socket.on('endGame', (socketId, userName) => {
             let color = null
             if (socketId == this.socket.id) {
                 color = this.player.colorString
@@ -428,7 +430,7 @@ export default class GameScene extends Phaser.Scene {
                 })
             }
 
-            this.currentTurnText.text = `${socketId} WIINNSSS`
+            this.currentTurnText.text = `${userName} WINS`
             this.currentTurnText.setColor(color)
             this.gameState.finishGame()
         })
@@ -589,6 +591,7 @@ export default class GameScene extends Phaser.Scene {
         this.load.image('runBtn', 'assets/buttons/runBtn.jpg')
         this.load.image('askHelpBtn', 'assets/buttons/askHelpBtn.png')
         this.load.image('offerHelpBtn', 'assets/buttons/offerHelpBtn.png')
+        this.load.image('exitBtn', 'assets/buttons/exitButton.png')
     }
 
     loadMonsters() {

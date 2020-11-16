@@ -8,6 +8,8 @@ class Player {
         this.strength = 1
         this.tokenImage = ""
         this.inPregame = true
+        this.userName = ""
+        this.userEmail = ""
 
         this.getSocketId = () => { return this.socketId }
         this.getTokenImage = () => { return this.tokenImage }

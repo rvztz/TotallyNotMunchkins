@@ -35,9 +35,9 @@ class Room {
             this.players = shuffleArray(this.players)
         }
 
-        this.getNextPlayerId = () => {
+        this.getNextPlayerIdAndName = () => {
             this.turnIndex += 1
-            return this.players[this.turnIndex % this.players.length].socketId
+            return {id: this.players[this.turnIndex % this.players.length].socketId, name: this.players[this.turnIndex % this.players.length].userName}
         }
     }
 }

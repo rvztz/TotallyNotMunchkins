@@ -36,8 +36,27 @@ io.on('connection', (socket) => {
 	})
 
 	/*======================LOBBY UPDATES=======================*/
-	socket.on('joined', (roomName) => {
+	socket.on('joined', (roomName, userName, userEmail) => {
 		let roomIndex = findRoom(roomName)
+		if (roomIndex < 0) {
+			console.log("Error: room doesn't exist")
+			return
+		}
+
+		let playerIndex = findPlayer(rooms[roomIndex], socket.id)
+		if (playerIndex < 0) {
+			console.log("Error: player not found")
+			return
+		}
+
+		rooms[roomIndex].players[playerIndex].userName = userName
+		rooms[roomIndex].players[playerIndex].userEmail = userEmail
+
+		io.in(roomName).emit('cleanPlayerList')
+		rooms[roomIndex].players.forEach(player => {
+			io.in(roomName).emit('addUsername', player.userName)
+		})
+
 		socket.emit('updateTokenSelections', rooms[roomIndex].availableTokens)
 	})
 
@@ -104,9 +123,9 @@ io.on('connection', (socket) => {
 				// Someone is still in pregame, do nothing
 			} else {
 				rooms[roomIndex].shufflePlayers()
-				let nextId = rooms[roomIndex].getNextPlayerId()
+				const {id, name} = rooms[roomIndex].getNextPlayerIdAndName()
 				io.in(roomName).emit('endPregame')
-				io.in(roomName).emit('changeTurn', nextId)
+				io.in(roomName).emit('changeTurn', id, name)
 			}
 		}
 	})
@@ -130,12 +149,27 @@ io.on('connection', (socket) => {
 			return
 		}
 
-		let nextId = rooms[roomIndex].getNextPlayerId()
-		io.in(roomName).emit('changeTurn', nextId)
+		const {id, name} = rooms[roomIndex].getNextPlayerIdAndName()
+		io.in(roomName).emit('changeTurn', id, name)
 	})
 
 	socket.on('winGame', (roomName) => {
-		io.in(roomName).emit('endGame', socket.id)
+		let roomIndex = findRoom(roomName)
+		if (roomIndex < 0) {
+			console.log("Error: room doesn't exist")
+			return
+		}
+
+		let playerIndex = findPlayer(rooms[roomIndex], socket.id)
+		if (playerIndex < 0) {
+			console.log("Error: player not found")
+			return
+		}
+
+		rooms[roomIndex].winnerId = socket.id
+
+		io.to(rooms[roomIndex].hostId).emit('displayExitButton')
+		io.in(roomName).emit('endGame', socket.id, rooms[roomIndex].players[playerIndex].userName)
 	})
 
 	/*======================COMBAT EVENTS=======================*/
