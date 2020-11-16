@@ -8,6 +8,8 @@ import Player from '../classes/player'
 import GameState from '../classes/gameState'
 import Battlefield from '../classes/battlefield'
 
+import router from '../../router/index'
+
 export default class GameScene extends Phaser.Scene {
     constructor() {
         super({
@@ -353,8 +355,13 @@ export default class GameScene extends Phaser.Scene {
             this.exitButton = this.add.image(0, 0, 'exitBtn').setInteractive({ cursor: 'pointer' })
 
             this.exitButton.on('pointerup', () => {
-                console.log("Not yet implemented")
+                this.socket.emit('closeRoom', this.roomName)
             })
+        })
+
+        this.socket.on('disconnectPlayer', () => {
+            this.socket.emit('disconnectPlayer')
+            router.push("/play")
         })
 
         /*======================COMBAT EVENTS=======================*/

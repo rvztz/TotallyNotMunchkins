@@ -240,9 +240,11 @@ export default class Battlefield {
                 scene.player.helper = null
                 this.removeButtons()
             } else {
-                this.offerHelpButton.destroy()
+                if (this.offerHelpButton) {
+                    this.offerHelpButton.destroy()
+                }
             }
-
+ 
             scene.combatBackground.destroy()
         }
 

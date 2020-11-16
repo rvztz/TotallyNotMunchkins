@@ -35,6 +35,24 @@ io.on('connection', (socket) => {
 		}
 	})
 
+	socket.on('closeRoom', (roomName) => {
+		let roomIndex = findRoom(roomName)
+		if (roomIndex < 0) {
+			console.log("Error: room doesn't exist")
+			return
+		}
+
+		// Send room info to database here
+
+		rooms.splice(roomIndex, 1)
+		
+		io.in(roomName).emit('disconnectPlayer')
+	})
+	
+	socket.on('disconnectPlayer', () => {
+		socket.disconnect()
+	})
+
 	/*======================LOBBY UPDATES=======================*/
 	socket.on('joined', (roomName, userName, userEmail) => {
 		let roomIndex = findRoom(roomName)
