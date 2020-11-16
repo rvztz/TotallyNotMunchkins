@@ -88,11 +88,8 @@ export default class Battlefield {
             if(scene.player.helper) {
                 let helperRng = rng = Math.floor(Math.random() * 6 + 1) 
                 if(helperRng < 5) {
-                    console.log("Ur helper died")
                     scene.socket.emit('killHelper', scene.player.helper)
                     scene.player.helper = null
-                } else {
-                    console.log("Ur helper escaped")
                 }
             }
             
@@ -100,11 +97,9 @@ export default class Battlefield {
             
             if(rng >= 5) {
                 //YOU ESCAPED
-                console.log("U escaped")
                 this.removeTargettedMonster() 
             } else { 
                 // YOU DIE
-                console.log("U died")
                 scene.player.die()
                 this.returnCards()
                 scene.socket.emit('endCombat', scene.roomName)
@@ -267,7 +262,6 @@ export default class Battlefield {
         }
 
         this.resetPlayerEffects = (helper) => {
-            console.log("ITS HAPPENIN OH MY GOD")
             if (helper) {
                 scene.socket.emit('resetEffects', helper)
             }

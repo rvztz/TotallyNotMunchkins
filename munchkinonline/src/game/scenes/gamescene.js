@@ -353,12 +353,8 @@ export default class GameScene extends Phaser.Scene {
             this.exitButton = this.add.image(0, 0, 'exitBtn').setInteractive({ cursor: 'pointer' })
 
             this.exitButton.on('pointerup', () => {
-                this.socket.emit("returnToLobby", this.roomName)
+                console.log("Not yet implemented")
             })
-        })
-
-        this.socket.on('returnToLobby', () => {
-            this.scene.start('Lobby', {socket: this.socket})
         })
 
         /*======================COMBAT EVENTS=======================*/
@@ -550,7 +546,7 @@ export default class GameScene extends Phaser.Scene {
 
         switch(card.name) {
             case "Go Up A Level":
-                target.levelUp(10)
+                target.levelUp(1)
                 return true
             case "Stand Arrow":
                 target.buff(card.statBonus)

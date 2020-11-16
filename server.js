@@ -172,10 +172,6 @@ io.on('connection', (socket) => {
 		io.in(roomName).emit('endGame', socket.id, rooms[roomIndex].players[playerIndex].userName)
 	})
 
-	socket.on('returnToLobby', (roomName) => {
-		io.in(roomName).emit('returnToLobby')
-	})
-
 	/*======================COMBAT EVENTS=======================*/
 	socket.on('startCombat', (roomName, card) => {
 		io.in(roomName).emit('startCombat', card)
