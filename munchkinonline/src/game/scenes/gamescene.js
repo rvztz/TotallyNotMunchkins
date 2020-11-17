@@ -362,6 +362,7 @@ export default class GameScene extends Phaser.Scene {
         this.socket.on('disconnectPlayer', () => {
             this.socket.emit('disconnectPlayer')
             router.push("/play")
+            this.sys.game.destroy(true)
         })
 
         /*======================COMBAT EVENTS=======================*/

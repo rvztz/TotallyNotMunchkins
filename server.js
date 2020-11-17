@@ -35,6 +35,46 @@ io.on('connection', (socket) => {
 		}
 	})
 
+	socket.on('kickPlayer', (roomName, userName) => {
+		let roomIndex = findRoom(roomName)
+		if (roomIndex < 0) {
+			console.log("Error: room doesn't exist")
+			return
+		}
+
+		if (rooms[roomIndex].hostId != socket.id) {
+			// Not the host; do nothing
+			return
+		}
+
+		let playerIndex = findPlayerByUsername(rooms[roomIndex], userName)
+		if (playerIndex < 0) {
+			console.log("Error: player not found")
+			return
+		}
+
+		let socketId = rooms[roomIndex].players[playerIndex].socketId
+		if (socketId == socket.id) {
+			// Can't kick yourself; do nothing
+			return
+		}
+
+		if(rooms[roomIndex].players[playerIndex].tokenImage != "") {
+			rooms[roomIndex].availableTokens.push(rooms[roomIndex].players[playerIndex].tokenImage)
+		}
+
+		io.in(rooms[roomIndex].name).emit('updateTokenSelections', rooms[roomIndex].availableTokens)
+		
+		rooms[roomIndex].players.splice(playerIndex, 1)
+
+		io.in(roomName).emit('cleanPlayerList')
+		rooms[roomIndex].players.forEach(player => {
+			io.in(roomName).emit('addUsername', player.userName)
+		})
+
+		io.to(socketId).emit('disconnectPlayer')
+	})
+
 	socket.on('closeRoom', (roomName) => {
 		let roomIndex = findRoom(roomName)
 		if (roomIndex < 0) {
@@ -438,6 +478,17 @@ function findPlayer(room, socketId) {
 	let ans = -1
 	room.players.forEach((player, i) => {
 		if (player.socketId == socketId) {
+			ans = i
+		}
+	})
+  
+	return ans 
+}
+
+function findPlayerByUsername(room, userName) {
+	let ans = -1
+	room.players.forEach((player, i) => {
+		if (player.userName == userName) {
 			ans = i
 		}
 	})

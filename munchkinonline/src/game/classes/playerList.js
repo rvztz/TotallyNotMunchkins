@@ -18,18 +18,25 @@ export default class PlayerList {
             newUsername.setFontSize(24).setColor('#000').setOrigin(0.5,0.5)
             newUsername.y += newUsername.displayHeight*1.5
 
+            let kickButton = scene.add.image(newUsername.x + 200, newUsername.y, 'kickButton').setInteractive({cursor: 'pointer'})
+            kickButton.on('pointerup', () => {
+                scene.socket.emit('kickPlayer', scene.roomName, text)
+            })
+
             this.usernames.push(newUsername)
         }
 
         this.deleteUsername = (text) => {
-            let index;
+            let index = -1;
             this.usernames.forEach((user, i) => {
                if (user.text === text) {
                    index = i
-               } else {
-                   console.log("Error: username not found")
                }
             })
+
+            if (index === -1) {
+                console.log("Error: username not found")
+            }
 
            for (let i = this.usernames.length - 1; i > index; i--) {
                this.usernames[i].x = this.usernames[i - 1].x

@@ -3,6 +3,7 @@ import Phaser from 'phaser'
 
 import PlayerList from '../classes/playerList'
 import Selection from '../classes/selection'
+import router from '../../router/index'
 
 export default class Lobby extends Phaser.Scene {
     constructor() {
@@ -18,6 +19,7 @@ export default class Lobby extends Phaser.Scene {
     
     preload() {
         this.load.image('playButton', 'assets/buttons/playButton.png')
+        this.load.image('kickButton', 'assets/buttons/kickButton.png')
 
         this.load.image('male', 'assets/male.png')
         this.load.image('female', 'assets/female.png')
@@ -72,6 +74,12 @@ export default class Lobby extends Phaser.Scene {
 
         this.socket.on('cleanPlayerList', () => {
             this.playerList.deleteAll()
+        })
+
+        this.socket.on('disconnectPlayer', () => {
+            this.socket.emit('disconnectPlayer')
+            router.push("/play")
+            this.sys.game.destroy(true)
         })
     }
 
