@@ -11,7 +11,7 @@ export default class PlayerList {
             } else if (this.usernames.length == 0) {
                 startY = this.dimensions.y // use the y coordinate of the container
             } else {
-                startY = this.usernames[this.usernames.length - 1].y // use the y coordinate of the last element added
+                startY = this.usernames[this.usernames.length - 1].username.y // use the y coordinate of the last element added
             }
 
             let newUsername = scene.add.text(this.dimensions.x, startY, text, {fontFamily: 'Avenir, Helvetica, Arial, sans-serif'})
@@ -23,33 +23,30 @@ export default class PlayerList {
                 scene.socket.emit('kickPlayer', scene.roomName, text)
             })
 
-            this.usernames.push(newUsername)
+            this.usernames.push({username: newUsername, button: kickButton})
         }
 
         this.deleteUsername = (text) => {
             let index = -1;
             this.usernames.forEach((user, i) => {
-               if (user.text === text) {
-                   index = i
-               }
+                if (user.username.text === text) {
+                    index = i
+                } 
             })
 
             if (index === -1) {
                 console.log("Error: username not found")
+                return
             }
 
-           for (let i = this.usernames.length - 1; i > index; i--) {
-               this.usernames[i].x = this.usernames[i - 1].x
-               this.usernames[i].y = this.usernames[i - 1].y
-           }
-
-           this.usernames[index].destroy()
+           this.usernames[index].username.destroy()
+           this.usernames[index].button.destroy()
            this.usernames.splice(index, 1)
        }
 
         this.deleteAll = () => {
             while (this.usernames.length > 0) {
-                this.deleteUsername(this.usernames[0].text)
+                this.deleteUsername(this.usernames[0].username.text)
             }
         }
     }
