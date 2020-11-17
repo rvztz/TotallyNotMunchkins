@@ -9,6 +9,7 @@ class Room {
         this.availableTokens = ["tokenRed", "tokenBlue", "tokenGreen", "tokenYellow"]
         this.treasureDeck = new Deck()
         this.doorDeck = new Deck()
+        this.blockList = []
 
         this.turnIndex = 0
     
@@ -38,6 +39,21 @@ class Room {
         this.getNextPlayerIdAndName = () => {
             this.turnIndex += 1
             return {id: this.players[this.turnIndex % this.players.length].socketId, name: this.players[this.turnIndex % this.players.length].userName}
+        }
+
+        this.addToBlocklist = (userName) => {
+            this.blockList.push(userName)
+        }
+    
+        this.foundInBlockList = (userName) => {
+            let found = false
+            this.blockList.forEach(blockedName => {
+                if (blockedName === userName) {
+                    found = true
+                }
+            })
+
+            return found
         }
     }
 }

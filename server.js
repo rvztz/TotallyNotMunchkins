@@ -58,7 +58,9 @@ io.on('connection', (socket) => {
 			// Can't kick yourself; do nothing
 			return
 		}
-
+		
+		rooms[roomIndex].addToBlocklist(rooms[roomIndex].players[playerIndex].userName)
+		
 		if(rooms[roomIndex].players[playerIndex].tokenImage != "") {
 			rooms[roomIndex].availableTokens.push(rooms[roomIndex].players[playerIndex].tokenImage)
 		}
@@ -443,16 +445,21 @@ server.get("/api/roomExists", (req, res, next) => {
 })
 
 server.get("/api/roomIsJoinable", (req, res, next) => {
-    let name = req.query.name
+	let roomName = req.query.name
+	let userName = req.query.userName
 	res.header('Access-Control-Allow-Origin', '*')
 
-	let roomIndex = findRoom(name)
+	let roomIndex = findRoom(roomName)
 	let ans = false
 	let message = ""
 
 	if (roomIndex >= 0) {
 		if (rooms[roomIndex].players.length < 4) {
-			ans = true
+			if(!rooms[roomIndex].foundInBlockList(userName)) {
+				ans = true
+			} else {
+				message = "You're blocked from this room."
+			} 
 		} else {
 			message = "Room exists but is full."
 		}
