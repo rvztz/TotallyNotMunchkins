@@ -7,7 +7,7 @@ import Opponent from '../classes/opponent'
 import Player from '../classes/player'
 import GameState from '../classes/gameState'
 import Battlefield from '../classes/battlefield'
-
+import { gameCollection } from '../../main.js';
 import router from '../../router/index'
 
 export default class GameScene extends Phaser.Scene {
@@ -141,7 +141,7 @@ export default class GameScene extends Phaser.Scene {
                     this.scene.socket.emit('moveToken', this.scene.roomName, gameObject.x, gameObject.y)
 
                     if (gameObject.data.get('level') == 10) {
-                        this.scene.socket.emit('winGame', this.scene.roomName) 
+                        this.scene.socket.emit('winGame', this.scene.roomName)
                     }
                 } else {
                     returnToLastPosition(gameObject)
@@ -443,6 +443,10 @@ export default class GameScene extends Phaser.Scene {
             this.gameState.finishGame()
         })
 
+        this.socket.on('saveGameToFirebase', (room) => {
+            saveGameToFirebase(room)
+        })
+
     }
 
     update() {
@@ -554,7 +558,7 @@ export default class GameScene extends Phaser.Scene {
 
         switch(card.name) {
             case "Go Up A Level":
-                target.levelUp(1)
+                target.levelUp(10)
                 return true
             case "Stand Arrow":
                 target.buff(card.statBonus)
@@ -629,4 +633,11 @@ function returnToLastPosition(gameObject) {
         gameObject.x = gameObject.data.get('lastX')
         gameObject.y = gameObject.data.get('lastY')
     }
+}
+
+function saveGameToFirebase(room) {
+    gameCollection.add(room)
+        .catch(function(error) {
+            console.error("Error adding document: ", error);
+        })
 }

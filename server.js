@@ -1,10 +1,8 @@
 const server = require('express')()
 const http = require('http').createServer(server)
 const io = require('socket.io')(http)
-
 const {Room} = require('./models/room.js')
 const {TreasureList, DoorList} = require('./models/cardLists.js')
-//const room = require('./models/room.js')
 
 let rooms = []
 
@@ -229,10 +227,11 @@ io.on('connection', (socket) => {
 			return
 		}
 
-		rooms[roomIndex].winnerId = socket.id
+		rooms[roomIndex].winnerName = rooms[roomIndex].players[playerIndex].userName
 
 		io.to(rooms[roomIndex].hostId).emit('displayExitButton')
 		io.in(roomName).emit('endGame', socket.id, rooms[roomIndex].players[playerIndex].userName)
+		io.to(rooms[roomIndex].hostId).emit('saveGameToFirebase', rooms[roomIndex].getFirebaseObject())
 	})
 
 	/*======================COMBAT EVENTS=======================*/
