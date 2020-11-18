@@ -59,6 +59,11 @@ export default class Lobby extends Phaser.Scene {
             this.socket.emit('startGame', this.roomName)
         })
 
+        const scene = this
+        window.onpopstate = function() {
+            scene.socket.emit('kickPlayer', scene.roomName, scene.userName)
+        } 
+
         /*======================SOCKET.IO EVENTS=======================*/
         this.socket.on('startGame', (playerList) => {
             this.scene.start('GameScene', {socket: this.socket, roomName: this.roomName, playerList: playerList})
@@ -79,7 +84,7 @@ export default class Lobby extends Phaser.Scene {
         this.socket.on('disconnectPlayer', () => {
             this.socket.emit('disconnectPlayer')
             router.push("/play")
-            this.sys.game.destroy(true)
+            this.sys.game.destroy(true) 
         })
     }
 

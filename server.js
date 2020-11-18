@@ -42,11 +42,6 @@ io.on('connection', (socket) => {
 			return
 		}
 
-		if (rooms[roomIndex].hostId != socket.id) {
-			// Not the host; do nothing
-			return
-		}
-
 		let playerIndex = findPlayerByUsername(rooms[roomIndex], userName)
 		if (playerIndex < 0) {
 			console.log("Error: player not found")
@@ -54,11 +49,12 @@ io.on('connection', (socket) => {
 		}
 
 		let socketId = rooms[roomIndex].players[playerIndex].socketId
-		if (socketId == socket.id) {
-			// Can't kick yourself; do nothing
+
+		if (rooms[roomIndex].hostId != socket.id && socketId != socket.id) {
+			// Can't kick others if you're not the host; do nothing
 			return
 		}
-		
+
 		rooms[roomIndex].addToBlocklist(rooms[roomIndex].players[playerIndex].userName)
 		
 		if(rooms[roomIndex].players[playerIndex].tokenImage != "") {
@@ -69,11 +65,18 @@ io.on('connection', (socket) => {
 		
 		rooms[roomIndex].players.splice(playerIndex, 1)
 
-		io.in(roomName).emit('cleanPlayerList')
-		rooms[roomIndex].players.forEach(player => {
-			io.in(roomName).emit('addUsername', player.userName)
-		})
-
+		if (rooms[roomIndex].players.length === 0) {
+			rooms.splice(roomIndex, 1)
+		} else {
+			if (rooms[roomIndex].hostId == socketId) {
+				rooms[roomIndex].hostId = rooms[roomIndex].players[0].socketId
+			}
+	
+			io.in(roomName).emit('cleanPlayerList')
+			rooms[roomIndex].players.forEach(player => {
+				io.in(roomName).emit('addUsername', player.userName)
+			})
+		}
 		io.to(socketId).emit('disconnectPlayer')
 	})
 
@@ -432,7 +435,7 @@ io.on('connection', (socket) => {
 	/*======================PLAYER DISCONNECT=======================*/
 	socket.on('disconnect', () => {
         console.log('a user disconnected ' + socket.id)
-    })
+	})
 })
 
 
