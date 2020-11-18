@@ -60,9 +60,13 @@ export default class Lobby extends Phaser.Scene {
         })
 
         const scene = this
-        window.onpopstate = function() {
+        window.onpopstate = () => {
             scene.socket.emit('kickPlayer', scene.roomName, scene.userName)
-        } 
+        }
+
+        window.addEventListener('beforeunload', () => {
+            scene.socket.emit('kickPlayer', scene.roomName, scene.userName)
+        })
 
         /*======================SOCKET.IO EVENTS=======================*/
         this.socket.on('startGame', (playerList) => {

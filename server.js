@@ -4,7 +4,7 @@ const io = require('socket.io')(http)
 
 const {Room} = require('./models/room.js')
 const {TreasureList, DoorList} = require('./models/cardLists.js')
-const room = require('./models/room.js')
+//const room = require('./models/room.js')
 
 let rooms = []
 
@@ -64,7 +64,7 @@ io.on('connection', (socket) => {
 		io.in(rooms[roomIndex].name).emit('updateTokenSelections', rooms[roomIndex].availableTokens)
 		
 		rooms[roomIndex].players.splice(playerIndex, 1)
-
+		
 		if (rooms[roomIndex].players.length === 0) {
 			rooms.splice(roomIndex, 1)
 		} else {
