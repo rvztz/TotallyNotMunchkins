@@ -34,7 +34,7 @@ export default class GameScene extends Phaser.Scene {
         /*======================OTHER DATA LOADING=======================*/
         this.load.json('cards', 'data/cards.json')
     }
-
+  
     create() {
         /*======================INITIAL SOCKET SETUP=======================*/
 
@@ -95,7 +95,7 @@ export default class GameScene extends Phaser.Scene {
         })
 
         // Render current turn text
-        this.currentTurnText = this.add.text(58, 36, "Pregame", {fontFamily: 'Avenir, Helvetica, Arial, sans-serif'}).setFontSize(24).setColor('#000')
+        this.currentTurnText = this.add.text(10, 36, "Pregame", {fontFamily: 'Avenir, Helvetica, Arial, sans-serif'}).setFontSize(24).setColor('#000')
 
         // Render strength text
         this.add.text(1106, 426, "Strength", {fontFamily: 'Avenir, Helvetica, Arial, sans-serif'}).setFontSize(20).setColor('#000')
@@ -352,7 +352,7 @@ export default class GameScene extends Phaser.Scene {
 
         this.socket.on('displayExitButton', () => {
             // Render new game image and add click event
-            this.exitButton = this.add.image(0, 0, 'exitBtn').setInteractive({ cursor: 'pointer' })
+            this.exitButton = this.add.image(10, 50, 'exitBtn').setOrigin(0, 0).setInteractive({ cursor: 'pointer' })
 
             this.exitButton.on('pointerup', () => {
                 this.socket.emit('closeRoom', this.roomName)
