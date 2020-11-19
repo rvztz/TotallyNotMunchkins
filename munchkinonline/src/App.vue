@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <div id="nav">
+    <div id="nav" v-if="['Game'].indexOf($route.name) == -1">
       <router-link to="/">Sign In</router-link> |
       <router-link to="/about">About</router-link> |
       <router-link to="/signup">Sign Up</router-link> |

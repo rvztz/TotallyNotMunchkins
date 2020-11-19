@@ -1,10 +1,8 @@
 const server = require('express')()
 const http = require('http').createServer(server)
 const io = require('socket.io')(http)
-
 const {Room} = require('./models/room.js')
 const {TreasureList, DoorList} = require('./models/cardLists.js')
-const room = require('./models/room.js')
 
 let rooms = []
 
@@ -33,6 +31,69 @@ io.on('connection', (socket) => {
 			rooms[roomIndex].addPlayer(socket.id)
 			socket.emit('updateTokenSelections', rooms[roomIndex].availableTokens)
 		}
+	})
+
+	socket.on('kickPlayer', (roomName, userName) => {
+		let roomIndex = findRoom(roomName)
+		if (roomIndex < 0) {
+			console.log("Error: room doesn't exist")
+			return
+		}
+
+		let playerIndex = findPlayerByUsername(rooms[roomIndex], userName)
+		if (playerIndex < 0) {
+			console.log("Error: player not found")
+			return
+		}
+
+		let socketId = rooms[roomIndex].players[playerIndex].socketId
+
+		if (rooms[roomIndex].hostId != socket.id && socketId != socket.id) {
+			// Can't kick others if you're not the host; do nothing
+			return
+		}
+
+		rooms[roomIndex].addToBlocklist(rooms[roomIndex].players[playerIndex].userName)
+		
+		if(rooms[roomIndex].players[playerIndex].tokenImage != "") {
+			rooms[roomIndex].availableTokens.push(rooms[roomIndex].players[playerIndex].tokenImage)
+		}
+
+		io.in(rooms[roomIndex].name).emit('updateTokenSelections', rooms[roomIndex].availableTokens)
+		
+		rooms[roomIndex].players.splice(playerIndex, 1)
+		
+		if (rooms[roomIndex].players.length === 0) {
+			rooms.splice(roomIndex, 1)
+		} else {
+			if (rooms[roomIndex].hostId == socketId) {
+				rooms[roomIndex].hostId = rooms[roomIndex].players[0].socketId
+			}
+	
+			io.in(roomName).emit('cleanPlayerList')
+			rooms[roomIndex].players.forEach(player => {
+				io.in(roomName).emit('addUsername', player.userName)
+			})
+		}
+		io.to(socketId).emit('disconnectPlayer')
+	})
+
+	socket.on('closeRoom', (roomName) => {
+		let roomIndex = findRoom(roomName)
+		if (roomIndex < 0) {
+			console.log("Error: room doesn't exist")
+			return
+		}
+
+		// Send room info to database here
+
+		rooms.splice(roomIndex, 1)
+		
+		io.in(roomName).emit('disconnectPlayer')
+	})
+	
+	socket.on('disconnectPlayer', () => {
+		socket.disconnect()
 	})
 
 	/*======================LOBBY UPDATES=======================*/
@@ -166,10 +227,11 @@ io.on('connection', (socket) => {
 			return
 		}
 
-		rooms[roomIndex].winnerId = socket.id
+		rooms[roomIndex].winnerName = rooms[roomIndex].players[playerIndex].userName
 
 		io.to(rooms[roomIndex].hostId).emit('displayExitButton')
 		io.in(roomName).emit('endGame', socket.id, rooms[roomIndex].players[playerIndex].userName)
+		io.to(rooms[roomIndex].hostId).emit('saveGameToFirebase', rooms[roomIndex].getFirebaseObject())
 	})
 
 	/*======================COMBAT EVENTS=======================*/
@@ -372,7 +434,7 @@ io.on('connection', (socket) => {
 	/*======================PLAYER DISCONNECT=======================*/
 	socket.on('disconnect', () => {
         console.log('a user disconnected ' + socket.id)
-    })
+	})
 })
 
 
@@ -385,16 +447,21 @@ server.get("/api/roomExists", (req, res, next) => {
 })
 
 server.get("/api/roomIsJoinable", (req, res, next) => {
-    let name = req.query.name
+	let roomName = req.query.name
+	let userName = req.query.userName
 	res.header('Access-Control-Allow-Origin', '*')
 
-	let roomIndex = findRoom(name)
+	let roomIndex = findRoom(roomName)
 	let ans = false
 	let message = ""
 
 	if (roomIndex >= 0) {
 		if (rooms[roomIndex].players.length < 4) {
-			ans = true
+			if(!rooms[roomIndex].foundInBlockList(userName)) {
+				ans = true
+			} else {
+				message = "You're blocked from this room."
+			} 
 		} else {
 			message = "Room exists but is full."
 		}
@@ -420,6 +487,17 @@ function findPlayer(room, socketId) {
 	let ans = -1
 	room.players.forEach((player, i) => {
 		if (player.socketId == socketId) {
+			ans = i
+		}
+	})
+  
+	return ans 
+}
+
+function findPlayerByUsername(room, userName) {
+	let ans = -1
+	room.players.forEach((player, i) => {
+		if (player.userName == userName) {
 			ans = i
 		}
 	})

@@ -80,7 +80,7 @@ export default {
             }
         },
         async roomIsJoinable(roomName) {
-            const url = `http://localhost:3000/api/roomIsJoinable?name=${roomName}`
+            const url = `http://localhost:3000/api/roomIsJoinable?name=${roomName}&userName=${localStorage.getItem('userName')}`
 
             try {
                 let response = await fetch(url)
