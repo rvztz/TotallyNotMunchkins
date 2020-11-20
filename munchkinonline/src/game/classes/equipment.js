@@ -6,42 +6,34 @@ export default class Equipment {
         this.slots = [
             {
                 equipmentType: 'head',
-                image: 'slotBG'  
+                image: 'head'  
             },
             {
-                equipmentType: 'leftArm',
-                image: 'slotBG'
+                equipmentType: 'rightArm',
+                image: 'rightArm'
             },
             {
                 equipmentType: 'torso',
-                image: 'slotBG'
+                image: 'torso'
             },
             {
-                equipmentType: 'rigthArm',
-                image: 'slotBG'
+                equipmentType: 'leftArm',
+                image: 'leftArm'
             },
             {
                 equipmentType: 'legs',
-                image: 'slotBG'
+                image: 'legs'
             },
             {
                 equipmentType: 'feet',
-                image: 'slotBG'
-            },
-            {
-                equipmentType: 'class',
-                image: 'slotBG'
-            },
-            {
-                equipmentType: 'race',
-                image: 'slotBG'
+                image: 'feet'
             },
         ]
 
         this.renderSlots = () => {
             for(let i = 0; i < this.slots.length; i++) {
                 let newSlot = new Slot(scene, this.slots[i].equipmentType)
-                newSlot.render(this.dimensions.x + 0.75*this.dimensions.cardWidth + 1.25*i*this.dimensions.cardWidth, this.dimensions.y + this.dimensions.height/2, this.slots[i].image)
+                newSlot.render(this.dimensions.x + this.dimensions.cardWidth + 7 + 1.6*i*this.dimensions.cardWidth, this.dimensions.y + this.dimensions.height/2, this.slots[i].image)
             }
         }
     }

@@ -28,6 +28,7 @@ export default class GameScene extends Phaser.Scene {
         this.loadSceneComponents()
         this.loadTokens()
         this.loadButtons()
+        this.loadEquipmentSlots()
         this.loadMonsters()     
         this.loadItems()   
 
@@ -611,6 +612,15 @@ export default class GameScene extends Phaser.Scene {
         this.load.image('pogminMonster', 'assets/monsters/pogminMonster.png')
         this.load.image('unpogminMonster', 'assets/monsters/unpogminMonster.png')
         this.load.image('mikeWazowski', 'assets/monsters/mikeWazowski.png')
+    }
+
+    loadEquipmentSlots() {
+        this.load.image('head', 'assets/equipment/helmetSlot.png')
+        this.load.image('leftArm', 'assets/equipment/leftHandSlot.png')
+        this.load.image('rightArm', 'assets/equipment/rightHandSlot.png')
+        this.load.image('feet', 'assets/equipment/feetSlot.png')
+        this.load.image('legs', 'assets/equipment/legsSlot.png')
+        this.load.image('torso', 'assets/equipment/torsoSlot.png')
     }
 
     loadItems() {
