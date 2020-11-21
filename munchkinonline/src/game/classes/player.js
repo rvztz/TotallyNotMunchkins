@@ -175,16 +175,20 @@ export default class Player {
             return -1
         }
 
+        this.removeFromEquipmentAt = (index) => {
+            this.equipment.splice(index, 1)
+            scene.socket.emit('updateStrength', scene.roomName, this.getFullStrength())
+        }
+
         this.returnEquipmentToHand = (cardData) => {
             let equipmentIndex = this.findCardInEquipment(cardData)
             if(equipmentIndex === -1) {
                 console.log("Error: card not found in equipment")
                 return
             }
-            
-            this.equipment.splice(equipmentIndex, 1)
+
+            this.removeFromEquipmentAt(equipmentIndex)
             this.cards.push(cardData)
-            scene.socket.emit('updateStrength', scene.roomName, this.getFullStrength())
             scene.socket.emit('updatePlayerHand', scene.roomName, cardData.deck)
         }
     }

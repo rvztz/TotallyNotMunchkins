@@ -157,8 +157,11 @@ export default class GameScene extends Phaser.Scene {
             // Card on Discard
             } else if (gameObject.data.get('type') === 'card' && dropZone.data.get('type') === 'discard') {
                 if (gameObject.data.get('deck') === dropZone.data.get('deck')) {
-
-                    this.scene.removeAndReturnCardFromPlayer(gameObject)
+                    if(gameObject.data.get("placedOn") === "equipment") {
+                        this.scene.discardFromEquipment(gameObject)
+                    } else {
+                        this.scene.removeAndReturnCardFromPlayer(gameObject)
+                    }                    
 
                 } else {
                     returnToLastPosition(gameObject)
@@ -514,6 +517,16 @@ export default class GameScene extends Phaser.Scene {
         return -1
     }
 
+    discardFromEquipment(cardGameObject) {
+        this.player.playerHand.equipment.makeAvailable(cardGameObject.data.get("equipmentSlot"))
+
+        let equipmentIndex = this.player.findCardInEquipment(cardGameObject.data.get('data'))
+        this.player.removeFromEquipmentAt(equipmentIndex)
+
+        this.socket.emit('returnCard', this.roomName, cardGameObject.data.get('data').name, cardGameObject.data.get('deck'))
+
+        cardGameObject.destroy()
+    }
 
     removeCardFromPlayer(cardGameObject, destroy) {
         let index = this.findCard(cardGameObject.data.get('data'))
