@@ -626,7 +626,13 @@ export default class GameScene extends Phaser.Scene {
     loadItems() {
         this.load.image('goUpALevel', 'assets/items/goUpALevel.png')
         this.load.image('standArrow', 'assets/items/standArrow.png')
-    } 
+        this.load.image('diamondSword', 'assets/items/diamondSword.png')
+        this.load.image('dkTie', 'assets/items/dkTie.png')
+        this.load.image('samusHelmet', 'assets/items/samusHelmet.png')
+        this.load.image('dekuShield', 'assets/items/dekuShield.png')
+        this.load.image('sonicShoes', 'assets/items/sonicShoes.png')
+        this.load.image('squarepants', 'assets/items/squarepants.png')
+    }
 }
 
 /*======================DRAG EVENT HELPER FUNCTIONS=======================*/

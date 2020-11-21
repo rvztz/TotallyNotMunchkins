@@ -9,7 +9,7 @@ export default class Equipment {
                 image: 'head'  
             },
             {
-                equipmentType: 'rightArm',
+                equipmentType: 'hand',
                 image: 'rightArm'
             },
             {
@@ -17,7 +17,7 @@ export default class Equipment {
                 image: 'torso'
             },
             {
-                equipmentType: 'leftArm',
+                equipmentType: 'hand',
                 image: 'leftArm'
             },
             {
