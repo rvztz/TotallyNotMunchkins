@@ -150,5 +150,27 @@ export default class Player {
         this.resurrect = () => {
             this.isDead = false
         }
+
+        this.equipCard = (card, slotType, available) => {
+            if (card.type != 'equipment') {
+                alert("You can't equip that card.")
+                return false
+            }
+
+            if (card.slotType != slotType) {
+                alert("This is the wrong slot for that card.")
+                return false
+            }
+
+            if(!available) {
+                alert("That slot isn't available.")
+                return false
+            }
+
+            this.equipment.push(card)
+            scene.socket.emit('updateStrength', scene.roomName, this.getFullStrength())
+            
+            return true
+        }
     }
 }

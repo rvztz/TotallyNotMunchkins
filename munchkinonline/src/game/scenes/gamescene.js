@@ -160,18 +160,22 @@ export default class GameScene extends Phaser.Scene {
             
             // Card on Equipment Slot
             } else if (gameObject.data.get('type') === 'card' && dropZone.data.get('type') === 'slot') {
-                // Later check for equipment type compatibility
-                gameObject.x = dropZone.x
-                gameObject.y = dropZone.y
-
-                updateLastPosition(gameObject)
+                if (this.scene.player.equipCard(gameObject.data.get('data'), dropZone.data.get('equipmentType'), dropZone.data.get('available'))) {
+                    updateLastPosition(gameObject)
+                    this.scene.removeCardFromPlayer(gameObject, /* destroy */ false)
+                    dropZone.data.set("available", false)
+                    gameObject.x = dropZone.x
+                    gameObject.y = dropZone.y
+                } else {
+                    returnToLastPosition(gameObject)
+                }                
 
             // Card on Tile (use card on self)
             } else if (gameObject.data.get('type') === 'card' && dropZone.data.get('type') === 'tile') {
 
                 if (this.scene.useCard(gameObject.data.get('data'), this.scene.socket.id)) {
                     if (gameObject.data.get('data').type === "monster") {
-                        this.scene.removeCardFromPlayer(gameObject)
+                        this.scene.removeCardFromPlayer(gameObject, /* destroy */ true)
                     } else {
                         this.scene.removeAndReturnCardFromPlayer(gameObject)
                     }
@@ -503,13 +507,15 @@ export default class GameScene extends Phaser.Scene {
     }
 
 
-    removeCardFromPlayer(cardGameObject) {
+    removeCardFromPlayer(cardGameObject, destroy) {
         let index = this.findCard(cardGameObject.data.get('data'))
         this.player.removeCardAt(index)
 
         this.socket.emit('removeCard', this.roomName, index)
 
-        cardGameObject.destroy()
+        if(destroy) {
+            cardGameObject.destroy()
+        }
     }
 
     removeAndReturnCardFromPlayer(cardGameObject) {
