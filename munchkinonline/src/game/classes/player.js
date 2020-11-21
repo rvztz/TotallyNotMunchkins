@@ -151,7 +151,7 @@ export default class Player {
             this.isDead = false
         }
 
-        this.equipCard = (card, slotType, available) => {
+        this.equipCard = (card, placedOn, slotType, available) => {
             if (card.type != 'equipment') {
                 alert("You can't equip that card.")
                 return false
@@ -159,6 +159,11 @@ export default class Player {
 
             if (card.slotType != slotType) {
                 alert("This is the wrong slot for that card.")
+                return false
+            }
+
+            if(placedOn === "equipment") {
+                alert("That card was already on your equipment")
                 return false
             }
 
@@ -172,5 +177,6 @@ export default class Player {
             
             return true
         }
+
     }
 }

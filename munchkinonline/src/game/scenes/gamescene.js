@@ -128,11 +128,15 @@ export default class GameScene extends Phaser.Scene {
         }, this)
 
         this.input.on('drop', function (pointer, gameObject, dropZone) {
-            
+             
             // Card on Player Hand
             if (gameObject.data.get('type') === 'card' && dropZone.data.get('type') === 'hand') {
- 
+                if (gameObject.data.get('placedOn') === 'equipment') {
+                    // Remove card from equipment and add it back to the hand
+                }
+                
                 updateLastPosition(gameObject)
+                gameObject.data.set("placedOn", "hand")
             
             // Token on Tile
             } else if (gameObject.data.get('type') === 'token' && dropZone.data.get('type') === 'tile') {
@@ -160,12 +164,13 @@ export default class GameScene extends Phaser.Scene {
             
             // Card on Equipment Slot
             } else if (gameObject.data.get('type') === 'card' && dropZone.data.get('type') === 'slot') {
-                if (this.scene.player.equipCard(gameObject.data.get('data'), dropZone.data.get('equipmentType'), dropZone.data.get('available'))) {
-                    updateLastPosition(gameObject)
+                if (this.scene.player.equipCard(gameObject.data.get('data'), gameObject.data.get('placedOn'), dropZone.data.get('equipmentType'), dropZone.data.get('available'))) {
                     this.scene.removeCardFromPlayer(gameObject, /* destroy */ false)
                     dropZone.data.set("available", false)
+                    gameObject.data.set("placedOn", "equipment")
                     gameObject.x = dropZone.x
                     gameObject.y = dropZone.y
+                    updateLastPosition(gameObject)
                 } else {
                     returnToLastPosition(gameObject)
                 }                
@@ -232,7 +237,7 @@ export default class GameScene extends Phaser.Scene {
         */
     
         this.input.on('dragleave', function (pointer, gameObject, dropZone) {
-            if (gameObject.data.get('type') === 'card' && dropZone.data.get('type') === 'hand') {
+            if (gameObject.data.get('type') === 'card' && gameObject.data.get('placedOn') !== 'equipment' && dropZone.data.get('type') === 'hand') {
                 updateLastPosition(gameObject)
             }
             else if (gameObject.data.get('type') === 'token' && dropZone.data.get('type') === 'tile') {
