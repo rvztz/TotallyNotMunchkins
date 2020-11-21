@@ -132,11 +132,13 @@ export default class GameScene extends Phaser.Scene {
             // Card on Player Hand
             if (gameObject.data.get('type') === 'card' && dropZone.data.get('type') === 'hand') {
                 if (gameObject.data.get('placedOn') === 'equipment') {
-                    // Remove card from equipment and add it back to the hand
+                    this.scene.player.playerHand.equipment.makeAvailable(gameObject.data.get('equipmentSlot'))
+                    this.scene.player.returnEquipmentToHand(gameObject.data.get('data'))
+                    gameObject.data.set("placedOn", "hand")
+                    gameObject.data.set("equipmentSlot", "")
                 }
                 
                 updateLastPosition(gameObject)
-                gameObject.data.set("placedOn", "hand")
             
             // Token on Tile
             } else if (gameObject.data.get('type') === 'token' && dropZone.data.get('type') === 'tile') {
@@ -168,6 +170,7 @@ export default class GameScene extends Phaser.Scene {
                     this.scene.removeCardFromPlayer(gameObject, /* destroy */ false)
                     dropZone.data.set("available", false)
                     gameObject.data.set("placedOn", "equipment")
+                    gameObject.data.set("equipmentSlot",  dropZone.data.get("image"))
                     gameObject.x = dropZone.x
                     gameObject.y = dropZone.y
                     updateLastPosition(gameObject)

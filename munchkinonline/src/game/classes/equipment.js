@@ -2,6 +2,7 @@ import Slot from '../classes/slot'
 
 export default class Equipment {
     constructor(scene, x, y, width, height, cardWidth, cardHeight) {
+        this.renderedSlots = []
         this.dimensions = {x: x, y: y, width: width, height: height, cardWidth: cardWidth, cardHeight: cardHeight}
         this.slots = [
             {
@@ -45,8 +46,17 @@ export default class Equipment {
         this.renderSlots = () => {
             for(let i = 0; i < this.slots.length; i++) {
                 let newSlot = new Slot(scene, this.slots[i])
-                newSlot.render(this.dimensions.x + this.dimensions.cardWidth + 7 + 1.6*i*this.dimensions.cardWidth, this.dimensions.y + this.dimensions.height/2, this.slots[i].image)
+                let newRenderedSlot = newSlot.render(this.dimensions.x + this.dimensions.cardWidth + 7 + 1.6*i*this.dimensions.cardWidth, this.dimensions.y + this.dimensions.height/2, this.slots[i].image)
+                this.renderedSlots.push(newRenderedSlot)
             }
+        }
+
+        this.makeAvailable = (placedOn) => {
+            this.renderedSlots.forEach(slot => {
+                if (slot.data.get("image") === placedOn) {
+                    slot.data.set("available", true)
+                }
+            })
         }
     }
 }

@@ -37,19 +37,7 @@ export default class Player {
 
         this.removeCardAt = (index) => {
             this.cards.splice(index, 1)
-
         }
-
-        /*
-        this.getData = () => {
-            return {
-                cards: this.cards,
-                level: this.level,
-                equipment: this.equipment,
-                strength: this.strength
-            }
-        }
-        */
 
         this.levelUp = (n) => {
             this.level += n
@@ -178,5 +166,26 @@ export default class Player {
             return true
         }
 
+        this.findCardInEquipment = (card) => {
+            for (let i = 0; i < this.equipment.length; i++) {
+                if (card == this.equipment[i]) {
+                    return i
+                }
+            }
+            return -1
+        }
+
+        this.returnEquipmentToHand = (cardData) => {
+            let equipmentIndex = this.findCardInEquipment(cardData)
+            if(equipmentIndex === -1) {
+                console.log("Error: card not found in equipment")
+                return
+            }
+            
+            this.equipment.splice(equipmentIndex, 1)
+            this.cards.push(cardData)
+            scene.socket.emit('updateStrength', scene.roomName, this.getFullStrength())
+            scene.socket.emit('updatePlayerHand', scene.roomName, cardData.deck)
+        }
     }
 }
