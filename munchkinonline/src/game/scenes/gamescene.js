@@ -586,7 +586,7 @@ export default class GameScene extends Phaser.Scene {
 
         switch(card.name) {
             case "Go Up A Level":
-                target.levelUp(10)
+                target.levelUp(1)
                 return true
             case "Stand Arrow":
                 target.buff(card.statBonus)

@@ -68,6 +68,17 @@ export default class Player {
             }
         }
 
+        this.resetEquipment = () => {
+            this.playerHand.equipment.renderedSlots.forEach(renderedSlot => {
+                renderedSlot.data.set("available", true)
+            })
+
+            while (this.equipment.length > 0) {
+                scene.socket.emit('returnCard', scene.roomName, this.equipment[0].name, this.equipment[0].deck)
+                this.removeFromEquipmentAt(0)
+            }
+        }
+
         this.updateLevel = (level) => {
             this.level = level
             this.token.renderedToken.data.set('level', this.level)
@@ -123,7 +134,7 @@ export default class Player {
                         strength = opponent.strength
                     }
                 })
-            }
+            } 
 
             return strength
         } 
@@ -132,6 +143,7 @@ export default class Player {
             this.resetLevel()
             this.buff(this.effects * -1)
             this.resetHand()
+            this.resetEquipment()
             this.isDead = true
         }
 
