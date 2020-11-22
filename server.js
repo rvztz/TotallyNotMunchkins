@@ -372,7 +372,7 @@ io.on('connection', (socket) => {
 			console.log("Error: room doesn't exist")
 			return
 		}
-		
+
 		if (cardType === 'treasure') {
 			rooms[roomIndex].treasureDeck.push(cardName)
 		} else {

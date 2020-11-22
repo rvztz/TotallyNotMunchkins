@@ -28,6 +28,7 @@ export default class GameScene extends Phaser.Scene {
         this.loadSceneComponents()
         this.loadTokens()
         this.loadButtons()
+        this.loadEquipmentSlots()
         this.loadMonsters()     
         this.loadItems()   
 
@@ -127,10 +128,16 @@ export default class GameScene extends Phaser.Scene {
         }, this)
 
         this.input.on('drop', function (pointer, gameObject, dropZone) {
-            
+             
             // Card on Player Hand
             if (gameObject.data.get('type') === 'card' && dropZone.data.get('type') === 'hand') {
- 
+                if (gameObject.data.get('placedOn') === 'equipment') {
+                    this.scene.player.playerHand.equipment.makeAvailable(gameObject.data.get('equipmentSlot'))
+                    this.scene.player.returnEquipmentToHand(gameObject.data.get('data'))
+                    gameObject.data.set("placedOn", "hand")
+                    gameObject.data.set("equipmentSlot", "")
+                }
+                
                 updateLastPosition(gameObject)
             
             // Token on Tile
@@ -150,8 +157,11 @@ export default class GameScene extends Phaser.Scene {
             // Card on Discard
             } else if (gameObject.data.get('type') === 'card' && dropZone.data.get('type') === 'discard') {
                 if (gameObject.data.get('deck') === dropZone.data.get('deck')) {
-
-                    this.scene.removeAndReturnCardFromPlayer(gameObject)
+                    if(gameObject.data.get("placedOn") === "equipment") {
+                        this.scene.discardFromEquipment(gameObject)
+                    } else {
+                        this.scene.removeAndReturnCardFromPlayer(gameObject)
+                    }                    
 
                 } else {
                     returnToLastPosition(gameObject)
@@ -159,18 +169,24 @@ export default class GameScene extends Phaser.Scene {
             
             // Card on Equipment Slot
             } else if (gameObject.data.get('type') === 'card' && dropZone.data.get('type') === 'slot') {
-                // Later check for equipment type compatibility
-                gameObject.x = dropZone.x
-                gameObject.y = dropZone.y
-
-                updateLastPosition(gameObject)
+                if (this.scene.player.equipCard(gameObject.data.get('data'), gameObject.data.get('placedOn'), dropZone.data.get('equipmentType'), dropZone.data.get('available'))) {
+                    this.scene.removeCardFromPlayer(gameObject, /* destroy */ false)
+                    dropZone.data.set("available", false)
+                    gameObject.data.set("placedOn", "equipment")
+                    gameObject.data.set("equipmentSlot",  dropZone.data.get("image"))
+                    gameObject.x = dropZone.x
+                    gameObject.y = dropZone.y
+                    updateLastPosition(gameObject)
+                } else {
+                    returnToLastPosition(gameObject)
+                }                
 
             // Card on Tile (use card on self)
             } else if (gameObject.data.get('type') === 'card' && dropZone.data.get('type') === 'tile') {
 
                 if (this.scene.useCard(gameObject.data.get('data'), this.scene.socket.id)) {
                     if (gameObject.data.get('data').type === "monster") {
-                        this.scene.removeCardFromPlayer(gameObject)
+                        this.scene.removeCardFromPlayer(gameObject, /* destroy */ true)
                     } else {
                         this.scene.removeAndReturnCardFromPlayer(gameObject)
                     }
@@ -227,7 +243,7 @@ export default class GameScene extends Phaser.Scene {
         */
     
         this.input.on('dragleave', function (pointer, gameObject, dropZone) {
-            if (gameObject.data.get('type') === 'card' && dropZone.data.get('type') === 'hand') {
+            if (gameObject.data.get('type') === 'card' && gameObject.data.get('placedOn') !== 'equipment' && dropZone.data.get('type') === 'hand') {
                 updateLastPosition(gameObject)
             }
             else if (gameObject.data.get('type') === 'token' && dropZone.data.get('type') === 'tile') {
@@ -501,14 +517,26 @@ export default class GameScene extends Phaser.Scene {
         return -1
     }
 
+    discardFromEquipment(cardGameObject) {
+        this.player.playerHand.equipment.makeAvailable(cardGameObject.data.get("equipmentSlot"))
 
-    removeCardFromPlayer(cardGameObject) {
+        let equipmentIndex = this.player.findCardInEquipment(cardGameObject.data.get('data'))
+        this.player.removeFromEquipmentAt(equipmentIndex)
+
+        this.socket.emit('returnCard', this.roomName, cardGameObject.data.get('data').name, cardGameObject.data.get('deck'))
+
+        cardGameObject.destroy()
+    }
+
+    removeCardFromPlayer(cardGameObject, destroy) {
         let index = this.findCard(cardGameObject.data.get('data'))
         this.player.removeCardAt(index)
 
         this.socket.emit('removeCard', this.roomName, index)
 
-        cardGameObject.destroy()
+        if(destroy) {
+            cardGameObject.destroy()
+        }
     }
 
     removeAndReturnCardFromPlayer(cardGameObject) {
@@ -558,7 +586,7 @@ export default class GameScene extends Phaser.Scene {
 
         switch(card.name) {
             case "Go Up A Level":
-                target.levelUp(10)
+                target.levelUp(1)
                 return true
             case "Stand Arrow":
                 target.buff(card.statBonus)
@@ -613,10 +641,25 @@ export default class GameScene extends Phaser.Scene {
         this.load.image('mikeWazowski', 'assets/monsters/mikeWazowski.png')
     }
 
+    loadEquipmentSlots() {
+        this.load.image('head', 'assets/equipment/helmetSlot.png')
+        this.load.image('leftArm', 'assets/equipment/leftHandSlot.png')
+        this.load.image('rightArm', 'assets/equipment/rightHandSlot.png')
+        this.load.image('feet', 'assets/equipment/feetSlot.png')
+        this.load.image('legs', 'assets/equipment/legsSlot.png')
+        this.load.image('torso', 'assets/equipment/torsoSlot.png')
+    }
+
     loadItems() {
         this.load.image('goUpALevel', 'assets/items/goUpALevel.png')
         this.load.image('standArrow', 'assets/items/standArrow.png')
-    } 
+        this.load.image('diamondSword', 'assets/items/diamondSword.png')
+        this.load.image('dkTie', 'assets/items/dkTie.png')
+        this.load.image('samusHelmet', 'assets/items/samusHelmet.png')
+        this.load.image('dekuShield', 'assets/items/dekuShield.png')
+        this.load.image('sonicShoes', 'assets/items/sonicShoes.png')
+        this.load.image('squarepants', 'assets/items/squarepants.png')
+    }
 }
 
 /*======================DRAG EVENT HELPER FUNCTIONS=======================*/
