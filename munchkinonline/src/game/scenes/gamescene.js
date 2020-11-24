@@ -7,6 +7,7 @@ import Opponent from '../classes/opponent'
 import Player from '../classes/player'
 import GameState from '../classes/gameState'
 import Battlefield from '../classes/battlefield'
+import Log from '../classes/log'
 import { gameCollection } from '../../main.js';
 import router from '../../router/index'
 
@@ -69,7 +70,7 @@ export default class GameScene extends Phaser.Scene {
             if (player.socketId != this.socket.id) {
                 this.opponents.push(new Opponent(this, positions.shift(), player.socketId, player.gender))
             }
-        })
+        }) 
 
         this.opponents.forEach(opponent => { 
             opponent.renderHand(cardWidth, cardHeight)
@@ -101,10 +102,10 @@ export default class GameScene extends Phaser.Scene {
         // Render strength text
         this.add.text(1106, 426, "Strength", {fontFamily: 'Avenir, Helvetica, Arial, sans-serif'}).setFontSize(20).setColor('#000')
         this.strengthText = this.add.text(1127, 456, "", {fontFamily: 'Avenir, Helvetica, Arial, sans-serif'}).setFontSize(28).setColor('#000')
- 
+  
         // Render endTurnBUtton
         this.endTurnButton = new EndTurnButton(this)
-        this.endTurnButton.render(1280, 650)
+        this.endTurnButton.render(1280, 680)
 
         // Render space to view bigger card 
         this.cardView = this.add.image(10, 436, 'blankCard').setScale(0.38, 0.38).setOrigin(0, 0)
@@ -116,6 +117,7 @@ export default class GameScene extends Phaser.Scene {
         this.socket.emit('distributeCards', this.roomName)
 
         /*====================== TEMP =======================*/
+        this.log = new Log(this)
 
         /*======================INPUT EVENTS=======================*/
         this.input.on('drag', function (pointer, gameObject, dragX, dragY) {
@@ -629,6 +631,7 @@ export default class GameScene extends Phaser.Scene {
         this.load.image('endTurn', 'assets/buttons/endTurn.png')
         this.load.image('fightBtn', 'assets/buttons/fightBtn.png')
         this.load.image('runBtn', 'assets/buttons/runBtn.jpg')
+        this.load.image('logBtn', 'assets/buttons/logBtn.jpg')
         this.load.image('askHelpBtn', 'assets/buttons/askHelpBtn.png')
         this.load.image('offerHelpBtn', 'assets/buttons/offerHelpBtn.png')
         this.load.image('exitBtn', 'assets/buttons/exitButton.png')
