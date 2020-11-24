@@ -3,38 +3,7 @@ import Phaser from 'phaser'
 export default class Log {
     constructor(scene) {
         this.lengthLimit = 30
-        this.content = [
-            "Pogmin used Stand Arrow on Pogmin",
-            "CEMEX CEMEX CEMEX CEMEX CEMEX CEMEX CEMEX CEMEX CEMEX",
-            "CEMEX CEMEX CEMEX CEMEX CEMEX CEMEX CEMEX CEMEX CEMEX",
-            "CEMEX CEMEX CEMEX CEMEX CEMEX CEMEX CEMEX CEMEX CEMEX",
-            "CEMEX CEMEX CEMEX CEMEX CEMEX CEMEX CEMEX CEMEX CEMEX",
-            "CEMEX CEMEX CEMEX CEMEX CEMEX CEMEX CEMEX CEMEX CEMEX",
-            "CEMEX CEMEX CEMEX CEMEX CEMEX CEMEX CEMEX CEMEX CEMEX",
-            "CEMEX CEMEX CEMEX CEMEX CEMEX CEMEX CEMEX CEMEX CEMEX",
-            "CEMEX CEMEX CEMEX CEMEX CEMEX CEMEX CEMEX CEMEX CEMEX",
-            "CEMEX CEMEX CEMEX CEMEX CEMEX CEMEX CEMEX CEMEX CEMEX",
-            "CEMEX CEMEX CEMEX CEMEX CEMEX CEMEX CEMEX CEMEX CEMEX",
-            "CEMEX CEMEX CEMEX CEMEX CEMEX CEMEX CEMEX CEMEX CEMEX",
-            "CEMEX CEMEX CEMEX CEMEX CEMEX CEMEX CEMEX CEMEX CEMEX",
-            "CEMEX CEMEX CEMEX CEMEX CEMEX CEMEX CEMEX CEMEX CEMEX",
-            "CEMEX CEMEX CEMEX CEMEX CEMEX CEMEX CEMEX CEMEX CEMEX",
-            "CEMEX CEMEX CEMEX CEMEX CEMEX CEMEX CEMEX CEMEX CEMEX",
-            "CEMEX CEMEX CEMEX CEMEX CEMEX CEMEX CEMEX CEMEX CEMEX",
-            "CEMEX CEMEX CEMEX CEMEX CEMEX CEMEX CEMEX CEMEX CEMEX",
-            "CEMEX CEMEX CEMEX CEMEX CEMEX CEMEX CEMEX CEMEX CEMEX",
-            "CEMEX CEMEX CEMEX CEMEX CEMEX CEMEX CEMEX CEMEX CEMEX",
-            "CEMEX CEMEX CEMEX CEMEX CEMEX CEMEX CEMEX CEMEX CEMEX",
-            "CEMEX CEMEX CEMEX CEMEX CEMEX CEMEX CEMEX CEMEX CEMEX",
-            "CEMEX CEMEX CEMEX CEMEX CEMEX CEMEX CEMEX CEMEX CEMEX",
-            "CEMEX CEMEX CEMEX CEMEX CEMEX CEMEX CEMEX CEMEX CEMEX",
-            "CEMEX CEMEX CEMEX CEMEX CEMEX CEMEX CEMEX CEMEX CEMEX",
-            "CEMEX CEMEX CEMEX CEMEX CEMEX CEMEX CEMEX CEMEX CEMEX",
-            "CEMEX CEMEX CEMEX CEMEX CEMEX CEMEX CEMEX CEMEX CEMEX",
-            "CEMEX CEMEX CEMEX CEMEX CEMEX CEMEX CEMEX CEMEX CEMEX",
-            "Unpogmin killed Pogmin",
-            "Pogmin died",
-        ]
+        this.content = []
         this.isVisible = false
         this.renderedGraphics = null
         this.renderedText = null 
@@ -71,14 +40,14 @@ export default class Log {
             this.downKey.on('down', function() {
                 scene.log.renderedText.y -= 40;
                 scene.log.renderedText.y = Phaser.Math.Clamp(scene.log.renderedText.y, -1280, 113);
-                this.currentY = scene.log.renderedText.y
+                scene.log.currentY = scene.log.renderedText.y
             })
-
+ 
             this.upKey = scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.UP);
             this.upKey.on('down', function() {
                 scene.log.renderedText.y += 40;
                 scene.log.renderedText.y = Phaser.Math.Clamp(scene.log.renderedText.y, -1280, 113);
-                this.currentY = scene.log.renderedText.y
+                scene.log.currentY = scene.log.renderedText.y
             })
         }
 
@@ -119,6 +88,7 @@ export default class Log {
             if (this.renderedText) {
                 this.renderedText.destroy()
             }
+            console.log(this.currentY)
             this.renderedText = scene.add.text(445, this.currentY, this.content, { fontFamily: 'Avenir, Helvetica, Arial, sans-serif', color: '#000000', lineSpacing: 10, wordWrap: { width: 395 } }).setFontSize(18)
             this.renderedText.setMask(this.mask);
         }

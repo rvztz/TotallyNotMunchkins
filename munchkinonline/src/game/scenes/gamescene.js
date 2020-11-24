@@ -278,6 +278,7 @@ export default class GameScene extends Phaser.Scene {
                     this.socket.emit('showPublicCard', this.roomName, card.bigImage)
                 } else {
                     if (isPublic) {
+                        this.socket.emit('addToLog', this.roomName, `${localStorage.getItem('userName')} drew ${card.name}.`)
                         this.socket.emit('enabledLoot', this.roomName)
                         this.socket.emit('showPublicCard', this.roomName, card.bigImage)
                     }
