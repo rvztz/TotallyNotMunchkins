@@ -87,7 +87,9 @@ export default class Log {
             if (this.content.length > this.lengthLimit) {
                 this.content.pop()
             }
-            this.updateText()
+            if(this.isVisible) {
+                this.updateText()
+            }
         }
 
         this.toggle = () => {

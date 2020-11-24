@@ -362,6 +362,11 @@ export default class GameScene extends Phaser.Scene {
 
             this.currentTurnText.text = `${userName}'s turn`
             this.currentTurnText.setColor(color)
+
+            if (this.gameState.isYourTurn()) {
+                this.socket.emit('addToLog', this.roomName, `${userName}'s turn.`)
+            }
+            
         })
 
         this.socket.on('drewCard', () => {
