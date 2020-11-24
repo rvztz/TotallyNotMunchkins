@@ -88,7 +88,6 @@ export default class Log {
             if (this.renderedText) {
                 this.renderedText.destroy()
             }
-            console.log(this.currentY)
             this.renderedText = scene.add.text(445, this.currentY, this.content, { fontFamily: 'Avenir, Helvetica, Arial, sans-serif', color: '#000000', lineSpacing: 10, wordWrap: { width: 395 } }).setFontSize(18)
             this.renderedText.setMask(this.mask);
         }

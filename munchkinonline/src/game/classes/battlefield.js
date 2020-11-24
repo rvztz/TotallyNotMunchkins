@@ -225,9 +225,13 @@ export default class Battlefield {
         this.beginCombat = (card) => {
             scene.gameState.startCombat()
             scene.socket.emit('disabledLoot', scene.roomName)
+            if (scene.log.isVisible) {
+                scene.log.toggle() 
+            }
 
             scene.combatBackground = scene.add.rectangle(212, 109, 855, 482, 0x999999).setAlpha(0.6).setOrigin(0, 0)
             if (scene.gameState.isYourTurn()) {
+                scene.socket.emit('addToLog', scene.roomName, `${localStorage.getItem('userName')} started fighting ${card.name}!`)
                 this.renderButtons()
             }
             this.addMonster(card)
