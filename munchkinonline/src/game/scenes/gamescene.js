@@ -461,6 +461,10 @@ export default class GameScene extends Phaser.Scene {
             this.gameState.finishGame()
         })
 
+        this.socket.on('addToLog', (text) => {
+            this.log.push(text)
+        })
+
         this.socket.on('saveGameToFirebase', (room) => {
             saveGameToFirebase(room)
         })

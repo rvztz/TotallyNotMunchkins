@@ -2,6 +2,7 @@ import Phaser from 'phaser'
 
 export default class Log {
     constructor(scene) {
+        this.lengthLimit = 30
         this.content = [
             "Pogmin used Stand Arrow on Pogmin",
             "CEMEX CEMEX CEMEX CEMEX CEMEX CEMEX CEMEX CEMEX CEMEX",
@@ -31,12 +32,13 @@ export default class Log {
             "CEMEX CEMEX CEMEX CEMEX CEMEX CEMEX CEMEX CEMEX CEMEX",
             "CEMEX CEMEX CEMEX CEMEX CEMEX CEMEX CEMEX CEMEX CEMEX",
             "CEMEX CEMEX CEMEX CEMEX CEMEX CEMEX CEMEX CEMEX CEMEX",
-            "CEMEX CEMEX CEMEX CEMEX CEMEX CEMEX CEMEX CEMEX CEMEX",
-            "CEMEX CEMEX CEMEX CEMEX CEMEX CEMEX CEMEX CEMEX CEMEX",
+            "Unpogmin killed Pogmin",
+            "Pogmin died",
         ]
         this.isVisible = false
         this.renderedGraphics = null
         this.renderedText = null 
+        this.mask = null
         this.logBackground = null
         this.upKey = null
         this.downKey = null
@@ -61,11 +63,9 @@ export default class Log {
             this.renderedGraphics.fillRect(440, 110, 400, 480)
             this.renderedGraphics.strokeRect(440, 110, 400, 480)
 
-            var mask = new Phaser.Display.Masks.GeometryMask(scene, this.renderedGraphics)
+            this.mask = new Phaser.Display.Masks.GeometryMask(scene, this.renderedGraphics)
 
             this.updateText()
-
-            this.renderedText.setMask(mask);
 
             this.downKey = scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.DOWN);
             this.downKey.on('down', function() {
@@ -82,8 +82,12 @@ export default class Log {
             })
         }
 
-        this.setContent = (newText) => {
-            this.content = newText
+        this.push = (newText) => {
+            this.content.unshift(newText)
+            if (this.content.length > this.lengthLimit) {
+                this.content.pop()
+            }
+            this.updateText()
         }
 
         this.toggle = () => {
@@ -114,6 +118,7 @@ export default class Log {
                 this.renderedText.destroy()
             }
             this.renderedText = scene.add.text(445, this.currentY, this.content, { fontFamily: 'Avenir, Helvetica, Arial, sans-serif', color: '#000000', lineSpacing: 10, wordWrap: { width: 395 } }).setFontSize(18)
+            this.renderedText.setMask(this.mask);
         }
     }
 }

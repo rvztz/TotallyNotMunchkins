@@ -431,6 +431,11 @@ io.on('connection', (socket) => {
 		socket.to(roomName).emit('updateStrength', socket.id, rooms[roomIndex].players[playerIndex].strength)
 	})
 
+	/*======================LOG UPDATES=======================*/
+	socket.on('addToLog', (roomName, text) => {
+		io.in(roomName).emit('addToLog', text)
+	})
+
 	/*======================PLAYER DISCONNECT=======================*/
 	socket.on('disconnect', () => {
         console.log('a user disconnected ' + socket.id)

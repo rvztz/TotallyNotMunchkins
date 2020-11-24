@@ -14,6 +14,7 @@ export default class EndTurnButton {
                         alert("You need to have 5 cards to end pregame")
                     } else {
                         scene.socket.emit('endPregame', scene.roomName)
+                        scene.socket.emit('addToLog', scene.roomName, `${localStorage.getItem('userName')} is ready.`)
                         scene.currentTurnText.text = "Waiting..."                
                     }
                 } else {
