@@ -517,5 +517,5 @@ function checkPregame(players) {
 }
 
 http.listen(PORT, () => {
-    console.log('Server started!')
+    console.log('Server started! Listening at' + PORT)
 })
