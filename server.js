@@ -4,6 +4,8 @@ const io = require('socket.io')(http)
 const {Room} = require('./models/room.js')
 const {TreasureList, DoorList} = require('./models/cardLists.js')
 
+const PORT = process.env.PORT || 3000
+
 let rooms = []
 
 // Socket IO
@@ -431,6 +433,11 @@ io.on('connection', (socket) => {
 		socket.to(roomName).emit('updateStrength', socket.id, rooms[roomIndex].players[playerIndex].strength)
 	})
 
+	/*======================LOG UPDATES=======================*/
+	socket.on('addToLog', (roomName, text) => {
+		io.in(roomName).emit('addToLog', text)
+	})
+
 	/*======================PLAYER DISCONNECT=======================*/
 	socket.on('disconnect', () => {
         console.log('a user disconnected ' + socket.id)
@@ -515,6 +522,6 @@ function checkPregame(players) {
 	return false
 }
 
-http.listen(3000, () => {
+http.listen(PORT, () => {
     console.log('Server started!')
 })

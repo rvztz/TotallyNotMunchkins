@@ -9,6 +9,8 @@ export default class Player {
         this.color = null
         this.colorString = null
 
+        this.userName = null
+
         // Data
         this.cards = []
         this.level = 1
@@ -44,6 +46,7 @@ export default class Player {
             this.level = Math.min(this.level, 10)
             this.level = Math.max(this.level, 1)
             this.token.renderedToken.data.set('level', this.level)
+            scene.socket.emit('addToLog', scene.roomName, `${this.userName} leveled up to level ${this.level}.`)
             scene.socket.emit('updateLevel', scene.roomName, this.level)
             scene.socket.emit('updateStrength', scene.roomName, this.getFullStrength())
         }
@@ -149,6 +152,7 @@ export default class Player {
 
         this.resurrect = () => {
             this.isDead = false
+            scene.socket.emit('addToLog', scene.roomName, `${this.userName} resurrected.`)
         }
 
         this.equipCard = (card, placedOn, slotType, available) => {

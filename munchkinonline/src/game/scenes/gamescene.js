@@ -7,6 +7,7 @@ import Opponent from '../classes/opponent'
 import Player from '../classes/player'
 import GameState from '../classes/gameState'
 import Battlefield from '../classes/battlefield'
+import Log from '../classes/log'
 import { gameCollection } from '../../main.js';
 import router from '../../router/index'
 
@@ -67,9 +68,11 @@ export default class GameScene extends Phaser.Scene {
         this.opponents = [] 
         this.playerList.forEach(player => {
             if (player.socketId != this.socket.id) {
-                this.opponents.push(new Opponent(this, positions.shift(), player.socketId, player.gender))
+                this.opponents.push(new Opponent(this, positions.shift(), player.socketId, player.gender, player.userName))
+            } else {
+                this.player.userName = player.userName
             }
-        })
+        }) 
 
         this.opponents.forEach(opponent => { 
             opponent.renderHand(cardWidth, cardHeight)
@@ -101,10 +104,10 @@ export default class GameScene extends Phaser.Scene {
         // Render strength text
         this.add.text(1106, 426, "Strength", {fontFamily: 'Avenir, Helvetica, Arial, sans-serif'}).setFontSize(20).setColor('#000')
         this.strengthText = this.add.text(1127, 456, "", {fontFamily: 'Avenir, Helvetica, Arial, sans-serif'}).setFontSize(28).setColor('#000')
- 
+  
         // Render endTurnBUtton
         this.endTurnButton = new EndTurnButton(this)
-        this.endTurnButton.render(1280, 650)
+        this.endTurnButton.render(1280, 680)
 
         // Render space to view bigger card 
         this.cardView = this.add.image(10, 436, 'blankCard').setScale(0.38, 0.38).setOrigin(0, 0)
@@ -116,6 +119,7 @@ export default class GameScene extends Phaser.Scene {
         this.socket.emit('distributeCards', this.roomName)
 
         /*====================== TEMP =======================*/
+        this.log = new Log(this)
 
         /*======================INPUT EVENTS=======================*/
         this.input.on('drag', function (pointer, gameObject, dragX, dragY) {
@@ -149,6 +153,7 @@ export default class GameScene extends Phaser.Scene {
 
                     if (gameObject.data.get('level') == 10) {
                         this.scene.socket.emit('winGame', this.scene.roomName)
+                        this.scene.socket.emit('addToLog', this.scene.roomName, `${this.scene.player.userName} won!`)
                     }
                 } else {
                     returnToLastPosition(gameObject)
@@ -188,6 +193,7 @@ export default class GameScene extends Phaser.Scene {
                     if (gameObject.data.get('data').type === "monster") {
                         this.scene.removeCardFromPlayer(gameObject, /* destroy */ true)
                     } else {
+                        this.scene.socket.emit('addToLog', this.scene.roomName, `${this.scene.player.userName} used ${gameObject.data.get('data').name} on themselves.`)
                         this.scene.removeAndReturnCardFromPlayer(gameObject)
                     }
                 } else {
@@ -198,6 +204,8 @@ export default class GameScene extends Phaser.Scene {
             } else if (gameObject.data.get('type') === 'card' && dropZone.data.get('type') === 'opponentHand') {
 
                 if (this.scene.useCard(gameObject.data.get('data'), dropZone.data.get('ownerId'))) {
+                    let opponentName = this.scene.getUserName(dropZone.data.get('ownerId'))
+                    this.scene.socket.emit('addToLog', this.scene.roomName, `${this.scene.player.userName} used ${gameObject.data.get('data').name} on ${opponentName}.`)
                     this.scene.removeAndReturnCardFromPlayer(gameObject)
                 } else {
                     returnToLastPosition(gameObject)
@@ -218,6 +226,7 @@ export default class GameScene extends Phaser.Scene {
                 }
 
                 if (monster.useCard(gameObject.data.get('data'))) {
+                    this.scene.socket.emit('addToLog', this.scene.roomName, `${this.scene.player.userName} used ${gameObject.data.get('data').name} on ${monster.name}.`)
                     this.scene.removeAndReturnCardFromPlayer(gameObject)
                 } else {
                     returnToLastPosition(gameObject)
@@ -276,6 +285,7 @@ export default class GameScene extends Phaser.Scene {
                     this.socket.emit('showPublicCard', this.roomName, card.bigImage)
                 } else {
                     if (isPublic) {
+                        this.socket.emit('addToLog', this.roomName, `${this.player.userName} drew ${card.name}.`)
                         this.socket.emit('enabledLoot', this.roomName)
                         this.socket.emit('showPublicCard', this.roomName, card.bigImage)
                     }
@@ -360,6 +370,11 @@ export default class GameScene extends Phaser.Scene {
 
             this.currentTurnText.text = `${userName}'s turn`
             this.currentTurnText.setColor(color)
+
+            if (this.gameState.isYourTurn()) {
+                this.socket.emit('addToLog', this.roomName, `${userName}'s turn.`)
+            }
+            
         })
 
         this.socket.on('drewCard', () => {
@@ -459,6 +474,10 @@ export default class GameScene extends Phaser.Scene {
             this.gameState.finishGame()
         })
 
+        this.socket.on('addToLog', (text) => {
+            this.log.push(text)
+        })
+
         this.socket.on('saveGameToFirebase', (room) => {
             saveGameToFirebase(room)
         })
@@ -488,6 +507,20 @@ export default class GameScene extends Phaser.Scene {
     }
 
     /*======================OBJECT SEARCH FUNCTIONS=======================*/
+    getUserName(socketId) {
+        if (this.socket.id == socketId) {
+            return this.player.userName
+        }
+        let result = ""
+        this.opponents.forEach(opponent => {
+            if (opponent.socketId == socketId) {
+                result = opponent.userName
+            }
+        })
+
+        return result
+    }
+
     getCards(cardNames, cardType) {
         let cards = []
         for (let i = 0; i < cardNames.length; i++) {
@@ -629,6 +662,7 @@ export default class GameScene extends Phaser.Scene {
         this.load.image('endTurn', 'assets/buttons/endTurn.png')
         this.load.image('fightBtn', 'assets/buttons/fightBtn.png')
         this.load.image('runBtn', 'assets/buttons/runBtn.jpg')
+        this.load.image('logBtn', 'assets/buttons/logBtn.jpg')
         this.load.image('askHelpBtn', 'assets/buttons/askHelpBtn.png')
         this.load.image('offerHelpBtn', 'assets/buttons/offerHelpBtn.png')
         this.load.image('exitBtn', 'assets/buttons/exitButton.png')
