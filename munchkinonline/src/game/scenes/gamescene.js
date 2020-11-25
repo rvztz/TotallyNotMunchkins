@@ -192,6 +192,7 @@ export default class GameScene extends Phaser.Scene {
                     if (gameObject.data.get('data').type === "monster") {
                         this.scene.removeCardFromPlayer(gameObject, /* destroy */ true)
                     } else {
+                        this.scene.socket.emit('addToLog', this.scene.roomName, `${this.scene.player.userName} used ${gameObject.data.get('data').name} on themselves.`)
                         this.scene.removeAndReturnCardFromPlayer(gameObject)
                     }
                 } else {
@@ -202,6 +203,8 @@ export default class GameScene extends Phaser.Scene {
             } else if (gameObject.data.get('type') === 'card' && dropZone.data.get('type') === 'opponentHand') {
 
                 if (this.scene.useCard(gameObject.data.get('data'), dropZone.data.get('ownerId'))) {
+                    let opponentName = this.scene.getUserName(dropZone.data.get('ownerId'))
+                    this.scene.socket.emit('addToLog', this.scene.roomName, `${this.scene.player.userName} used ${gameObject.data.get('data').name} on ${opponentName}.`)
                     this.scene.removeAndReturnCardFromPlayer(gameObject)
                 } else {
                     returnToLastPosition(gameObject)
@@ -222,6 +225,7 @@ export default class GameScene extends Phaser.Scene {
                 }
 
                 if (monster.useCard(gameObject.data.get('data'))) {
+                    this.scene.socket.emit('addToLog', this.scene.roomName, `${this.scene.player.userName} used ${gameObject.data.get('data').name} on ${monster.name}.`)
                     this.scene.removeAndReturnCardFromPlayer(gameObject)
                 } else {
                     returnToLastPosition(gameObject)
