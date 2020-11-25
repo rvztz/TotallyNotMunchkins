@@ -152,6 +152,7 @@ export default class Player {
 
         this.resurrect = () => {
             this.isDead = false
+            scene.socket.emit('addToLog', scene.roomName, `${this.userName} resurrected.`)
         }
 
         this.equipCard = (card, placedOn, slotType, available) => {
