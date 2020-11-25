@@ -41,6 +41,7 @@ export default class Battlefield {
 
             this.askForHelpButton = scene.add.image(792, 520, 'askHelpBtn').setInteractive({ cursor: 'pointer' })
             this.askForHelpButton.on('pointerup', () => {
+                scene.socket.emit('addToLog', scene.roomName, `${scene.player.userName} is asking for help.`)
                 scene.socket.emit('askForHelp', scene.roomName)
                 this.askForHelpButton.destroy()
             })
@@ -49,6 +50,7 @@ export default class Battlefield {
         this.renderOfferHelpButton = () => {
             this.offerHelpButton = scene.add.image(640, 520, 'offerHelpBtn').setInteractive({ cursor: 'pointer' })
             this.offerHelpButton.on('pointerup', () => {
+                scene.socket.emit('addToLog', scene.roomName, `${scene.player.userName} offerred help.`)
                 scene.socket.emit('offerHelp', scene.roomName)
                 this.offerHelpButton.destroy()
             }) 
