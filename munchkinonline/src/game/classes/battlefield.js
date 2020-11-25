@@ -48,6 +48,9 @@ export default class Battlefield {
         }
 
         this.renderOfferHelpButton = () => {
+            if (scene.log.isVisible) {
+                scene.log.toggle()
+            }
             this.offerHelpButton = scene.add.image(640, 520, 'offerHelpBtn').setInteractive({ cursor: 'pointer' })
             this.offerHelpButton.on('pointerup', () => {
                 scene.socket.emit('addToLog', scene.roomName, `${scene.player.userName} offerred help.`)
@@ -95,19 +98,25 @@ export default class Battlefield {
         this.run = () => {
             if(scene.player.helper) {
                 let helperRng = rng = Math.floor(Math.random() * 6 + 1) 
+                let helperName = scene.getUserName(scene.player.helper)
                 if(helperRng < 5) {
+                    scene.socket.emit('addToLog', scene.roomName, `${helperName} rolled a ${helperRng} and died.`)
                     scene.socket.emit('killHelper', scene.player.helper)
                     scene.player.helper = null
+                } else {
+                    scene.socket.emit('addToLog', scene.roomName, `${helperName} rolled a ${helperRng} and escaped.`)
                 }
             }
             
-            let rng = Math.floor(Math.random() * 6 + 1) 
+            let rng = Math.floor(Math.random() * 6 + 1)
             
             if(rng >= 5) {
                 //YOU ESCAPED
+                scene.socket.emit('addToLog', scene.roomName, `${scene.player.userName} rolled a ${rng} and escaped.`)
                 this.removeTargettedMonster() 
             } else { 
                 // YOU DIE
+                scene.socket.emit('addToLog', scene.roomName, `${scene.player.userName} rolled a ${rng} and died.`)
                 scene.player.die()
                 this.returnCards()
                 scene.socket.emit('endCombat', scene.roomName)
