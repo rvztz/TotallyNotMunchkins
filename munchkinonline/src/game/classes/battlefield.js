@@ -64,9 +64,12 @@ export default class Battlefield {
                 scene.player.levelUp(targettedMonster.levelsGained)
                 
                 if(helper) {
+                    let helperName = scene.getUserName(helper)
+                    scene.socket.emit('addToLog', scene.roomName, `${scene.player.userName} and ${helperName} killed ${targettedMonster.name}.`)
                     scene.socket.emit('requestCards', scene.roomName, 'treasure', Math.floor(targettedMonster.treasuresDropped / 2), /* isPublic */ false)
                     scene.socket.emit('sendTreasuresToHelper', helper, Math.ceil(targettedMonster.treasuresDropped / 2))
                 } else {
+                    scene.socket.emit('addToLog', scene.roomName, `${scene.player.userName} killed ${targettedMonster.name}.`)
                     scene.socket.emit('requestCards', scene.roomName, 'treasure', targettedMonster.treasuresDropped, /* isPublic */ false)
                 }
 
