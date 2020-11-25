@@ -11,6 +11,7 @@ export default class Deck {
                         scene.socket.emit('requestCards', scene.roomName, this.cardType, 1, /* isPublic */ true)
                         scene.socket.emit('drewCard', scene.roomName)
                     } else if (scene.gameState.canLootTheRoom) {
+                        scene.socket.emit('addToLog', scene.roomName, `${scene.player.userName} looted the room.`)
                         scene.socket.emit('requestCards', scene.roomName, this.cardType, 1, /* isPublic */ false)
                         scene.socket.emit('disabledLoot', scene.roomName)
                     } else {
@@ -19,7 +20,7 @@ export default class Deck {
                 } else {
                     alert("You can't pick up a card right now.")
                 }
-            });
+            })
         }
     }
 }
