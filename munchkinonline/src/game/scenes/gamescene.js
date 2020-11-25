@@ -153,6 +153,7 @@ export default class GameScene extends Phaser.Scene {
 
                     if (gameObject.data.get('level') == 10) {
                         this.scene.socket.emit('winGame', this.scene.roomName)
+                        this.scene.socket.emit('addToLog', this.scene.roomName, `${this.scene.player.userName} won!`)
                     }
                 } else {
                     returnToLastPosition(gameObject)

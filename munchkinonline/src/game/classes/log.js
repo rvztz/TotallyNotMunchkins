@@ -38,14 +38,14 @@ export default class Log {
 
             this.downKey = scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.DOWN);
             this.downKey.on('down', function() {
-                scene.log.renderedText.y -= 40;
+                scene.log.renderedText.y -= 30;
                 scene.log.renderedText.y = Phaser.Math.Clamp(scene.log.renderedText.y, -1280, 113);
                 scene.log.currentY = scene.log.renderedText.y
             })
  
             this.upKey = scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.UP);
             this.upKey.on('down', function() {
-                scene.log.renderedText.y += 40;
+                scene.log.renderedText.y += 30;
                 scene.log.renderedText.y = Phaser.Math.Clamp(scene.log.renderedText.y, -1280, 113);
                 scene.log.currentY = scene.log.renderedText.y
             })
