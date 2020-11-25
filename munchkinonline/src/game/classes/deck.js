@@ -14,7 +14,7 @@ export default class Deck {
                         scene.socket.emit('addToLog', scene.roomName, `${scene.player.userName} looted the room.`)
                         scene.socket.emit('requestCards', scene.roomName, this.cardType, 1, /* isPublic */ false)
                         scene.socket.emit('disabledLoot', scene.roomName)
-                    } else {
+                    } else { 
                         alert("You can't pick up a card right now.")
                     }
                 } else {

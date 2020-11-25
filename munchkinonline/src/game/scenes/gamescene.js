@@ -32,6 +32,7 @@ export default class GameScene extends Phaser.Scene {
         this.loadEquipmentSlots()
         this.loadMonsters()     
         this.loadItems()   
+        this.loadTiles()
 
         /*======================OTHER DATA LOADING=======================*/
         this.load.json('cards', 'data/cards.json')
@@ -491,7 +492,7 @@ export default class GameScene extends Phaser.Scene {
     /*======================UI CREATION FUNCTIONS=======================*/
     createBoard() {
         const numRows = 3
-        const numCols = 5
+        const numCols = 5 /*  284.33 * 96  */
 
         this.board = new Board(this, 213, 110, 853/numCols, 480/numRows)
         this.board.renderTiles()
@@ -632,15 +633,12 @@ export default class GameScene extends Phaser.Scene {
 
     /*=================== IMAGE LOADING ===================*/
     loadSceneComponents() {
-        this.load.image('cardBack', 'assets/cardBack.jpg')
-        this.load.image('doorCard', 'assets/door.jpg')
-        this.load.image('treasureCard', 'assets/treasure.jpg')
-        this.load.image('pogmin', 'assets/Pogmin.jpg')
-        this.load.image('doorDeck', 'assets/deck.png')
-        this.load.image('treasureDeck', 'assets/deck.png')
-        this.load.image('doorDiscard', 'assets/discard.png')
-        this.load.image('treasureDiscard', 'assets/discard.png')
-        this.load.image('slotBG', 'assets/slotBG.png')
+        this.load.image('doorCard', 'assets/door.png')
+        this.load.image('treasureCard', 'assets/treasure.png')
+        this.load.image('doorDeck', 'assets/doorDeck.png')
+        this.load.image('treasureDeck', 'assets/treasureDeck.png')
+        this.load.image('doorDiscard', 'assets/doorDiscard.png')
+        this.load.image('treasureDiscard', 'assets/treasureDiscard.png') 
     }
 
     loadTokens() {
@@ -693,6 +691,19 @@ export default class GameScene extends Phaser.Scene {
         this.load.image('dekuShield', 'assets/items/dekuShield.png')
         this.load.image('sonicShoes', 'assets/items/sonicShoes.png')
         this.load.image('squarepants', 'assets/items/squarepants.png')
+    }
+
+    loadTiles() {
+        this.load.image('tile1', 'assets/tiles/tile1.png')
+        this.load.image('tile2', 'assets/tiles/tile2.png')
+        this.load.image('tile3', 'assets/tiles/tile3.png')
+        this.load.image('tile4', 'assets/tiles/tile4.png')
+        this.load.image('tile5', 'assets/tiles/tile5.png')
+        this.load.image('tile6', 'assets/tiles/tile6.png')
+        this.load.image('tile7', 'assets/tiles/tile7.png')
+        this.load.image('tile8', 'assets/tiles/tile8.png')
+        this.load.image('tile9', 'assets/tiles/tile9.png')
+        this.load.image('tile10', 'assets/tiles/tile10.png') 
     }
 }
 
