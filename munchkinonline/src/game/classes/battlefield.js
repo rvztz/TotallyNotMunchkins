@@ -73,7 +73,10 @@ export default class Battlefield {
                 this.removeTargettedMonster()
             } else {
                 scene.player.die()
+                scene.socket.emit('addToLog', scene.roomName, `${scene.player.userName} was killed by ${targettedMonster.name}...`)
                 if (helper) {
+                    let helperName = scene.getUserName(helper)
+                    scene.socket.emit('addToLog', scene.roomName, `${helperName} was killed by ${targettedMonster.name}...`)
                     scene.socket.emit('killHelper', helper)
                     scene.player.helper = null
                 }
@@ -231,7 +234,7 @@ export default class Battlefield {
 
             scene.combatBackground = scene.add.rectangle(212, 109, 855, 482, 0x999999).setAlpha(0.6).setOrigin(0, 0)
             if (scene.gameState.isYourTurn()) {
-                scene.socket.emit('addToLog', scene.roomName, `${localStorage.getItem('userName')} started fighting ${card.name}!`)
+                scene.socket.emit('addToLog', scene.roomName, `${scene.player.userName} started fighting ${card.name}!`)
                 this.renderButtons()
             }
             this.addMonster(card)

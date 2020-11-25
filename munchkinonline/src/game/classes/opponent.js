@@ -2,10 +2,11 @@ import OpponentHand from '../classes/opponentHand'
 import Token from '../classes/token'
 
 export default class Opponent {
-    constructor (scene, position, socketId, gender) {
+    constructor (scene, position, socketId, gender, userName) {
         this.opponentHand = new OpponentHand(scene, position, socketId)
         this.token = new Token(scene)
         this.color = null
+        this.userName = userName
 
         // Data
         this.position = position

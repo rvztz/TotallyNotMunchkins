@@ -9,6 +9,8 @@ export default class Player {
         this.color = null
         this.colorString = null
 
+        this.userName = null
+
         // Data
         this.cards = []
         this.level = 1

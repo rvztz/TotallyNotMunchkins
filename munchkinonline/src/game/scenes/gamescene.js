@@ -68,7 +68,9 @@ export default class GameScene extends Phaser.Scene {
         this.opponents = [] 
         this.playerList.forEach(player => {
             if (player.socketId != this.socket.id) {
-                this.opponents.push(new Opponent(this, positions.shift(), player.socketId, player.gender))
+                this.opponents.push(new Opponent(this, positions.shift(), player.socketId, player.gender, player.userName))
+            } else {
+                this.player.userName = player.userName
             }
         }) 
 
@@ -278,7 +280,7 @@ export default class GameScene extends Phaser.Scene {
                     this.socket.emit('showPublicCard', this.roomName, card.bigImage)
                 } else {
                     if (isPublic) {
-                        this.socket.emit('addToLog', this.roomName, `${localStorage.getItem('userName')} drew ${card.name}.`)
+                        this.socket.emit('addToLog', this.roomName, `${this.player.userName} drew ${card.name}.`)
                         this.socket.emit('enabledLoot', this.roomName)
                         this.socket.emit('showPublicCard', this.roomName, card.bigImage)
                     }
@@ -500,6 +502,20 @@ export default class GameScene extends Phaser.Scene {
     }
 
     /*======================OBJECT SEARCH FUNCTIONS=======================*/
+    getUserName(socketId) {
+        if (this.socket.id == socketId) {
+            return this.player.userName
+        }
+        let result = ""
+        this.opponents.forEach(opponent => {
+            if (opponent.socketId == socketId) {
+                result = opponent.userName
+            }
+        })
+
+        return result
+    }
+
     getCards(cardNames, cardType) {
         let cards = []
         for (let i = 0; i < cardNames.length; i++) {
