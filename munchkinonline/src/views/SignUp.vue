@@ -1,6 +1,8 @@
 <template>
     <div id="signup">
-        <Card v-bind:cardData="cardData" v-on:signup="signUpMethod"/>
+        <Card id="card" v-bind:cardData="cardData" v-on:signup="signUpMethod"/>
+        <div id="rest">
+        </div>
     </div>
 </template>
 
@@ -108,13 +110,12 @@ export default {
 </script>
 
 <style scoped>
-#signup {
-    display: flex;
-    justify-content: center;
+#card {
+    margin: 20px auto 50px auto;
 }
 
-.elem {
-    padding-top: 10px;
+#rest {
+    padding-bottom: 166px;
 }
 
 </style>

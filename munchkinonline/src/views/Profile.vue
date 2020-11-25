@@ -17,6 +17,8 @@
         </div>
       </b-card>
     </div>
+      <div id="rest">
+      </div>
   </div>
 </template>
 
@@ -88,6 +90,11 @@ export default {
 </script>
 
 <style scoped>
+
+#rest {
+  padding-bottom: 318px;
+}
+
 .container {
   text-align: left;
 }
