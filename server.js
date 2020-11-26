@@ -55,12 +55,19 @@ io.on('connection', (socket) => {
 		}
 
 		rooms[roomIndex].addToBlocklist(rooms[roomIndex].players[playerIndex].userName)
-		
-		if(rooms[roomIndex].players[playerIndex].tokenImage != "") {
-			rooms[roomIndex].availableTokens.push(rooms[roomIndex].players[playerIndex].tokenImage)
-		}
 
-		io.in(rooms[roomIndex].name).emit('updateTokenSelections', rooms[roomIndex].availableTokens)
+		if (rooms[roomIndex].started) {
+			if (rooms[roomIndex].turnIndex === playerIndex) {
+				const {id, name} = rooms[roomIndex].getNextPlayerIdAndName()
+				io.in(roomName).emit('changeTurn', id, name)
+			}
+		} else {
+			if (rooms[roomIndex].players[playerIndex].tokenImage != "") {
+				rooms[roomIndex].availableTokens.push(rooms[roomIndex].players[playerIndex].tokenImage)
+			}
+
+			io.in(rooms[roomIndex].name).emit('updateTokenSelections', rooms[roomIndex].availableTokens)
+		}
 		
 		rooms[roomIndex].players.splice(playerIndex, 1)
 		
