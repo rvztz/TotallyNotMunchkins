@@ -3,6 +3,7 @@ const http = require('http').createServer(server)
 const io = require('socket.io')(http)
 const {Room} = require('./models/room.js')
 const {TreasureList, DoorList} = require('./models/cardLists.js')
+const PORT = process.env.PORT || 3000;
 
 const PORT = process.env.PORT || 3000
 
@@ -523,5 +524,5 @@ function checkPregame(players) {
 }
 
 http.listen(PORT, () => {
-    console.log('Server started!')
+    console.log('Server started! Listening at' + PORT)
 })
