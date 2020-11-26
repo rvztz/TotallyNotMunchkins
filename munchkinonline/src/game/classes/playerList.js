@@ -44,6 +44,22 @@ export default class PlayerList {
            this.usernames.splice(index, 1)
        }
 
+       this.highlightName = (name) => {
+            let index = -1;
+            this.usernames.forEach((user, i) => {
+                if (user.username.text === name) {
+                    index = i
+                } 
+            })
+
+            if (index === -1) {
+                console.log("Error: username not found")
+                return
+            }
+            
+            this.usernames[index].username.setColor("#1E8000")
+       }
+
         this.deleteAll = () => {
             while (this.usernames.length > 0) {
                 this.deleteUsername(this.usernames[0].username.text)

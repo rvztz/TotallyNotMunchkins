@@ -265,6 +265,18 @@ export default class GameScene extends Phaser.Scene {
             }
         });
 
+        /*======================WINDOW EVENTS=======================*/
+        const scene = this
+        window.onpopstate = () => {
+            this.socket.emit('endPregame', this.roomName)
+            scene.socket.emit('kickPlayer', scene.roomName, this.player.userName)
+        }
+ 
+        window.addEventListener('beforeunload', () => {
+            this.socket.emit('endPregame', this.roomName)
+            scene.socket.emit('kickPlayer', scene.roomName, this.player.userName)
+        })
+
         /*======================SOCKET EVENTS=======================*/
 
         /*======================TOKEN EVENTS=======================*/
@@ -384,7 +396,7 @@ export default class GameScene extends Phaser.Scene {
 
         this.socket.on('displayExitButton', () => {
             // Render new game image and add click event
-            this.exitButton = this.add.image(10, 50, 'exitBtn').setOrigin(0, 0).setInteractive({ cursor: 'pointer' })
+            this.exitButton = this.add.image(10, 80, 'exitBtn').setOrigin(0, 0).setInteractive({ cursor: 'pointer' })
 
             this.exitButton.on('pointerup', () => {
                 this.socket.emit('closeRoom', this.roomName)
@@ -620,7 +632,7 @@ export default class GameScene extends Phaser.Scene {
 
         switch(card.name) {
             case "Go Up A Level":
-                target.levelUp(1)
+                target.levelUp(10)
                 return true
             case "Stand Arrow":
                 target.buff(card.statBonus)
