@@ -3,16 +3,24 @@ export default class Deck {
         this.cardType = cardType
         
         this.render = (x, y, sprite, cW, cH) => {
-            let deck = scene.add.image(x+cW/2, y+cH/2, sprite).setScale(0.7, 0.7).setInteractive({ cursor: 'pointer' })
+            let deck = scene.add.image(x+cW/2, y+cH/2, sprite).setInteractive({ cursor: 'pointer' })
 
-            deck.on('pointerup', function () {
-
-                let chosenCards = (cardType === 'door') ? [scene.cardList.doors.monsters[0], scene.cardList.doors.monsters[1]] : [scene.cardList.treasures.equipment[0]] // Get a random card from list in server
-
-                chosenCards.forEach((card, index) => {
-                    scene.player.addToHand(card, index)
-                })
-            });
+            deck.on('pointerup', () => {
+                if (scene.gameState.isYourTurn()) {
+                    if (!scene.gameState.cardDrawn){
+                        scene.socket.emit('requestCards', scene.roomName, this.cardType, 1, /* isPublic */ true)
+                        scene.socket.emit('drewCard', scene.roomName)
+                    } else if (scene.gameState.canLootTheRoom) {
+                        scene.socket.emit('addToLog', scene.roomName, `${scene.player.userName} looted the room.`)
+                        scene.socket.emit('requestCards', scene.roomName, this.cardType, 1, /* isPublic */ false)
+                        scene.socket.emit('disabledLoot', scene.roomName)
+                    } else { 
+                        alert("You can't pick up a card right now.")
+                    }
+                } else {
+                    alert("You can't pick up a card right now.")
+                }
+            })
         }
     }
 }

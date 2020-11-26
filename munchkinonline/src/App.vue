@@ -1,15 +1,14 @@
 <template>
   <div id="app">
-    <div id="nav">
+    <div id="nav" v-if="['Game'].indexOf($route.name) == -1">
       <div id="title">
-        Munchkins Online 
+        Munchkin Online 
       </div>
       <router-link to="/">Sign In</router-link> |
       <router-link to="/about">About</router-link> |
       <router-link to="/signup">Sign Up</router-link> |
-      <router-link to="/play">Play</router-link> |
       <router-link to="/profile">Profile</router-link> |
-      <router-link to="/game">Game</router-link>
+      <router-link to="/play">Play</router-link>
     </div>
     <div id="line">
   </div>
