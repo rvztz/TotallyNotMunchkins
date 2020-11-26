@@ -5,8 +5,6 @@ const {Room} = require('./models/room.js')
 const {TreasureList, DoorList} = require('./models/cardLists.js')
 const PORT = process.env.PORT || 3000;
 
-const PORT = process.env.PORT || 3000
-
 let rooms = []
 
 // Socket IO
