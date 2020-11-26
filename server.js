@@ -82,6 +82,11 @@ io.on('connection', (socket) => {
 			rooms[roomIndex].players.forEach(player => {
 				io.in(roomName).emit('addUsername', player.userName)
 			})
+			rooms[roomIndex].players.forEach(player => {
+				if (player.hasAllSelections()) {
+					io.in(roomName).emit('highlightName', player.userName)
+				}
+			})
 		}
 		io.to(socketId).emit('disconnectPlayer')
 	})
@@ -123,6 +128,11 @@ io.on('connection', (socket) => {
 		rooms[roomIndex].players.forEach(player => {
 			io.in(roomName).emit('addUsername', player.userName)
 		})
+		rooms[roomIndex].players.forEach(player => {
+			if (player.hasAllSelections()) {
+				io.in(roomName).emit('highlightName', player.userName)
+			}
+		})
 
 		socket.emit('updateTokenSelections', rooms[roomIndex].availableTokens)
 	})
@@ -155,14 +165,19 @@ io.on('connection', (socket) => {
 			rooms[roomIndex].players[playerIndex].gender = value
 		} else {
 			console.log("Error: unexpected attribute")
+			return
+		}
+
+		if (rooms[roomIndex].players[playerIndex].hasAllSelections()) {
+			io.in(roomName).emit('highlightName', rooms[roomIndex].players[playerIndex].userName)
 		}
 	}) 
-
+ 
 	/*======================GAME MANAGEMENT=======================*/
 	socket.on('startGame', (roomName) => {
 		let roomIndex = findRoom(roomName)
 		if (roomIndex >= 0) {
-			if (socket.id == rooms[roomIndex].hostId) {
+			if (socket.id == rooms[roomIndex].hostId && rooms[roomIndex].allPlayersHaveSelected()) {
 				rooms[roomIndex].shuffleDecks([...TreasureList], [...DoorList])
 				rooms[roomIndex].started = true
 				io.in(roomName).emit('startGame', rooms[roomIndex].getInfo())

@@ -85,6 +85,10 @@ export default class Lobby extends Phaser.Scene {
             this.playerList.deleteAll()
         })
 
+        this.socket.on('highlightName', (name) => {
+            this.playerList.highlightName(name)
+        })
+
         this.socket.on('disconnectPlayer', () => {
             this.socket.emit('disconnectPlayer')
             router.push("/play")
