@@ -7,7 +7,11 @@ const PORT = process.env.PORT || 3000;
 
 var path = require('path');
 var serveStatic = require('serve-static');
-server.use(serveStatic(__dirname + "//dist"));
+server.use(serveStatic(path.join(__dirname, "/munchkinonline/dist")));
+
+server.get('/', function(request, response) {
+	response.send('Hello World!');
+});   
 
 let rooms = []
 
