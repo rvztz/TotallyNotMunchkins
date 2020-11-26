@@ -4,11 +4,13 @@
       <div id="title">
         Munchkin Online 
       </div>
-      <router-link to="/">Sign In</router-link> |
-      <router-link to="/about">About</router-link> |
-      <router-link to="/signup">Sign Up</router-link> |
-      <router-link to="/profile">Profile</router-link> |
-      <router-link to="/play">Play</router-link>
+      <div id="navBar">
+        <router-link to="/">Sign In</router-link> |
+        <router-link to="/about">About</router-link> |
+        <router-link to="/signup">Sign Up</router-link> |
+        <router-link to="/profile">Profile</router-link> |
+        <router-link to="/play">Play</router-link>
+      </div>
     </div>
     <div id="line">
   </div>
@@ -18,13 +20,11 @@
 
 <style>
 #title {
-  display: inline-block;
   font-size: 25px;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   color: white;
   font-weight: bold;
-  margin-right: 268px;
-  }
+}
 
 #line{
   display : block;
@@ -44,9 +44,18 @@
 }
 
 #nav {
-  padding: 25px 40px;
+  padding: 25px 0;
   background-color : #00000086;
-  text-align: right;  
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+}
+
+#navBar {
+  padding: 0 40px;
+  position: absolute;
+  right: 0;
 }
 
 #nav a {
