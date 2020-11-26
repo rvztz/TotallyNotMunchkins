@@ -1,6 +1,8 @@
 <template>
     <div id="signin">
-        <Card v-bind:cardData="cardData" v-on:login="signInMethod"/>
+        <Card id="card" v-bind:cardData="cardData" v-on:login="signInMethod"/>
+        <div id="rest">
+        </div>
     </div>
 </template>
 
@@ -66,9 +68,12 @@ export default {
 </script>
 
 <style scoped>
-#signin {
-    display: flex;
-    justify-content: center;
+#card {
+    margin: 20px auto 50px auto;
+}
+
+#rest {
+    padding-bottom: 292px;
 }
 
 .elem {

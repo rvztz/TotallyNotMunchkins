@@ -1,6 +1,8 @@
 <template>
     <div id="play">
-        <Card v-bind:cardData="cardData" v-on:create-game="createGame" v-on:join-game="joinGame"/>
+        <Card id="card" v-bind:cardData="cardData" v-on:create-game="createGame" v-on:join-game="joinGame"/>
+        <div id="rest">
+        </div>
     </div>
 </template>
 
@@ -95,13 +97,12 @@ export default {
 </script>
 
 <style scoped>
-#play {
-    display: flex;
-    justify-content: center;
+#card {
+    margin: 20px auto 50px auto;
 }
 
-.elem {
-    padding-top: 10px;
+#rest {
+    padding-bottom: 332px;
 }
 
 </style>

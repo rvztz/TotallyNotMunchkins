@@ -21,6 +21,9 @@
     <div>
       <SiteButton v-bind:buttonData="buttonData" v-on:btn-click="logOut()"/>
     </div>
+
+    <div id="rest">
+    </div>
   </div>
 </template>
 
@@ -110,6 +113,11 @@ export default {
 </script>
 
 <style scoped>
+
+#rest {
+  padding-bottom: 318px;
+}
+
 .container {
   text-align: left;
 }
