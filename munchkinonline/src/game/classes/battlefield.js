@@ -41,14 +41,19 @@ export default class Battlefield {
 
             this.askForHelpButton = scene.add.image(792, 520, 'askHelpBtn').setInteractive({ cursor: 'pointer' })
             this.askForHelpButton.on('pointerup', () => {
+                scene.socket.emit('addToLog', scene.roomName, `${scene.player.userName} is asking for help.`)
                 scene.socket.emit('askForHelp', scene.roomName)
                 this.askForHelpButton.destroy()
             })
         }
 
         this.renderOfferHelpButton = () => {
+            if (scene.log.isVisible) {
+                scene.log.toggle()
+            }
             this.offerHelpButton = scene.add.image(640, 520, 'offerHelpBtn').setInteractive({ cursor: 'pointer' })
             this.offerHelpButton.on('pointerup', () => {
+                scene.socket.emit('addToLog', scene.roomName, `${scene.player.userName} offerred help.`)
                 scene.socket.emit('offerHelp', scene.roomName)
                 this.offerHelpButton.destroy()
             }) 
@@ -64,16 +69,22 @@ export default class Battlefield {
                 scene.player.levelUp(targettedMonster.levelsGained)
                 
                 if(helper) {
+                    let helperName = scene.getUserName(helper)
+                    scene.socket.emit('addToLog', scene.roomName, `${scene.player.userName} and ${helperName} killed ${targettedMonster.name}.`)
                     scene.socket.emit('requestCards', scene.roomName, 'treasure', Math.floor(targettedMonster.treasuresDropped / 2), /* isPublic */ false)
                     scene.socket.emit('sendTreasuresToHelper', helper, Math.ceil(targettedMonster.treasuresDropped / 2))
                 } else {
+                    scene.socket.emit('addToLog', scene.roomName, `${scene.player.userName} killed ${targettedMonster.name}.`)
                     scene.socket.emit('requestCards', scene.roomName, 'treasure', targettedMonster.treasuresDropped, /* isPublic */ false)
                 }
 
                 this.removeTargettedMonster()
             } else {
                 scene.player.die()
+                scene.socket.emit('addToLog', scene.roomName, `${scene.player.userName} was killed by ${targettedMonster.name}...`)
                 if (helper) {
+                    let helperName = scene.getUserName(helper)
+                    scene.socket.emit('addToLog', scene.roomName, `${helperName} was killed by ${targettedMonster.name}...`)
                     scene.socket.emit('killHelper', helper)
                     scene.player.helper = null
                 }
@@ -87,19 +98,25 @@ export default class Battlefield {
         this.run = () => {
             if(scene.player.helper) {
                 let helperRng = rng = Math.floor(Math.random() * 6 + 1) 
+                let helperName = scene.getUserName(scene.player.helper)
                 if(helperRng < 5) {
+                    scene.socket.emit('addToLog', scene.roomName, `${helperName} rolled a ${helperRng} and died.`)
                     scene.socket.emit('killHelper', scene.player.helper)
                     scene.player.helper = null
+                } else {
+                    scene.socket.emit('addToLog', scene.roomName, `${helperName} rolled a ${helperRng} and escaped.`)
                 }
             }
             
-            let rng = Math.floor(Math.random() * 6 + 1) 
+            let rng = Math.floor(Math.random() * 6 + 1)
             
             if(rng >= 5) {
                 //YOU ESCAPED
+                scene.socket.emit('addToLog', scene.roomName, `${scene.player.userName} rolled a ${rng} and escaped.`)
                 this.removeTargettedMonster() 
             } else { 
                 // YOU DIE
+                scene.socket.emit('addToLog', scene.roomName, `${scene.player.userName} rolled a ${rng} and died.`)
                 scene.player.die()
                 this.returnCards()
                 scene.socket.emit('endCombat', scene.roomName)
@@ -225,9 +242,13 @@ export default class Battlefield {
         this.beginCombat = (card) => {
             scene.gameState.startCombat()
             scene.socket.emit('disabledLoot', scene.roomName)
+            if (scene.log.isVisible) {
+                scene.log.toggle() 
+            }
 
             scene.combatBackground = scene.add.rectangle(212, 109, 855, 482, 0x999999).setAlpha(0.6).setOrigin(0, 0)
             if (scene.gameState.isYourTurn()) {
+                scene.socket.emit('addToLog', scene.roomName, `${scene.player.userName} started fighting ${card.name}!`)
                 this.renderButtons()
             }
             this.addMonster(card)

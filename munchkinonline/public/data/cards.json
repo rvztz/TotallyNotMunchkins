@@ -34,27 +34,7 @@
                 "treasuresDropped": 1,
                 "type": "monster"
             },
- 
-
-            {
-                "name": "Warrior",
-                "deck": "door",
-                "description": "You are a strong boi.",
-                "smallImage": "doorCard",
-                "bigImage": "doorCard",
-                "type": "class"
-            },
-
-
-            {
-                "name": "Elf",
-                "deck": "door",
-                "description": "Easy wins.",
-                "smallImage": "doorCard",
-                "bigImage": "doorCard",
-                "type": "race"
-            },
-            
+           
 
             {
                 "name": "Duck of Doom",
@@ -70,15 +50,75 @@
                 "name": "Diamond Sword",
                 "deck": "treasure",
                 "description": "This is not Minecraft, Steve.",
-                "smallImage": "treasureCard",
-                "bigImage": "treasureCard",
+                "smallImage": "diamondSword",
+                "bigImage": "diamondSword",
                 "size": "small",
-                "slotType": "arm",
-                "statBonus": 5,
+                "slotType": "hand",
+                "statBonus": 7,
                 "type": "equipment",
-                "value": 1000
+                "value": 700
             },
-            
+            {
+                "name": "Samus's Helmet",
+                "deck": "treasure",
+                "description": "I think Halo is a pretty cool guy. Eh kills aleins and doesnt afraid of anything.",
+                "smallImage": "samusHelmet",
+                "bigImage": "samusHelmet",
+                "size": "small",
+                "slotType": "head",
+                "statBonus": 2,
+                "type": "equipment",
+                "value": 200
+            },
+            {
+                "name": "DK's Tie",
+                "deck": "treasure",
+                "description": "The tie stays on during Smash.",
+                "smallImage": "dkTie",
+                "bigImage": "dkTie",
+                "size": "small",
+                "slotType": "torso",
+                "statBonus": 1,
+                "type": "equipment",
+                "value": 100
+            },
+            {
+                "name": "Deku Shield",
+                "deck": "treasure",
+                "description": "A simple wooden shield crafted from the bark of the Great Deku Tree.",
+                "smallImage": "dekuShield",
+                "bigImage": "dekuShield",
+                "size": "small",
+                "slotType": "hand",
+                "statBonus": 1,
+                "type": "equipment",
+                "value": 10
+            },
+            {
+                "name": "Sonic's Shoes",
+                "deck": "treasure",
+                "description": "Gotta go fast.",
+                "smallImage": "sonicShoes",
+                "bigImage": "sonicShoes",
+                "size": "small",
+                "slotType": "feet",
+                "statBonus": 3,
+                "type": "equipment",
+                "value": 400
+            },
+            {
+                "name": "Squarepants",
+                "deck": "treasure",
+                "description": "They're actually squareshorts.",
+                "smallImage": "squarepants",
+                "bigImage": "squarepants",
+                "size": "small",
+                "slotType": "legs",
+                "statBonus": 4,
+                "type": "equipment",
+                "value": 400
+            },
+
 
             {
                 "name": "Go Up A Level",

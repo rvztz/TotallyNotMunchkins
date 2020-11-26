@@ -23,7 +23,8 @@ class Room {
                 return {
                     socketId: player.getSocketId(),
                     tokenImage: player.getTokenImage(),
-                    gender: player.getGender()
+                    gender: player.getGender(),
+                    userName: player.getUserName()
                 }
             })
         }

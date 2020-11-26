@@ -9,6 +9,8 @@ export default class Player {
         this.color = null
         this.colorString = null
 
+        this.userName = null
+
         // Data
         this.cards = []
         this.level = 1
@@ -37,25 +39,14 @@ export default class Player {
 
         this.removeCardAt = (index) => {
             this.cards.splice(index, 1)
-
         }
-
-        /*
-        this.getData = () => {
-            return {
-                cards: this.cards,
-                level: this.level,
-                equipment: this.equipment,
-                strength: this.strength
-            }
-        }
-        */
 
         this.levelUp = (n) => {
             this.level += n
             this.level = Math.min(this.level, 10)
             this.level = Math.max(this.level, 1)
             this.token.renderedToken.data.set('level', this.level)
+            scene.socket.emit('addToLog', scene.roomName, `${this.userName} leveled up to level ${this.level}.`)
             scene.socket.emit('updateLevel', scene.roomName, this.level)
             scene.socket.emit('updateStrength', scene.roomName, this.getFullStrength())
         }
@@ -77,6 +68,17 @@ export default class Player {
                 scene.socket.emit('removeCard', scene.roomName, 0)
                 scene.socket.emit('returnCard', scene.roomName, this.cards[0].name, this.cards[0].deck)
                 this.removeCardAt(0)
+            }
+        }
+
+        this.resetEquipment = () => {
+            this.playerHand.equipment.renderedSlots.forEach(renderedSlot => {
+                renderedSlot.data.set("available", true)
+            })
+
+            while (this.equipment.length > 0) {
+                scene.socket.emit('returnCard', scene.roomName, this.equipment[0].name, this.equipment[0].deck)
+                this.removeFromEquipmentAt(0)
             }
         }
 
@@ -135,7 +137,7 @@ export default class Player {
                         strength = opponent.strength
                     }
                 })
-            }
+            } 
 
             return strength
         } 
@@ -144,11 +146,66 @@ export default class Player {
             this.resetLevel()
             this.buff(this.effects * -1)
             this.resetHand()
+            this.resetEquipment()
             this.isDead = true
         }
 
         this.resurrect = () => {
             this.isDead = false
+            scene.socket.emit('addToLog', scene.roomName, `${this.userName} resurrected.`)
+        }
+
+        this.equipCard = (card, placedOn, slotType, available) => {
+            if (card.type != 'equipment') {
+                alert("You can't equip that card.")
+                return false
+            }
+
+            if (card.slotType != slotType) {
+                alert("This is the wrong slot for that card.")
+                return false
+            }
+
+            if(placedOn === "equipment") {
+                alert("That card was already on your equipment")
+                return false
+            }
+
+            if(!available) {
+                alert("That slot isn't available.")
+                return false
+            }
+
+            this.equipment.push(card)
+            scene.socket.emit('updateStrength', scene.roomName, this.getFullStrength())
+            
+            return true
+        }
+
+        this.findCardInEquipment = (card) => {
+            for (let i = 0; i < this.equipment.length; i++) {
+                if (card == this.equipment[i]) {
+                    return i
+                }
+            }
+            return -1
+        }
+
+        this.removeFromEquipmentAt = (index) => {
+            this.equipment.splice(index, 1)
+            scene.socket.emit('updateStrength', scene.roomName, this.getFullStrength())
+        }
+
+        this.returnEquipmentToHand = (cardData) => {
+            let equipmentIndex = this.findCardInEquipment(cardData)
+            if(equipmentIndex === -1) {
+                console.log("Error: card not found in equipment")
+                return
+            }
+
+            this.removeFromEquipmentAt(equipmentIndex)
+            this.cards.push(cardData)
+            scene.socket.emit('updatePlayerHand', scene.roomName, cardData.deck)
         }
     }
 }

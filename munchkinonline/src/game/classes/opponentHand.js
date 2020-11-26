@@ -60,10 +60,10 @@ export default class OppositeHand {
 
                 if (this.position === 'right') {
                     renderedCard = opponentCard.render(this.dimensions.x + this.dimensions.width/2, (this.dimensions.y + this.dimensions.height - this.dimensions.cardWidth) - i*(this.dimensions.cardHeight / maxCards), sprite)
-                    renderedCard.angle = 90
+                    renderedCard.angle = -90
                 } else if (this.position === 'left') {
                     renderedCard = opponentCard.render(this.dimensions.x + this.dimensions.width/2, (this.dimensions.y + this.dimensions.cardWidth) + i*(this.dimensions.cardHeight / maxCards), sprite)
-                    renderedCard.angle = -90
+                    renderedCard.angle = 90
                 } else if (this.position === 'top') {
                     renderedCard = opponentCard.render(this.dimensions.x + this.dimensions.width - this.dimensions.cardWidth - 1.5*i*(this.dimensions.cardWidth/maxCards), this.dimensions.y + this.dimensions.height/2, sprite)
                     renderedCard.angle = 180

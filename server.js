@@ -5,6 +5,8 @@ const {Room} = require('./models/room.js')
 const {TreasureList, DoorList} = require('./models/cardLists.js')
 const PORT = process.env.PORT || 3000;
 
+const PORT = process.env.PORT || 3000
+
 let rooms = []
 
 // Socket IO
@@ -373,7 +375,7 @@ io.on('connection', (socket) => {
 			console.log("Error: room doesn't exist")
 			return
 		}
-		
+
 		if (cardType === 'treasure') {
 			rooms[roomIndex].treasureDeck.push(cardName)
 		} else {
@@ -430,6 +432,11 @@ io.on('connection', (socket) => {
 
 		rooms[roomIndex].players[playerIndex].strength = strength
 		socket.to(roomName).emit('updateStrength', socket.id, rooms[roomIndex].players[playerIndex].strength)
+	})
+
+	/*======================LOG UPDATES=======================*/
+	socket.on('addToLog', (roomName, text) => {
+		io.in(roomName).emit('addToLog', text)
 	})
 
 	/*======================PLAYER DISCONNECT=======================*/
