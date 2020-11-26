@@ -5,8 +5,6 @@ const {Room} = require('./models/room.js')
 const {TreasureList, DoorList} = require('./models/cardLists.js')
 const PORT = process.env.PORT || 3000;
 
-const PORT = process.env.PORT || 3000
-
 let rooms = []
 
 // Socket IO
@@ -47,7 +45,7 @@ io.on('connection', (socket) => {
 		if (playerIndex < 0) {
 			console.log("Error: player not found")
 			return
-		}
+		} 
 
 		let socketId = rooms[roomIndex].players[playerIndex].socketId
 
@@ -87,8 +85,6 @@ io.on('connection', (socket) => {
 			console.log("Error: room doesn't exist")
 			return
 		}
-
-		// Send room info to database here
 
 		rooms.splice(roomIndex, 1)
 		
@@ -161,6 +157,7 @@ io.on('connection', (socket) => {
 		if (roomIndex >= 0) {
 			if (socket.id == rooms[roomIndex].hostId) {
 				rooms[roomIndex].shuffleDecks([...TreasureList], [...DoorList])
+				rooms[roomIndex].started = true
 				io.in(roomName).emit('startGame', rooms[roomIndex].getInfo())
 			}
 		} else {
@@ -464,14 +461,18 @@ server.get("/api/roomIsJoinable", (req, res, next) => {
 	let message = ""
 
 	if (roomIndex >= 0) {
-		if (rooms[roomIndex].players.length < 4) {
-			if(!rooms[roomIndex].foundInBlockList(userName)) {
-				ans = true
+		if (!rooms[roomIndex].started) {
+			if (rooms[roomIndex].players.length < 4) {
+				if(!rooms[roomIndex].foundInBlockList(userName)) {
+					ans = true
+				} else {
+					message = "You're blocked from this room."
+				} 
 			} else {
-				message = "You're blocked from this room."
-			} 
+				message = "Room exists but is full."
+			}
 		} else {
-			message = "Room exists but is full."
+			message = "That room is already in game."
 		}
 	} else {
 		message = "Room doesn't exist."
@@ -524,5 +525,5 @@ function checkPregame(players) {
 }
 
 http.listen(PORT, () => {
-    console.log('Server started! Listening at' + PORT)
+    console.log('Server started! Listening at ' + PORT)
 })
