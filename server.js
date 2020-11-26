@@ -5,6 +5,10 @@ const {Room} = require('./models/room.js')
 const {TreasureList, DoorList} = require('./models/cardLists.js')
 const PORT = process.env.PORT || 3000;
 
+var path = require('path');
+var serveStatic = require('serve-static');
+server.use(serveStatic(__dirname + "//dist"));
+
 let rooms = []
 
 // Socket IO
