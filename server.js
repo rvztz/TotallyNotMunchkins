@@ -11,7 +11,7 @@ server.use(serveStatic(path.join(__dirname, "/munchkinonline/dist")));
 
 server.get('/', function(request, response) {
 	response.send('Hello World!');
-});   
+});
 
 let rooms = []
 
