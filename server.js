@@ -172,7 +172,7 @@ io.on('connection', (socket) => {
 			io.in(roomName).emit('highlightName', rooms[roomIndex].players[playerIndex].userName)
 		}
 	}) 
- 
+
 	/*======================GAME MANAGEMENT=======================*/
 	socket.on('startGame', (roomName) => {
 		let roomIndex = findRoom(roomName)

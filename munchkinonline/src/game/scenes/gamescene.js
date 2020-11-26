@@ -268,10 +268,12 @@ export default class GameScene extends Phaser.Scene {
         /*======================WINDOW EVENTS=======================*/
         const scene = this
         window.onpopstate = () => {
+            this.socket.emit('endPregame', this.roomName)
             scene.socket.emit('kickPlayer', scene.roomName, this.player.userName)
         }
-
+ 
         window.addEventListener('beforeunload', () => {
+            this.socket.emit('endPregame', this.roomName)
             scene.socket.emit('kickPlayer', scene.roomName, this.player.userName)
         })
 
