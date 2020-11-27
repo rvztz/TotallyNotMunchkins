@@ -45,4 +45,8 @@ export default {
     .container {
         text-align: center;
     }
+
+    .elem {
+        margin: 10px;
+    }
 </style>

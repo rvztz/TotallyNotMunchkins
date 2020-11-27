@@ -34,9 +34,7 @@
 }
 
 #app {
-  background-image: url("~@/BG.png");
-  background-size: cover;
-  background-attachment: fixed;
+  
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -45,7 +43,7 @@
 
 #nav {
   padding: 25px 0;
-  background-color : #00000086;
+  background-color : #17a2b8;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -65,11 +63,11 @@
 }
 
 #nav a:hover {
-  opacity: 30%;
+  opacity: 70%;
 }
 
 #nav a.router-link-exact-active {
-  color: #42b983;
+  text-decoration: underline;
   opacity: 100%;
 }
 </style>

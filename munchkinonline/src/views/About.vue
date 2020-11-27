@@ -1,7 +1,7 @@
 <template>
   <div class="about">
     <div class="contain">
-    <h1 id="title">What is Munchkins?</h1>
+    <h1 id="title">What is Munchkin?</h1>
     <div>
      <img src="https://cdn.influenster.com/media/product/image/78007287f452384fa0b13378f2229ef4.png" alt="Test image" class="gif"/>
     </div>

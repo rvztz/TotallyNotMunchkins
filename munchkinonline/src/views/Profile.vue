@@ -15,11 +15,9 @@
             <AccordionElement v-bind:entryData="entry" />
           </div>
         </div>
-      </b-card>
-    </div>
 
-    <div>
-      <SiteButton v-bind:buttonData="buttonData" v-on:btn-click="logOut()"/>
+        <SiteButton v-bind:buttonData="buttonData" v-on:btn-click="logOut()"/>
+      </b-card>
     </div>
 
     <div id="rest">
@@ -123,7 +121,7 @@ export default {
 }
 
 #history {
-  width: 70%;
+  width: 75%;
   margin: 0 auto;
 }
 

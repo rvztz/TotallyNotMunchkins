@@ -18,7 +18,9 @@ export default {
 
 <style scoped>
     div {
-        margin: 10px auto;
-        width: 55%;
+        margin: 0 auto;
+        margin-top: 40px;
+        width: 70%;
+        background-color: #fff;
     }
 </style>
