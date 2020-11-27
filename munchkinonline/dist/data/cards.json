@@ -1,0 +1,149 @@
+{
+    "cards": {
+        "doors": [
+            {
+                "name": "Pogmin",
+                "deck": "door",
+                "description": "An extremely powerful monster. If you can beat him, that would be a pogmin moment.",
+                "smallImage": "pogminMonster",
+                "bigImage": "pogminMonster",
+                "level": 99,
+                "levelsGained": 10,
+                "treasuresDropped": 5,
+                "type": "monster"
+            },
+            {
+                "name": "Unpogmin",
+                "deck": "door",
+                "smallImage": "unpogminMonster",
+                "bigImage": "unpogminMonster",
+                "description": "The weakest monster ever. If you kill him, you are the monster.",
+                "level": 0,
+                "levelsGained": -1,
+                "treasuresDropped": 0,
+                "type": "monster"
+            },
+            {
+                "name": "Mike Wazowski",
+                "deck": "door",
+                "smallImage": "mikeWazowski",
+                "bigImage": "mikeWazowski",
+                "description": "Would you listen to this? Blame it on the little guy, how original. He must've read the schedule wrong with his one eye!",
+                "level": 2,
+                "levelsGained": 1,
+                "treasuresDropped": 1,
+                "type": "monster"
+            },
+           
+
+            {
+                "name": "Duck of Doom",
+                "deck": "door",
+                "description": "Is a duck",
+                "smallImage": "doorCard",
+                "bigImage": "doorCard",
+                "type": "curse"
+            }
+        ],
+        "treasures": [
+            {
+                "name": "Diamond Sword",
+                "deck": "treasure",
+                "description": "This is not Minecraft, Steve.",
+                "smallImage": "diamondSword",
+                "bigImage": "diamondSword",
+                "size": "small",
+                "slotType": "hand",
+                "statBonus": 7,
+                "type": "equipment",
+                "value": 700
+            },
+            {
+                "name": "Samus's Helmet",
+                "deck": "treasure",
+                "description": "I think Halo is a pretty cool guy. Eh kills aleins and doesnt afraid of anything.",
+                "smallImage": "samusHelmet",
+                "bigImage": "samusHelmet",
+                "size": "small",
+                "slotType": "head",
+                "statBonus": 2,
+                "type": "equipment",
+                "value": 200
+            },
+            {
+                "name": "DK's Tie",
+                "deck": "treasure",
+                "description": "The tie stays on during Smash.",
+                "smallImage": "dkTie",
+                "bigImage": "dkTie",
+                "size": "small",
+                "slotType": "torso",
+                "statBonus": 1,
+                "type": "equipment",
+                "value": 100
+            },
+            {
+                "name": "Deku Shield",
+                "deck": "treasure",
+                "description": "A simple wooden shield crafted from the bark of the Great Deku Tree.",
+                "smallImage": "dekuShield",
+                "bigImage": "dekuShield",
+                "size": "small",
+                "slotType": "hand",
+                "statBonus": 1,
+                "type": "equipment",
+                "value": 10
+            },
+            {
+                "name": "Sonic's Shoes",
+                "deck": "treasure",
+                "description": "Gotta go fast.",
+                "smallImage": "sonicShoes",
+                "bigImage": "sonicShoes",
+                "size": "small",
+                "slotType": "feet",
+                "statBonus": 3,
+                "type": "equipment",
+                "value": 400
+            },
+            {
+                "name": "Squarepants",
+                "deck": "treasure",
+                "description": "They're actually squareshorts.",
+                "smallImage": "squarepants",
+                "bigImage": "squarepants",
+                "size": "small",
+                "slotType": "legs",
+                "statBonus": 4,
+                "type": "equipment",
+                "value": 400
+            },
+
+
+            {
+                "name": "Go Up A Level",
+                "deck": "treasure",
+                "description": "Go Up A Level",
+                "smallImage": "goUpALevel",
+                "bigImage": "goUpALevel",
+                "type": "item",
+                "usableOnPlayer": true,
+                "usableOnMonster": false,
+                "value": 0
+            },
+
+            {
+                "name": "Stand Arrow",
+                "deck": "treasure",
+                "description": "A Golden Experience",
+                "smallImage": "standArrow",
+                "bigImage": "standArrow",
+                "type": "item",
+                "usableOnPlayer": true,
+                "usableOnMonster": true,
+                "statBonus": 8,
+                "value": 800
+            }
+        ]
+    }
+}

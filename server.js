@@ -5,7 +5,16 @@ const {Room} = require('./models/room.js')
 const {TreasureList, DoorList} = require('./models/cardLists.js')
 const PORT = process.env.PORT || 3000;
 
-let rooms = [] 
+
+var path = require('path');
+var serveStatic = require('serve-static');
+server.use(serveStatic(path.join(__dirname, "/munchkinonline/dist")));
+
+server.get('/', function(request, response) {
+	response.send('Hello World!');
+});
+
+let rooms = []
 
 // Socket IO
 io.on('connection', (socket) => {
