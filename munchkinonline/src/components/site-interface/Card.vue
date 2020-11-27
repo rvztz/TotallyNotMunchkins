@@ -2,7 +2,7 @@
     <b-card class="container" v-bind:title="cardData.title" style="width: 25%">
         <div>
             <div v-bind:key="textField.id" v-for="textField in cardData.textFields">
-                <TextField v-bind:fieldData="textField" ref="textfields"/>
+                <TextField v-bind:fieldData="textField" v-on:btn-click="getTextFieldValues(cardData.buttons[0].eventName)" ref="textfields"/>
             </div>
 
             <div v-bind:key="button.id" v-for="button in cardData.buttons">

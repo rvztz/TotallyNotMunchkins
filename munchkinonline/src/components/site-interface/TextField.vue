@@ -1,6 +1,6 @@
 <template>
    <div>
-       <b-form-input v-model="textValue" v-bind:placeholder="fieldData.placeholder" v-bind:type="fieldData.type" ref="input"/>
+       <b-form-input v-model="textValue" v-bind:placeholder="fieldData.placeholder" v-bind:type="fieldData.type" v-on:keyup.enter="$emit('btn-click')" ref="input"/>
     </div>
 </template>>
 
