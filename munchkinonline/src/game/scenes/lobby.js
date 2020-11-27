@@ -13,7 +13,7 @@ export default class Lobby extends Phaser.Scene {
     }
 
     init() {
-        this.socket = io("http://localhost:3000")
+        this.socket = io()
         this.socket.emit(localStorage.getItem('roomEvent'), localStorage.getItem('roomName'))
     }
     
