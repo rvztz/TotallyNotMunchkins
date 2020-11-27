@@ -49,6 +49,7 @@
 
 #nav a:hover {
   opacity: 70%;
+  cursor: pointer;
 }
 
 #nav a.router-link-exact-active {

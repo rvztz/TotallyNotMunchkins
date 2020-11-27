@@ -7,7 +7,8 @@
         <div id="navBar">
           <span> <router-link to="/about">About</router-link> | </span>
           <span> <router-link to="/profile">Profile</router-link> | </span>
-          <span> <router-link to="/play">Play</router-link> </span>
+          <span> <router-link to="/play">Play</router-link> | </span>
+          <a v-on:click="logOut()"> Sign Out </a>
         </div>
       </div>
       <div id="line" />
@@ -29,10 +30,6 @@
             <AccordionElement v-bind:entryData="entry" />
           </div>
         </div>
-
-        <div id="logOutDiv">
-          <SiteButton v-bind:buttonData="buttonData" v-on:btn-click="logOut()"/>
-        </div>
       </b-card>
     </div>
 
@@ -47,7 +44,6 @@
 // @ is an alias to /src
 import {BCard} from 'bootstrap-vue';
 import firebase from 'firebase';
-import SiteButton from '../components/site-interface/SiteButton'
 import AccordionElement from '../components/site-interface/AccordionElement'
 import { userCollection, gameCollection } from '../main.js';
 
@@ -55,8 +51,7 @@ export default {
   name: "profile",
   components: {
     BCard,
-    AccordionElement,
-    SiteButton
+    AccordionElement
   },
   data() {
     return {
@@ -146,10 +141,6 @@ export default {
 #userProfile {
   width: 60%;
   margin: 20px auto 50px auto;
-}
-
-#logOutDiv {
-  margin-top: 40px;
 }
 </style>
 

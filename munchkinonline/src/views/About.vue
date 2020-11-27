@@ -6,10 +6,11 @@
       </div>
       <div id="navBar">
         <span> <router-link to="/about">About</router-link> | </span>
-        <span v-if="userName == null"> <router-link to="/">Sign In</router-link> | </span>
-        <span v-if="userName == null"> <router-link to="/signup">Sign Up</router-link> </span>
-        <span v-if="userName != null"> <router-link to="/profile">Profile</router-link> | </span>
-        <span v-if="userName != null"> <router-link to="/play">Play</router-link> </span>
+        <span v-if="userData.name == ''"> <router-link to="/">Sign In</router-link> | </span>
+        <span v-if="userData.name == ''"> <router-link to="/signup">Sign Up</router-link> </span>
+        <span v-if="userData.name != ''"> <router-link to="/profile">Profile</router-link> | </span>
+        <span v-if="userData.name != ''"> <router-link to="/play">Play</router-link> | </span>
+        <a v-if="userData.name != ''" v-on:click="logOut()"> Sign Out </a>
       </div>
     </div>
     <div id="line" />
@@ -50,12 +51,59 @@
 </template>
 
 <script>
+import firebase from 'firebase';
+import { userCollection } from '../main.js';
+
 export default {
     name: 'About',
     data () {
         return {
-            userName: localStorage.getItem('userName')
+            userData: {
+                name: "",
+                email: "",
+                joined: ""
+            }
         }
+    },
+    created() {
+        firebase.auth().onAuthStateChanged((user) => {
+        if (user) {
+            this.getUserData(user)
+        } else {
+            this.userData = {
+            name: "",
+            email: "",
+            joined: ""}
+        }
+        })
+    },
+    methods: {
+      getUserData(user) {
+        userCollection.where("email", "==", user.email)
+          .limit(1)
+          .get()
+          .then(q => {
+          this.userData = q.docs[0].data()
+          localStorage.setItem("userName", this.userData.name)
+          localStorage.setItem("userEmail", this.userData.email)
+          })
+          .catch(e => {
+              console.log("Error loading user data: ", e)
+          })
+      },
+      logOut() {
+        if(this.userData.email != "") {
+            firebase.auth().signOut().then(() => {
+                firebase.auth().onAuthStateChanged(() => {
+                    localStorage.removeItem("userName")
+                    localStorage.removeItem("userEmail")
+                    window.location.href = '/'
+                })
+            })
+        } else {
+            alert("You have not signed in")
+        }
+      }
     }
 }
 </script>
