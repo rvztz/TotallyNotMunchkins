@@ -1,7 +1,22 @@
 <template>
-  <div class = 'container'>
-    <div>
-      <b-card id="profile" title="Your Profile">
+  <div>
+    <div id="nav">
+        <div id="title">
+          Munchkin Online 
+        </div>
+        <div id="navBar">
+          <span> <router-link to="/about">About</router-link> | </span>
+          <span> <router-link to="/profile">Profile</router-link> | </span>
+          <span> <router-link to="/play">Play</router-link> | </span>
+          <a v-on:click="logOut()"> Sign Out </a>
+        </div>
+      </div>
+      <div id="line" />
+
+
+  <div class='container'>
+      <div>
+      <b-card id="userProfile" title="Your Profile">
         <b-card-text>Username: {{userData.name}}</b-card-text>
         <b-card-text>Email: {{userData.email}}</b-card-text>
         <b-card-text>Date Joined: {{userData.joined}}</b-card-text>
@@ -18,9 +33,10 @@
       </b-card>
     </div>
 
-    <div>
-      <SiteButton v-bind:buttonData="buttonData" v-on:btn-click="logOut()"/>
+    <div id="rest">
     </div>
+  </div>
+
   </div>
 </template>
 
@@ -28,7 +44,6 @@
 // @ is an alias to /src
 import {BCard} from 'bootstrap-vue';
 import firebase from 'firebase';
-import SiteButton from '../components/site-interface/SiteButton'
 import AccordionElement from '../components/site-interface/AccordionElement'
 import { userCollection, gameCollection } from '../main.js';
 
@@ -36,8 +51,7 @@ export default {
   name: "profile",
   components: {
     BCard,
-    AccordionElement,
-    SiteButton
+    AccordionElement
   },
   data() {
     return {
@@ -73,7 +87,7 @@ export default {
           firebase.auth().onAuthStateChanged(() => {
             localStorage.removeItem("userName")
             localStorage.removeItem("userEmail")
-            this.$router.push('/')
+            window.location.href = '/'
           })
         })
       } else {
@@ -110,20 +124,24 @@ export default {
 </script>
 
 <style scoped>
+
+#rest {
+  padding-bottom: 318px;
+}
+
 .container {
   text-align: left;
 }
 
 #history {
-  width: 70%;
+  width: 75%;
   margin: 0 auto;
 }
 
-#profile {
+#userProfile {
   width: 60%;
   margin: 20px auto 50px auto;
 }
-
 </style>
 
 

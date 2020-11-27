@@ -13,7 +13,7 @@ export default class Lobby extends Phaser.Scene {
     }
 
     init() {
-        this.socket = io()
+        this.socket = io("http://localhost:3000")
         this.socket.emit(localStorage.getItem('roomEvent'), localStorage.getItem('roomName'))
     }
     
@@ -83,6 +83,10 @@ export default class Lobby extends Phaser.Scene {
 
         this.socket.on('cleanPlayerList', () => {
             this.playerList.deleteAll()
+        })
+
+        this.socket.on('highlightName', (name) => {
+            this.playerList.highlightName(name)
         })
 
         this.socket.on('disconnectPlayer', () => {

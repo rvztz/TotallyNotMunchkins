@@ -1,6 +1,19 @@
 <template>
     <div id="signin">
-        <Card v-bind:cardData="cardData" v-on:login="signInMethod"/>
+        <div id="nav">
+            <div id="title">
+                Munchkin Online 
+            </div>
+            <div id="navBar">
+                <span> <router-link to="/about">About</router-link> | </span>
+                <span> <router-link to="/">Sign In</router-link> | </span>
+                <span> <router-link to="/signup">Sign Up</router-link> </span>
+            </div>
+        </div>
+        <div id="line" />
+        <Card id="card" v-bind:cardData="cardData" v-on:login="signInMethod"/>
+        <div id="rest">
+        </div>
     </div>
 </template>
 
@@ -24,11 +37,13 @@ export default {
                 textFields: [
                     {
                         id: 100,
-                        placeholder: "Username"
+                        placeholder: "E-mail",
+                        type: "text"
                     },
                     {
                         id: 101,
-                        placeholder: "Password"
+                        placeholder: "Password",
+                        type: "password"
                     }
                 ],
                 buttons: [
@@ -60,15 +75,26 @@ export default {
                     alert(error.message); 
                 }); 
             }
+        },
+        redirectUser() {
+            if (localStorage.getItem("userName")) {
+                this.$router.push("/profile")
+            }
         }
+    },
+    mounted() {
+        this.redirectUser()
     }
 }
 </script>
 
 <style scoped>
-#signin {
-    display: flex;
-    justify-content: center;
+#card {
+    margin: 20px auto 50px auto;
+}
+
+#rest {
+    padding-bottom: 292px;
 }
 
 .elem {

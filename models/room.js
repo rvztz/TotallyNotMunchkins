@@ -3,6 +3,7 @@ const {Deck, shuffleArray} = require('./deck.js')
 
 class Room {
     constructor(name, hostId) {
+        this.started = false
         this.name = name
         this.hostId = hostId
         this.winnerName = null
@@ -90,6 +91,15 @@ class Room {
                usernames: userNames,
                emails: emails
            }
+        }
+
+        this.allPlayersHaveSelected = () => {
+            for (let i=0; i<this.players.length; i++) {
+                if (!this.players[i].hasAllSelections()) {
+                    return false
+                }
+            }
+            return true
         }
     }
 }

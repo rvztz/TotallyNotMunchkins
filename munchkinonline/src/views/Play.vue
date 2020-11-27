@@ -1,11 +1,27 @@
 <template>
     <div id="play">
-        <Card v-bind:cardData="cardData" v-on:create-game="createGame" v-on:join-game="joinGame"/>
+        <div id="nav">
+            <div id="title">
+                Munchkin Online 
+            </div>
+            <div id="navBar">
+                <span> <router-link to="/about">About</router-link> | </span>
+                <span> <router-link to="/profile">Profile</router-link> | </span>
+                <span> <router-link to="/play">Play</router-link> | </span>
+                <a v-on:click="logOut()"> Sign Out </a>
+            </div>
+        </div>
+        <div id="line" />
+        <Card id="card" v-bind:cardData="cardData" v-on:create-game="createGame" v-on:join-game="joinGame"/>
+        <div id="rest">
+        </div>
     </div>
 </template>
 
 <script>
 import Card from '../components/site-interface/Card'
+import firebase from 'firebase';
+import { userCollection } from '../main.js';
 
 export default {
     name: 'play',
@@ -19,7 +35,8 @@ export default {
                 textFields: [
                     {
                         id: 100,
-                        placeholder: "Room Name"
+                        placeholder: "Room Name",
+                        type: "text"
                     }
                 ],
                 buttons: [
@@ -39,8 +56,25 @@ export default {
                     route: "",
                     text: ""
                 }
+            },
+            userData: {
+                name: "",
+                email: "",
+                joined: ""
             }
         }
+    },
+    created() {
+        firebase.auth().onAuthStateChanged((user) => {
+        if (user) {
+            this.getUserData(user)
+        } else {
+            this.userData = {
+            name: "",
+            email: "",
+            joined: ""}
+        }
+        })
     },
     methods: {
         //data = ["roomName"]
@@ -88,6 +122,32 @@ export default {
             } catch (error) {
                 console.log("Error: " + error)
             }
+        },
+        getUserData(user) {
+            userCollection.where("email", "==", user.email)
+                .limit(1)
+                .get()
+                .then(q => {
+                this.userData = q.docs[0].data()
+                localStorage.setItem("userName", this.userData.name)
+                localStorage.setItem("userEmail", this.userData.email)
+                })
+                .catch(e => {
+                    console.log("Error loading user data: ", e)
+                })
+        },
+        logOut() {
+            if(this.userData.email != "") {
+                firebase.auth().signOut().then(() => {
+                    firebase.auth().onAuthStateChanged(() => {
+                        localStorage.removeItem("userName")
+                        localStorage.removeItem("userEmail")
+                        window.location.href = '/'
+                    })
+                })
+            } else {
+                alert("You have not signed in")
+            }
         }
     }
 }
@@ -95,13 +155,12 @@ export default {
 </script>
 
 <style scoped>
-#play {
-    display: flex;
-    justify-content: center;
+#card {
+    margin: 20px auto 50px auto;
 }
 
-.elem {
-    padding-top: 10px;
+#rest {
+    padding-bottom: 332px;
 }
 
 </style>

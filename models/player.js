@@ -19,6 +19,10 @@ class Player {
         this.removeCardAt = (index) => {
             this.cards.splice(index, 1)
         }
+
+        this.hasAllSelections = () => {
+            return (this.gender !== "" && this.tokenImage !== "")
+        }
     }
 }
 
