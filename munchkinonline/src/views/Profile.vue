@@ -16,7 +16,9 @@
           </div>
         </div>
 
-        <SiteButton v-bind:buttonData="buttonData" v-on:btn-click="logOut()"/>
+        <div id="logOutDiv">
+          <SiteButton v-bind:buttonData="buttonData" v-on:btn-click="logOut()"/>
+        </div>
       </b-card>
     </div>
 
@@ -130,6 +132,9 @@ export default {
   margin: 20px auto 50px auto;
 }
 
+#logOutDiv {
+  margin-top: 40px;
+}
 </style>
 
 

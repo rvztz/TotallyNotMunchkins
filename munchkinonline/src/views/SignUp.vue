@@ -31,19 +31,23 @@ export default {
                 textFields: [
                     {
                         id: 100,
-                        placeholder: "Email"
+                        placeholder: "Email",
+                        type: "text"
                     },
                     {
                         id:101,
-                        placeholder: 'Username'
+                        placeholder: 'Username',
+                        type: "text"
                     },
                     {
                         id: 102,
-                        placeholder: "Password"
+                        placeholder: "Password",
+                        type: "password"
                     },
                     {
                         id: 103,
-                        placeholder: "Confirm Password"
+                        placeholder: "Confirm Password",
+                        type: "password"
                     }
                 ],
                 buttons: [

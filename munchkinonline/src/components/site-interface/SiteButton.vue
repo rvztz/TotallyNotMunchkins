@@ -18,8 +18,7 @@ export default {
 
 <style scoped>
     div {
-        margin: 0 auto;
-        margin-top: 40px;
+        margin: 10px auto;
         width: 70%;
         background-color: #fff;
     }

@@ -21,7 +21,8 @@ export default {
                 textFields: [
                     {
                         id: 100,
-                        placeholder: "Room Name"
+                        placeholder: "Room Name",
+                        type: "text"
                     }
                 ],
                 buttons: [

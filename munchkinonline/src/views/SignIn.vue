@@ -26,11 +26,13 @@ export default {
                 textFields: [
                     {
                         id: 100,
-                        placeholder: "Username"
+                        placeholder: "Username",
+                        type: "text"
                     },
                     {
                         id: 101,
-                        placeholder: "Password"
+                        placeholder: "Password",
+                        type: "password"
                     }
                 ],
                 buttons: [
