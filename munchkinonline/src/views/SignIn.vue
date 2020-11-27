@@ -75,7 +75,15 @@ export default {
                     alert(error.message); 
                 }); 
             }
+        },
+        redirectUser() {
+            if (localStorage.getItem("userName")) {
+                this.$router.push("/profile")
+            }
         }
+    },
+    mounted() {
+        this.redirectUser()
     }
 }
 </script>
