@@ -1,11 +1,24 @@
 <template>
   <div class="about">
+    <div id="nav">
+      <div id="title">
+        Munchkin Online 
+      </div>
+      <div id="navBar">
+        <span> <router-link to="/about">About</router-link> | </span>
+        <span v-if="userName == null"> <router-link to="/">Sign In</router-link> | </span>
+        <span v-if="userName == null"> <router-link to="/signup">Sign Up</router-link> </span>
+        <span v-if="userName != null"> <router-link to="/profile">Profile</router-link> | </span>
+        <span v-if="userName != null"> <router-link to="/play">Play</router-link> </span>
+      </div>
+    </div>
+    <div id="line" />
     <div class="contain">
       <div>
       <img src="https://www.bestchoicereviews.org/wp-content/uploads/2014/12/munchkin-card-and-board-games.png" alt="Test image" class="gif"/>
       </div>
       <div class="aboutText">
-        <h1 id="title">What is Munchkin?</h1>
+        <h1 id="titleAbout">What is Munchkin?</h1>
         <p>
           Go down in the dungeon. Kill everything you meet. Backstab your friends and steal their stuff. Grab the treasure and run.
         </p>
@@ -36,9 +49,20 @@
   </div>
 </template>
 
+<script>
+export default {
+    name: 'About',
+    data () {
+        return {
+            userName: localStorage.getItem('userName')
+        }
+    }
+}
+</script>
+
 <style scoped>
 
-#title {
+#titleAbout {
   color: black;
   margin: 20px auto 20px auto;
 }

@@ -1,5 +1,16 @@
 <template>
     <div id="signin">
+        <div id="nav">
+            <div id="title">
+                Munchkin Online 
+            </div>
+            <div id="navBar">
+                <span> <router-link to="/about">About</router-link> | </span>
+                <span> <router-link to="/">Sign In</router-link> | </span>
+                <span> <router-link to="/signup">Sign Up</router-link> </span>
+            </div>
+        </div>
+        <div id="line" />
         <Card id="card" v-bind:cardData="cardData" v-on:login="signInMethod"/>
         <div id="rest">
         </div>
@@ -26,7 +37,7 @@ export default {
                 textFields: [
                     {
                         id: 100,
-                        placeholder: "Username",
+                        placeholder: "E-mail",
                         type: "text"
                     },
                     {

@@ -1,5 +1,16 @@
 <template>
     <div id="play">
+        <div id="nav">
+            <div id="title">
+                Munchkin Online 
+            </div>
+            <div id="navBar">
+                <span> <router-link to="/about">About</router-link> | </span>
+                <span> <router-link to="/profile">Profile</router-link> | </span>
+                <span> <router-link to="/play">Play</router-link> </span>
+            </div>
+        </div>
+        <div id="line" />
         <Card id="card" v-bind:cardData="cardData" v-on:create-game="createGame" v-on:join-game="joinGame"/>
         <div id="rest">
         </div>

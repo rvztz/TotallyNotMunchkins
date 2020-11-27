@@ -1,7 +1,21 @@
 <template>
-  <div class = 'container'>
-    <div>
-      <b-card id="profile" title="Your Profile">
+  <div>
+    <div id="nav">
+        <div id="title">
+          Munchkin Online 
+        </div>
+        <div id="navBar">
+          <span> <router-link to="/about">About</router-link> | </span>
+          <span> <router-link to="/profile">Profile</router-link> | </span>
+          <span> <router-link to="/play">Play</router-link> </span>
+        </div>
+      </div>
+      <div id="line" />
+
+
+  <div class='container'>
+      <div>
+      <b-card id="userProfile" title="Your Profile">
         <b-card-text>Username: {{userData.name}}</b-card-text>
         <b-card-text>Email: {{userData.email}}</b-card-text>
         <b-card-text>Date Joined: {{userData.joined}}</b-card-text>
@@ -24,6 +38,8 @@
 
     <div id="rest">
     </div>
+  </div>
+
   </div>
 </template>
 
@@ -76,7 +92,7 @@ export default {
           firebase.auth().onAuthStateChanged(() => {
             localStorage.removeItem("userName")
             localStorage.removeItem("userEmail")
-            this.$router.push('/')
+            window.location.href = '/'
           })
         })
       } else {
@@ -127,7 +143,7 @@ export default {
   margin: 0 auto;
 }
 
-#profile {
+#userProfile {
   width: 60%;
   margin: 20px auto 50px auto;
 }

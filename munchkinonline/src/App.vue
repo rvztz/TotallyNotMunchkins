@@ -1,19 +1,5 @@
 <template>
   <div id="app">
-    <div id="nav" v-if="['Game'].indexOf($route.name) == -1">
-      <div id="title">
-        Munchkin Online 
-      </div>
-      <div id="navBar">
-        <router-link to="/">Sign In</router-link> |
-        <router-link to="/about">About</router-link> |
-        <router-link to="/signup">Sign Up</router-link> |
-        <router-link to="/profile">Profile</router-link> |
-        <router-link to="/play">Play</router-link>
-      </div>
-    </div>
-    <div id="line">
-  </div>
     <router-view/>
   </div>
 </template>
@@ -34,7 +20,6 @@
 }
 
 #app {
-  
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;

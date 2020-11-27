@@ -51,7 +51,6 @@ const TreasureList = [
     "DK's Tie",
     "Sonic's Shoes",
     "Squarepants",
-    "Go Up A Level","Go Up A Level","Go Up A Level","Go Up A Level","Go Up A Level","Go Up A Level","Go Up A Level","Go Up A Level","Go Up A Level","Go Up A Level","Go Up A Level","Go Up A Level","Go Up A Level","Go Up A Level","Go Up A Level","Go Up A Level","Go Up A Level","Go Up A Level","Go Up A Level","Go Up A Level","Go Up A Level","Go Up A Level","Go Up A Level","Go Up A Level","Go Up A Level","Go Up A Level","Go Up A Level","Go Up A Level","Go Up A Level","Go Up A Level","Go Up A Level","Go Up A Level","Go Up A Level","Go Up A Level","Go Up A Level","Go Up A Level","Go Up A Level","Go Up A Level","Go Up A Level","Go Up A Level","Go Up A Level","Go Up A Level","Go Up A Level","Go Up A Level","Go Up A Level","Go Up A Level","Go Up A Level","Go Up A Level","Go Up A Level","Go Up A Level","Go Up A Level","Go Up A Level","Go Up A Level","Go Up A Level","Go Up A Level","Go Up A Level","Go Up A Level","Go Up A Level","Go Up A Level","Go Up A Level","Go Up A Level","Go Up A Level","Go Up A Level","Go Up A Level","Go Up A Level","Go Up A Level","Go Up A Level","Go Up A Level","Go Up A Level","Go Up A Level","Go Up A Level","Go Up A Level","Go Up A Level",
 ]
 
 const DoorList = [
