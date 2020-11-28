@@ -1,41 +1,41 @@
 <template>
   <div>
     <div id="nav">
-        <div id="title">
-          Munchkin Online 
-        </div>
-        <div id="navBar">
-          <span> <router-link to="/about">About</router-link> | </span>
-          <span> <router-link to="/profile">Profile</router-link> | </span>
-          <span> <router-link to="/play">Play</router-link> | </span>
-          <a v-on:click="logOut()"> Sign Out </a>
-        </div>
+      <div id="title">
+        Munchkin Online 
       </div>
-      <div id="line" />
+      <div id="navBar">
+        <span> <router-link to="/about">About</router-link> | </span>
+        <span> <router-link to="/profile">Profile</router-link> | </span>
+        <span> <router-link to="/play">Play</router-link> | </span>
+        <a v-on:click="logOut()"> Sign Out </a>
+      </div>
+    </div>
+    <div id="line" />
 
 
-  <div class='container'>
+    <div class='container'>
       <div>
-      <b-card id="userProfile" title="Your Profile">
-        <b-card-text>Username: {{userData.name}}</b-card-text>
-        <b-card-text>Email: {{userData.email}}</b-card-text>
-        <b-card-text>Date Joined: {{userData.joined}}</b-card-text>
-      </b-card>
-    </div>
+        <b-card id="userProfile" title="Your Profile">
+          <b-card-text>Username: {{userData.name}}</b-card-text>
+          <b-card-text>Email: {{userData.email}}</b-card-text>
+          <b-card-text>Date Joined: {{userData.joined}}</b-card-text>
+        </b-card>
+      </div>
 
-    <div>
-      <b-card id="history" title='Game History'>
-        <div class="accordion" role="tablist">
+      <div id="history" class="mt-3">
+        <h1>Game History</h1>
+        <b-card-group columns>
           <div v-bind:key="entry.id" v-for="entry in gameHistory">
-            <AccordionElement v-bind:entryData="entry" />
+            <HistoryElement v-bind:entryData="entry" />
           </div>
-        </div>
-      </b-card>
-    </div>
+        </b-card-group>
+      </div>
 
-    <div id="rest">
+
+      <div id="rest">
+      </div>
     </div>
-  </div>
 
   </div>
 </template>
@@ -44,14 +44,14 @@
 // @ is an alias to /src
 import {BCard} from 'bootstrap-vue';
 import firebase from 'firebase';
-import AccordionElement from '../components/site-interface/AccordionElement'
+import HistoryElement from '../components/site-interface/HistoryElement'
 import { userCollection, gameCollection } from '../main.js';
 
 export default {
   name: "profile",
   components: {
     BCard,
-    AccordionElement
+    HistoryElement
   },
   data() {
     return {
