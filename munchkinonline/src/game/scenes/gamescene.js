@@ -626,7 +626,7 @@ export default class GameScene extends Phaser.Scene {
 
         return true
     }
-
+ 
     /*======================CARD EFFECTS=======================*/
     useCardEffect(card, target) {
 

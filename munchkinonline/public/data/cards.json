@@ -238,12 +238,12 @@
                 "name": "Duck of Doom",
                 "deck": "door",
                 "description": "Is a duck",
-                "smallImage": "doorCard",
-                "bigImage": "doorCard",
+                "smallImage": "duckOfDoom",
+                "bigImage": "duckOfDoom",
                 "type": "curse"
             }
         ],
-        "treasures": [
+        "treasures": [ 
             {
                 "name": "Diamond Sword",
                 "deck": "treasure",
@@ -460,6 +460,18 @@
                 "usableOnMonster": true,
                 "statBonus": 2,
                 "value": 300
+            },
+            {
+                "name": "Splash Potion",
+                "deck": "treasure",
+                "description": "Its bottled oxygen",
+                "smallImage": "splashPotion",
+                "bigImage": "splashPotion",
+                "type": "item",
+                "usableOnPlayer": true,
+                "usableOnMonster": true,
+                "statBonus": 2,
+                "value": 64
             },
             {
                 "name": "Power Stone",
