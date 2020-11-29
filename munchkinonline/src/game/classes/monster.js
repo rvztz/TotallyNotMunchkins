@@ -27,7 +27,7 @@ export default class Monster {
 
             monster.on('pointerover', () => {
                 scene.strengthText.text = `${this.strength}`
-                if (this.strength < 10) {
+                if (this.strength >= 0 && this.strength < 10) {
                     scene.strengthText.text = '0' + scene.strengthText.text
                 }
                 scene.strengthText.setColor("#000")

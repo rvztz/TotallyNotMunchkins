@@ -190,7 +190,7 @@ export default class GameScene extends Phaser.Scene {
 
             // Card on Tile (use card on self)
             } else if (gameObject.data.get('type') === 'card' && dropZone.data.get('type') === 'tile') {
-
+ 
                 if (this.scene.useCard(gameObject.data.get('data'), this.scene.socket.id)) {
                     if (gameObject.data.get('data').type === "monster") {
                         this.scene.removeCardFromPlayer(gameObject, /* destroy */ true)
@@ -344,6 +344,10 @@ export default class GameScene extends Phaser.Scene {
 
         this.socket.on('buffPlayer', (amount) => {
             this.player.buff(amount)
+        })
+
+        this.socket.on('resetBuffs', () => {
+            this.player.resetBuffs()
         })
 
         this.socket.on('updateStrength', (socketId, strength) => {
@@ -614,18 +618,18 @@ export default class GameScene extends Phaser.Scene {
             if (targetId == this.socket.id) {
                 return this.useCardEffect(card, this.player)
             } else {
+                let targetOpponent = null
                 this.opponents.forEach(opponent => { 
                     if (opponent.socketId == targetId) {
-                        return this.useCardEffect(card, opponent)
+                        targetOpponent = opponent
                     }
                 })
+                return this.useCardEffect(card, targetOpponent)
             }
-        } else {
+        } else { 
             swal("Oops!", "You can't use that card right now.", "error")
             return false
         }
-
-        return true
     }
  
     /*======================CARD EFFECTS=======================*/
@@ -638,6 +642,57 @@ export default class GameScene extends Phaser.Scene {
             case "Fire Flower": case "Oxygen": case "Oxygen Capsule": case "Splash Potion": case "Power Stone": case "Arsene": case "Stand Arrow":
                 target.buff(card.statBonus)
                 return true
+            case "Go Down A Level": 
+                target.levelUp(-1)
+                return true
+            case "Duck of Doom":
+                target.levelUp(-2)
+                return true
+            case "Antidoping":
+                target.resetBuffs()
+                return true
+            case "From Hero To Zero":
+                if (target.socketId) {
+                    target.buff(target.strength * -1)
+                } else {
+                    target.buff(target.getFullStrength() * -1)
+                }
+                return true
+            case "Steal A Level":
+                if (target.socketId) {
+                    if (target.level > 1) {
+                        target.levelUp(-1)
+                        this.player.levelUp(1)
+                        return true
+                    } else {
+                        swal("Oops!", "That opponent's level is too low", "error")
+                        return false
+                    } 
+                } else {
+                    swal("Oops!", "You can't use that card on yourself", "error")
+                    return false
+                }
+            case "Communism":
+                if (target.socketId) {
+                    let opponentCount = this.opponents.length
+                    if (target.level > opponentCount) {
+                        target.levelUp(opponentCount * -1)
+                        this.player.levelUp(1)
+                        
+                        this.opponents.forEach(opponent => {
+                            if (opponent.socketId != target.socketId) {
+                                opponent.levelUp(1)
+                            }
+                        })
+                        return true
+                    } else {
+                        swal("Oops!", "That opponent's level is too low", "error")
+                        return false
+                    } 
+                } else {
+                    swal("Oops!", "You can't use that card on yourself", "error")
+                    return false
+                }
             default:
                 console.log("Error: unexpected card name")
                 return false

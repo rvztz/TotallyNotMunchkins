@@ -16,7 +16,6 @@ export default class Player {
         this.cards = []
         this.level = 1
         this.equipment = []
-        this.strength = 1
         this.gender = ""
         this.effects = 0
         this.helper = null
@@ -47,7 +46,7 @@ export default class Player {
             this.level = Math.min(this.level, 10)
             this.level = Math.max(this.level, 1)
             this.token.renderedToken.data.set('level', this.level)
-            scene.socket.emit('addToLog', scene.roomName, `${this.userName} leveled up to level ${this.level}.`)
+            scene.socket.emit('addToLog', scene.roomName, `${this.userName}'s level is now ${this.level}.`)
             scene.socket.emit('updateLevel', scene.roomName, this.level)
             scene.socket.emit('updateStrength', scene.roomName, this.getFullStrength())
         }
@@ -90,6 +89,11 @@ export default class Player {
 
         this.buff = (amount) => {
             this.effects += amount
+            scene.socket.emit('updateStrength', scene.roomName, this.getFullStrength())
+        }
+
+        this.resetBuffs = () => {
+            this.effects = 0
             scene.socket.emit('updateStrength', scene.roomName, this.getFullStrength())
         }
 

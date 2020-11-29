@@ -22,50 +22,7 @@ const TreasureList = [
     "Arsene","Arsene","Arsene",
     "Stand Arrow","Stand Arrow","Stand Arrow",
     "Go Up A Level","Go Up A Level","Go Up A Level","Go Up A Level","Go Up A Level",
-    "Go Up A Level","Go Up A Level","Go Up A Level","Go Up A Level","Go Up A Level", 
-    
-    
-    /* Temporary duplicates
-    "Diamond Sword",
-    "Go Up A Level",
-    "Stand Arrow",
-    "Samus's Helmet",
-    "Deku Shield",
-    "DK's Tie",
-    "Sonic's Shoes",
-    "Squarepants",
-    "Diamond Sword",
-    "Go Up A Level",
-    "Stand Arrow",
-    "Samus's Helmet",
-    "Deku Shield",
-    "DK's Tie",
-    "Sonic's Shoes",
-    "Squarepants",
-    "Diamond Sword",
-    "Go Up A Level",
-    "Stand Arrow",
-    "Samus's Helmet",
-    "Deku Shield",
-    "DK's Tie",
-    "Sonic's Shoes",
-    "Squarepants",
-    "Diamond Sword",
-    "Go Up A Level",
-    "Stand Arrow",
-    "Samus's Helmet",
-    "Deku Shield",
-    "DK's Tie",
-    "Sonic's Shoes",
-    "Squarepants",
-    "Diamond Sword",
-    "Go Up A Level",
-    "Stand Arrow",
-    "Samus's Helmet",
-    "Deku Shield",
-    "DK's Tie",
-    "Sonic's Shoes",
-    "Squarepants",*/
+    "Go Up A Level","Go Up A Level","Go Up A Level","Go Up A Level","Go Up A Level"
 ]
 
 const DoorList = [
@@ -91,34 +48,14 @@ const DoorList = [
     "Ender Dragon","Ender Dragon",
     "Ultimate Kars","Ultimate Kars",
     "Pogmin",
-
+ 
     //Curses
-    "Duck of Doom",
-
-    /* Temporary duplicates
-    "Pogmin", 
-    "Pogmin",
-    "Pogmin", 
-    "Pogmin", 
-    "Pogmin", 
-    "Pogmin", 
-    "Pogmin",
-    "Unpogmin",
-    "Unpogmin",
-    "Unpogmin", 
-    "Unpogmin",
-    "Unpogmin", 
-    "Unpogmin",
-    "Unpogmin", 
-    "Mike Wazowski",
-    "Mike Wazowski",
-    "Mike Wazowski",
-    "Mike Wazowski",
-    "Mike Wazowski",
-    "Mike Wazowski",
-    "Mike Wazowski",
-    "Mike Wazowski", 
-    "Duck of Doom", */
+    "Duck of Doom", "Duck of Doom", "Duck of Doom", "Duck of Doom",
+    "Go Down A Level","Go Down A Level","Go Down A Level","Go Down A Level",
+    "From Hero To Zero", "From Hero To Zero", "From Hero To Zero", "From Hero To Zero",
+    "Antidoping","Antidoping","Antidoping","Antidoping",
+    "Steal A Level", "Steal A Level", "Steal A Level", "Steal A Level",
+    "Communism","Communism","Communism","Communism"
 ]
 
 module.exports = { TreasureList, DoorList }

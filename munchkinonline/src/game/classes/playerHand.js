@@ -27,7 +27,7 @@ export default class PlayerHand {
 
             this.dropZone.on('pointerover', () => {
                 scene.strengthText.text = `${scene.player.getFullStrength()}`
-                if (scene.player.getFullStrength() < 10) {
+                if (scene.player.getFullStrength() >= 0 && scene.player.getFullStrength() < 10) {
                     scene.strengthText.text = '0' + scene.strengthText.text
                 }
                 scene.strengthText.setColor(scene.player.colorString)

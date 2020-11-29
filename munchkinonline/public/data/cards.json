@@ -241,6 +241,46 @@
                 "smallImage": "duckOfDoom",
                 "bigImage": "duckOfDoom",
                 "type": "curse"
+            },
+            {
+                "name": "Go Down A Level",
+                "deck": "door",
+                "description": "Read the name",
+                "smallImage": "goDownALevel",
+                "bigImage": "goDownALevel",
+                "type": "curse"
+            },
+            {
+                "name": "From Hero To Zero",
+                "deck": "door",
+                "description": "Pogmin -> Unpogmin",
+                "smallImage": "fromHeroToZero",
+                "bigImage": "fromHeroToZero",
+                "type": "curse"
+            },
+            {
+                "name": "Antidoping",
+                "deck": "door",
+                "description": "Drugs are banned.",
+                "smallImage": "antidoping",
+                "bigImage": "antidoping",
+                "type": "curse"
+            },
+            {
+                "name": "Steal A Level",
+                "deck": "door",
+                "description": "Yoink",
+                "smallImage": "stealALevel",
+                "bigImage": "stealALevel",
+                "type": "curse"
+            },
+            {
+                "name": "Communism",
+                "deck": "door",
+                "description": "OUR levels.",
+                "smallImage": "communism",
+                "bigImage": "communism",
+                "type": "curse"
             }
         ],
         "treasures": [ 
@@ -384,7 +424,7 @@
                 "bigImage": "hoverBoots",
                 "size": "small",
                 "slotType": "feet",
-                "statBonus": 0,
+                "statBonus": 2,
                 "type": "equipment",
                 "value": 500
             },
