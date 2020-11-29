@@ -22,7 +22,8 @@ const TreasureList = [
     "Arsene","Arsene","Arsene",
     "Stand Arrow","Stand Arrow","Stand Arrow",
     "Go Up A Level","Go Up A Level","Go Up A Level","Go Up A Level","Go Up A Level",
-    "Go Up A Level","Go Up A Level","Go Up A Level","Go Up A Level","Go Up A Level",  
+    "Go Up A Level","Go Up A Level","Go Up A Level","Go Up A Level","Go Up A Level", 
+    
     
     /* Temporary duplicates
     "Diamond Sword",

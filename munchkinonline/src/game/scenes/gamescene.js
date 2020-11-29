@@ -634,7 +634,7 @@ export default class GameScene extends Phaser.Scene {
             case "Go Up A Level":
                 target.levelUp(1)
                 return true
-            case "Stand Arrow":
+            case "Fire Flower": case "Oxygen": case "Oxygen Capsule": case "Splash Potion": case "Power Stone": case "Arsene": case "Stand Arrow":
                 target.buff(card.statBonus)
                 return true
             default:
