@@ -81,27 +81,35 @@ export default {
         //data = ["roomName"]
         async createGame(data) {
             // Game creation here
-            let response = await this.roomExists(data[0])
-            if (response.ans) {
-                // Room exists, so tell the user they can't create it
-                swal("Oops!", "Room already exists.", "error")
-            }
-            else {
-                // Room doesn't exist, so create it and make this user the host
-                localStorage.setItem('roomEvent', 'createRoom')
-                localStorage.setItem('roomName', data[0])
-                this.$router.push('/game')
+            if(data[0].length > 0) {
+                let response = await this.roomExists(data[0])
+                if (response.ans) {
+                    // Room exists, so tell the user they can't create it
+                    swal("Oops!", "Room already exists.", "error")
+                }
+                else {
+                    // Room doesn't exist, so create it and make this user the host
+                    localStorage.setItem('roomEvent', 'createRoom')
+                    localStorage.setItem('roomName', data[0])
+                    this.$router.push('/game')
+                }
+            } else {
+                swal("Oops!", "Please enter a room name", "error")
             }
         },
         async joinGame(data) {
-            let response = await this.roomIsJoinable(data[0])
-            if (response.ans) {
-                // Room exists, so join the room
-                localStorage.setItem('roomEvent', 'joinRoom')
-                localStorage.setItem('roomName', data[0])
-                this.$router.push('/game')
+            if(data[0].length > 0) {
+                let response = await this.roomIsJoinable(data[0])
+                if (response.ans) {
+                    // Room exists, so join the room
+                    localStorage.setItem('roomEvent', 'joinRoom')
+                    localStorage.setItem('roomName', data[0])
+                    this.$router.push('/game')
+                } else {
+                    swal("Oops!", response.message, "error")
+                }
             } else {
-                swal("Oops!", response.message, "error")
+                swal("Oops!", "Please enter a room name", "error")
             }
         },
         async roomExists(roomName) {
