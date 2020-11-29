@@ -34,6 +34,7 @@ export default class EndTurnButton {
             return scene.gameState.isYourTurn() &&
                    scene.gameState.cardDrawn &&
                    !scene.gameState.inPregame &&
+                   !scene.gameState.inCombat &&
                    scene.player.cards.length <= 5
         }
 
@@ -44,7 +45,9 @@ export default class EndTurnButton {
                 alert("You haven't drawn a card yet")
             } else if (scene.gameState.inPregame) {
                 alert("It's still the pregame")
-            }  else if (scene.player.cards.length > 5) {
+            }  else if (scene.gameState.inCombat) {
+                alert("You can't end your turn while in cmobat")
+            } else if (scene.player.cards.length > 5) {
                 alert("You can't have more than 5 cards in your hand")
             } else {
                 console.log("Error: unexpected game state")
