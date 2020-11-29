@@ -679,10 +679,28 @@ export default class GameScene extends Phaser.Scene {
     }
 
     loadMonsters() {
-        this.load.image('blankCard', 'assets/monsters/blankCard.png')
+        this.load.image('blankCard', 'assets/monsters/blankCard.png')        
+        this.load.image('goomba', 'assets/monsters/goomba.png')
+        this.load.image('grunt', 'assets/monsters/grunt.png')
+        this.load.image('legoStormTrooper', 'assets/monsters/legoStormTrooper.png')
+        this.load.image('stackOfGoombas', 'assets/monsters/stackOfGoombas.png')
+        this.load.image('fatPikachu', 'assets/monsters/fatPikachu.png')
+        this.load.image('sansUndertale', 'assets/monsters/sansUndertale.png')
+        this.load.image('brute', 'assets/monsters/brute.png')
+        this.load.image('enderman', 'assets/monsters/enderman.png')
+        this.load.image('masterHand', 'assets/monsters/masterHand.png')
+        this.load.image('bigYoshi', 'assets/monsters/bigYoshi.png')
+        this.load.image('ironGolem', 'assets/monsters/ironGolem.png')
+        this.load.image('jackFrost', 'assets/monsters/jackFrost.png')
+        this.load.image('crazyHand', 'assets/monsters/crazyHand.png')
+        this.load.image('marioHead', 'assets/monsters/marioHead.png')
+        this.load.image('goldenLynel', 'assets/monsters/goldenLynel.png')
+        this.load.image('wither', 'assets/monsters/wither.png')
+        this.load.image('territorialRotbart', 'assets/monsters/territorialRotbart.png')
+        this.load.image('metalFace', 'assets/monsters/metalFace.png')
+        this.load.image('enderDragon', 'assets/monsters/enderDragon.png')
+        this.load.image('ultimateKars', 'assets/monsters/ultimateKars.png')
         this.load.image('pogminMonster', 'assets/monsters/pogminMonster.png')
-        this.load.image('unpogminMonster', 'assets/monsters/unpogminMonster.png')
-        this.load.image('mikeWazowski', 'assets/monsters/mikeWazowski.png')
     }
 
     loadEquipmentSlots() {
@@ -695,14 +713,37 @@ export default class GameScene extends Phaser.Scene {
     }
 
     loadItems() {
-        this.load.image('goUpALevel', 'assets/items/goUpALevel.png')
-        this.load.image('standArrow', 'assets/items/standArrow.png')
-        this.load.image('diamondSword', 'assets/items/diamondSword.png')
-        this.load.image('dkTie', 'assets/items/dkTie.png')
+        //Equipment items
         this.load.image('samusHelmet', 'assets/items/samusHelmet.png')
+        this.load.image('jokerMask', 'assets/items/jokerMask.png')
+        this.load.image('diamondSword', 'assets/items/diamondSword.png')
+        this.load.image('emperor', 'assets/items/emperor.png')
         this.load.image('dekuShield', 'assets/items/dekuShield.png')
-        this.load.image('sonicShoes', 'assets/items/sonicShoes.png')
+        this.load.image('ropeSnake', 'assets/items/ropeSnake.png')        
+        this.load.image('dkTie', 'assets/items/dkTie.png')
+        this.load.image('ironChestplate', 'assets/items/ironChestplate.png')
         this.load.image('squarepants', 'assets/items/squarepants.png')
+        this.load.image('goldLeggings', 'assets/items/goldLeggings.png')
+        this.load.image('sonicShoes', 'assets/items/sonicShoes.png')
+        this.load.image('hoverBoots', 'assets/items/hoverBoots.png')
+
+        //Buffs
+        this.load.image('fireFlower', 'assets/items/fireFlower.png')
+        this.load.image('oxygen', 'assets/items/oxygen.png')
+        this.load.image('oxygenCapsule', 'assets/items/oxygenCapsule.png')
+        this.load.image('splashPotion', 'assets/items/splashPotion.png')
+        this.load.image('powerStone', 'assets/items/powerStone.png')
+        this.load.image('arsene', 'assets/items/arsene.png')
+        this.load.image('standArrow', 'assets/items/standArrow.png')
+        this.load.image('goUpALevel', 'assets/items/goUpALevel.png')
+        
+        //Curses
+        this.load.image('goDownALevel', 'assets/items/goDownALevel.png')
+        this.load.image('duckOfDoom', 'assets/items/duckOfDoom.png')
+        this.load.image('fromHeroToZero', 'assets/items/fromHeroToZero.png')
+        this.load.image('antidoping', 'assets/items/antidoping.png')
+        this.load.image('stealALevel', 'assets/items/stealALevel.png')
+        this.load.image('communism', 'assets/items/communism.png')
     }
 
     loadTiles() {
