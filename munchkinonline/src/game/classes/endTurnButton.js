@@ -1,3 +1,5 @@
+import swal from 'sweetalert'
+
 export default class EndTurnButton {
     constructor(scene) {
         this.renderedButton = null
@@ -9,9 +11,9 @@ export default class EndTurnButton {
             button.on('pointerup', () => {
                 if (scene.gameState.inPregame) {
                     if (scene.gameState.endGame) {
-                        alert("The game has already ended")
+                        swal("Oops!", "The game has already ended", "error")
                     } else if (scene.player.cards.length > 5) {
-                        alert("You need to have 5 cards to end pregame")
+                        swal("Oops!", "You need to have 5 cards to end pregame", "error")
                     } else {
                         scene.socket.emit('endPregame', scene.roomName)
                         scene.socket.emit('addToLog', scene.roomName, `${scene.player.userName} is ready.`)
@@ -40,15 +42,15 @@ export default class EndTurnButton {
 
         this.alertTurnCantEnd = () => {
             if (!scene.gameState.isYourTurn()) {
-                alert("It's not your turn")
+                swal("Oops!", "It's not your turn", "error")
             } else if (!scene.gameState.cardDrawn) {
-                alert("You haven't drawn a card yet")
+                swal("Oops!", "You haven't drawn a card yet", "error")
             } else if (scene.gameState.inPregame) {
-                alert("It's still the pregame")
+                swal("Oops!", "It's still the pregame", "error")
             }  else if (scene.gameState.inCombat) {
-                alert("You can't end your turn while in cmobat")
+                swal("Oops!", "You can't end your turn while in combat", "error")
             } else if (scene.player.cards.length > 5) {
-                alert("You can't have more than 5 cards in your hand")
+                swal("Oops!", "You can't have more than 5 cards in your hand", "error")
             } else {
                 console.log("Error: unexpected game state")
             }

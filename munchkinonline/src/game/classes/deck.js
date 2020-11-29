@@ -1,3 +1,5 @@
+import swal from 'sweetalert'
+
 export default class Deck {
     constructor (scene, cardType) {
         this.cardType = cardType
@@ -15,10 +17,10 @@ export default class Deck {
                         scene.socket.emit('requestCards', scene.roomName, this.cardType, 1, /* isPublic */ false)
                         scene.socket.emit('disabledLoot', scene.roomName)
                     } else { 
-                        alert("You can't pick up a card right now.")
+                        swal("Oops!", "You can't pick up a card right now.", "error")
                     }
                 } else {
-                    alert("You can't pick up a card right now.")
+                    swal("Oops!", "You can't pick up a card right now.", "error")
                 }
             })
         }

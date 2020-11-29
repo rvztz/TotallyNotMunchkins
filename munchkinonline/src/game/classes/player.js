@@ -1,5 +1,6 @@
 import PlayerHand from '../classes/playerHand'
 import Token from '../classes/token'
+import swal from 'sweetalert'
 
 export default class Player {
     constructor(scene) {
@@ -157,22 +158,22 @@ export default class Player {
 
         this.equipCard = (card, placedOn, slotType, available) => {
             if (card.type != 'equipment') {
-                alert("You can't equip that card.")
+                swal("Oops!", "You can't equip that card.", "error")
                 return false
             }
 
             if (card.slotType != slotType) {
-                alert("This is the wrong slot for that card.")
+                swal("Oops!", "This is the wrong slot for that card.", "error")
                 return false
             }
 
             if(placedOn === "equipment") {
-                alert("That card was already on your equipment")
+                swal("Oops!", "That card was already on your equipment", "error")
                 return false
             }
 
             if(!available) {
-                alert("That slot isn't available.")
+                swal("Oops!", "That slot isn't available.", "error")
                 return false
             }
 

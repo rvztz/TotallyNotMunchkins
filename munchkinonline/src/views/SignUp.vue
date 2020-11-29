@@ -21,6 +21,7 @@
 import Card from '../components/site-interface/Card'
 import firebase from 'firebase'; 
 import { userCollection } from '../main.js';
+import swal from 'sweetalert'
 
 function validateFields(data)  {
     return ((data[0].replace(/\s/g,"") == "") && (data[1].replace(/\s/g,"") == "") && (data[2].replace(/\s/g,"") == "") && (data[3].replace(/\s/g,"") == ""));
@@ -81,10 +82,10 @@ export default {
             // Sign in function here
             if(validateFields(data)) {
                 //display modal => empty fields
-                alert('Los campos están vacíos'); 
+                swal("Oops!", "One or more fields are empty", "error"); 
             } else if (!validatePasswords(data)) {
                 //diplay modal =>  password not equal  
-                alert('Las contraseñas no coinciden');
+                swal("Oops!", "Passwords don't match", "error");
             } else {
                 firebase.auth().createUserWithEmailAndPassword(
                     data[0], data[2]
@@ -97,7 +98,7 @@ export default {
                         this.addUserToCollection(data);
                     }); 
                 }).catch((error) => {
-                    alert(error.message); 
+                    swal("Oops!", error.message, "error"); 
                 });
             }
         },

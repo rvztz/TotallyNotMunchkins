@@ -10,6 +10,7 @@ import Battlefield from '../classes/battlefield'
 import Log from '../classes/log'
 import { gameCollection } from '../../main.js';
 import router from '../../router/index'
+import swal from 'sweetalert'
 
 export default class GameScene extends Phaser.Scene {
     constructor() {
@@ -597,7 +598,7 @@ export default class GameScene extends Phaser.Scene {
 
     useCard(card, targetId) {
         if (this.gameState.inPregame || !this.gameState.cardDrawn) {
-            alert("You can't use cards right now.")
+            swal("Oops!", "You can't use cards right now.", "error")
             return false
         }
 
@@ -620,7 +621,7 @@ export default class GameScene extends Phaser.Scene {
                 })
             }
         } else {
-            alert("You can't use that card right now.")
+            swal("Oops!", "You can't use that card right now.", "error")
             return false
         }
 

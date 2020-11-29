@@ -1,3 +1,5 @@
+import swal from 'sweetalert'
+
 export default class Monster {
     constructor(scene, cardData) {
         this.renderedMonster = null
@@ -42,7 +44,7 @@ export default class Monster {
 
         this.useCard = (card) => {
             if (card.type != "item" || !card.usableOnMonster) {
-                alert("You can't use this card on a monster.")
+                swal("Oops!", "You can't use this card on a monster", "error")
                 return false
             }
 
@@ -57,30 +59,5 @@ export default class Monster {
         this.buff = (bonus) => {
             this.strength += bonus
         }
-
-        /*
-        useCard(card, targetId) {
-        if (this.gameState.inPregame || !this.gameState.cardDrawn) {
-            alert("You can't use cards right now.")
-            return false
-        }
-
-        if (card.type === "curse" || card.type === "item") {
-            if (targetId == this.socket.id) {
-                return this.useCardEffect(card, this.player)
-            } else {
-                this.opponents.forEach(opponent => { 
-                    if (opponent.socketId == targetId) {
-                        return this.useCardEffect(card, opponent)
-                    }
-                })
-            }
-        } else {
-            return false
-        }
-
-        return true
-    }
-    */
     }
 }

@@ -22,6 +22,7 @@
 import Card from '../components/site-interface/Card'
 import firebase from 'firebase';
 import { userCollection } from '../main.js';
+import swal from 'sweetalert'
 
 export default {
     name: 'play',
@@ -83,7 +84,7 @@ export default {
             let response = await this.roomExists(data[0])
             if (response.ans) {
                 // Room exists, so tell the user they can't create it
-                alert("Room already exists.")
+                swal("Oops!", "Room already exists.", "error")
             }
             else {
                 // Room doesn't exist, so create it and make this user the host
@@ -100,7 +101,7 @@ export default {
                 localStorage.setItem('roomName', data[0])
                 this.$router.push('/game')
             } else {
-                alert(response.message)
+                swal("Oops!", response.message, "error")
             }
         },
         async roomExists(roomName) {
@@ -146,7 +147,7 @@ export default {
                     })
                 })
             } else {
-                alert("You have not signed in")
+                swal("Oops!", "You have not signed in", "error")
             }
         }
     }

@@ -46,6 +46,7 @@ import {BCard} from 'bootstrap-vue';
 import firebase from 'firebase';
 import HistoryElement from '../components/site-interface/HistoryElement'
 import { userCollection, gameCollection } from '../main.js';
+import swal from 'sweetalert'
 
 export default {
   name: "profile",
@@ -91,7 +92,7 @@ export default {
           })
         })
       } else {
-        alert("You have not signed in")
+        swal("Oops!", "You have not signed in", "error")
       }
     },
     getUserData(user) {
