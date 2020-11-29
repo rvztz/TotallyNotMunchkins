@@ -52,7 +52,7 @@ export default class Lobby extends Phaser.Scene {
         this.selection.render()
 
         // Add play button
-        let playButton = this.add.image(screenWidth/2, 4*screenHeight/5, 'playButton').setInteractive({ cursor: 'pointer' })
+        let playButton = this.add.image(screenWidth/2, 4*screenHeight/5, 'playButton').setScale(0.9, 0.9).setInteractive({ cursor: 'pointer' })
 
         /*======================PHASER EVENTS=======================*/
         playButton.on('pointerup', () => {

@@ -14,7 +14,7 @@ export default class Log {
         this.currentY = 0
 
 
-        this.logButton = scene.add.image(1280, 620, 'logBtn').setScale(0.5, 0.5).setInteractive({ cursor: 'pointer' })
+        this.logButton = scene.add.image(1280, 620, 'logBtn').setScale(0.4, 0.4).setInteractive({ cursor: 'pointer' })
         this.logButton.x -= this.logButton.displayWidth*0.75
 
         this.logButton.on('pointerup', () => {

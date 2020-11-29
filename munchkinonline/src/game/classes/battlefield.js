@@ -29,17 +29,17 @@ export default class Battlefield {
         }
 
         this.renderButtons = () => {
-            this.fightButton = scene.add.image(640, 520, 'fightBtn').setInteractive({ cursor: 'pointer' })
+            this.fightButton = scene.add.image(640, 520, 'fightBtn').setScale(0.5, 0.5).setInteractive({ cursor: 'pointer' })
             this.fightButton.on('pointerup', () => {
                 this.fight()
             })
 
-            this.runButton = scene.add.image(488, 520, 'runBtn').setInteractive({ cursor: 'pointer' })
+            this.runButton = scene.add.image(488, 520, 'runBtn').setScale(0.5, 0.5).setInteractive({ cursor: 'pointer' })
             this.runButton.on('pointerup', () => {
                 this.run()
             })
 
-            this.askForHelpButton = scene.add.image(792, 520, 'askHelpBtn').setInteractive({ cursor: 'pointer' })
+            this.askForHelpButton = scene.add.image(792, 520, 'askHelpBtn').setScale(0.5, 0.5).setInteractive({ cursor: 'pointer' })
             this.askForHelpButton.on('pointerup', () => {
                 scene.socket.emit('addToLog', scene.roomName, `${scene.player.userName} is asking for help.`)
                 scene.socket.emit('askForHelp', scene.roomName)
@@ -51,7 +51,7 @@ export default class Battlefield {
             if (scene.log.isVisible) {
                 scene.log.toggle()
             }
-            this.offerHelpButton = scene.add.image(640, 520, 'offerHelpBtn').setInteractive({ cursor: 'pointer' })
+            this.offerHelpButton = scene.add.image(640, 520, 'offerHelpBtn').setScale(0.5, 0.5).setInteractive({ cursor: 'pointer' })
             this.offerHelpButton.on('pointerup', () => {
                 scene.socket.emit('addToLog', scene.roomName, `${scene.player.userName} offerred help.`)
                 scene.socket.emit('offerHelp', scene.roomName)

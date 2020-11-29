@@ -5,7 +5,7 @@ export default class EndTurnButton {
         this.renderedButton = null
 
         this.render = (x, y) => {
-            let button = scene.add.image(x, y, 'endTurn').setScale(0.5, 0.5).setInteractive({ cursor: 'pointer' })
+            let button = scene.add.image(x, y, 'endTurn').setScale(0.4, 0.4).setInteractive({ cursor: 'pointer' })
             button.x -= button.displayWidth*0.75
 
             button.on('pointerup', () => {

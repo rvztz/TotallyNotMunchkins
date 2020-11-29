@@ -111,7 +111,7 @@ export default {
     },
     getGameHistory() {
       gameCollection.where("emails", "array-contains", this.userData.email)
-      .limit(10)
+      .limit(30)
       .get()
       .then(q => {
         this.gameHistory = q.docs.map(doc => {return {data: doc.data(), id: doc.id}})
