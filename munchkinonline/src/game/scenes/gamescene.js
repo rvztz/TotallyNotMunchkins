@@ -372,6 +372,7 @@ export default class GameScene extends Phaser.Scene {
 
             let color = null
             if (socketId == this.socket.id) {
+                this.endTurnButton.renderedButton.clearTint()
                 color = this.player.colorString
                 if (this.player.isDead) {
                     this.player.resurrect()
@@ -379,9 +380,10 @@ export default class GameScene extends Phaser.Scene {
                     this.socket.emit('distributeCards', this.roomName)
                 }
             } else {
+                this.endTurnButton.renderedButton.setTint(0xc4c4c4)
                 this.opponents.forEach(opponent => {
                     if (opponent.socketId == socketId) {
-                        color = opponent.colorString
+                        color = opponent.colorString 
                     }
                 })
             }

@@ -16,23 +16,17 @@ export default class Selection {
         this.genderCircle = null
 
         this.render = () => {
-            let token = this.renderButtons()
-
-            // Renderear outline
-            let graphics = scene.add.graphics()
-            graphics.lineStyle(4, 0x000000)
-            graphics.strokeRect(this.dimensions.x - this.dimensions.width/2 - token.displayWidth, this.dimensions.y - token.displayHeight, this.dimensions.width + 2*token.displayWidth, this.dimensions.height)
+            this.renderButtons()
         }
 
         this.renderButtons = () => {
-            let token = this.tokenYellow.render(this.dimensions.x - this.dimensions.width/2, this.dimensions.y, 'tokenYellow')
+            this.tokenYellow.render(this.dimensions.x - this.dimensions.width/2, this.dimensions.y, 'tokenYellow')
             let tokenBlue = this.tokenBlue.render(this.dimensions.x - this.dimensions.width/6, this.dimensions.y, 'tokenBlue')
             let tokenRed = this.tokenRed.render(this.dimensions.x + this.dimensions.width/6, this.dimensions.y, 'tokenRed')
             this.tokenGreen.render(this.dimensions.x + this.dimensions.width/2, this.dimensions.y, 'tokenGreen')
 
             this.genderMale.render(tokenBlue.x, tokenBlue.y + 1.5*tokenBlue.displayHeight, 'male')
             this.genderFemale.render(tokenRed.x, tokenRed.y + 1.5*tokenRed.displayHeight, 'female')
-            return token
         }
 
         this.loadCircle = (x, y, width, type) => {
