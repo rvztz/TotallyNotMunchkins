@@ -152,6 +152,7 @@ export default class Player {
             this.buff(this.effects * -1)
             this.resetHand()
             this.resetEquipment()
+            this.token.resetPosition()
             this.isDead = true
         }
 
