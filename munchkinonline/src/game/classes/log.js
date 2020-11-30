@@ -35,9 +35,10 @@ export default class Log {
             this.mask = new Phaser.Display.Masks.GeometryMask(scene, this.renderedGraphics)
 
             this.updateText() 
-
+ 
             this.downKey = scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.DOWN);
             this.downKey.on('down', function() {
+                console.log("DOWN")
                 scene.log.renderedText.y -= 20;
                 scene.log.renderedText.y = Phaser.Math.Clamp(scene.log.renderedText.y, -1280, 113);
                 scene.log.currentY = scene.log.renderedText.y
@@ -77,11 +78,14 @@ export default class Log {
             this.renderedText.destroy()
             this.renderedText = null
 
-            this.logBackground.destroy()
+            this.logBackground.destroy() 
             this.logBackground = null
 
             this.upKey = null
+            scene.input.keyboard.removeKey(Phaser.Input.Keyboard.KeyCodes.UP);
+
             this.downKey = null
+            scene.input.keyboard.removeKey(Phaser.Input.Keyboard.KeyCodes.DOWN);
         }
 
         this.updateText = () => {
