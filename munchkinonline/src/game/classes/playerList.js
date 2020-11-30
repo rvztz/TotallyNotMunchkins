@@ -23,7 +23,9 @@ export default class PlayerList {
                 scene.socket.emit('kickPlayer', scene.roomName, text)
             })
 
-            this.usernames.push({username: newUsername, button: kickButton})
+            let checkmark = scene.add.image(newUsername.x + 150, newUsername.y, 'checkMark').setAlpha(0)
+
+            this.usernames.push({username: newUsername, button: kickButton, checkmark: checkmark})
         }
 
         this.deleteUsername = (text) => {
@@ -41,6 +43,7 @@ export default class PlayerList {
 
            this.usernames[index].username.destroy()
            this.usernames[index].button.destroy()
+           this.usernames[index].checkmark.destroy()
            this.usernames.splice(index, 1)
        }
 
@@ -58,6 +61,7 @@ export default class PlayerList {
             }
             
             this.usernames[index].username.setColor("#1E8000")
+            this.usernames[index].checkmark.setAlpha(1)
        }
 
         this.deleteAll = () => {
