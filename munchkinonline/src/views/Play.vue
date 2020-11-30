@@ -113,7 +113,7 @@ export default {
             }
         },
         async roomExists(roomName) {
-            const url = `http://localhost:3000/api/roomExists?name=${roomName}`
+            const url = `/api/roomExists?name=${roomName}`
 
             try {
                 let response = await fetch(url)
@@ -123,7 +123,7 @@ export default {
             }
         },
         async roomIsJoinable(roomName) {
-            const url = `http://localhost:3000/api/roomIsJoinable?name=${roomName}&userName=${localStorage.getItem('userName')}`
+            const url = `/api/roomIsJoinable?name=${roomName}&userName=${localStorage.getItem('userName')}`
 
             try {
                 let response = await fetch(url)

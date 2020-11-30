@@ -2,6 +2,226 @@
     "cards": {
         "doors": [
             {
+                "name": "Goomba",
+                "deck": "door",
+                "smallImage": "goomba",
+                "bigImage": "goomba",
+                "description": "A walking angry little mushroom",
+                "level": 1,
+                "levelsGained": 1,
+                "treasuresDropped": 1,
+                "type": "monster"
+            },
+            {
+                "name": "Grunt",
+                "deck": "door",
+                "smallImage": "grunt",
+                "bigImage": "grunt",
+                "description": "A pathetic lifeform that will run at the first sign of danger",
+                "level": 2,
+                "levelsGained": 1,
+                "treasuresDropped": 1,
+                "type": "monster"
+            },
+            {
+                "name": "Lego Storm Trooper",
+                "deck": "door",
+                "smallImage": "legoStormTrooper",
+                "bigImage": "legoStormTrooper",
+                "description": "A Storm Trooper made from legos",
+                "level": 3,
+                "levelsGained": 1,
+                "treasuresDropped": 1,
+                "type": "monster"
+            },
+            {
+                "name": "Stack of Goombas",
+                "deck": "door",
+                "smallImage": "stackOfGoombas",
+                "bigImage": "stackOfGoombas",
+                "description": "\"You can be a goombas\"",
+                "level": 4,
+                "levelsGained": 1,
+                "treasuresDropped": 2,
+                "type": "monster"
+            },
+            {
+                "name": "Fat Pikachu",
+                "deck": "door",
+                "smallImage": "fatPikachu",
+                "bigImage": "fatPikachu",
+                "description": "An electric rat that really let himself go after becoming the second most popular mascot on the planet",
+                "level": 5,
+                "levelsGained": 1,
+                "treasuresDropped": 1,
+                "type": "monster"
+            },
+            {
+                "name": "Sans Undertale",
+                "deck": "door",
+                "smallImage": "sansUndertale",
+                "bigImage": "sansUndertale",
+                "description": "You are gonna have a bad time",
+                "level": 6,
+                "levelsGained": 1,
+                "treasuresDropped": 1,
+                "type": "monster"
+            },
+            {
+                "name": "Brute",
+                "deck": "door",
+                "smallImage": "brute",
+                "bigImage": "brute",
+                "description": "Part of a strong race that betrayed the Covenant",
+                "level": 7,
+                "levelsGained": 1,
+                "treasuresDropped": 2,
+                "type": "monster"
+            },
+            {
+                "name": "Enderman",
+                "deck": "door",
+                "smallImage": "enderman",
+                "bigImage": "enderman",
+                "description": "Don't make eye contact don't make eye contact don't make eye contact",
+                "level": 8,
+                "levelsGained": 1,
+                "treasuresDropped": 2,
+                "type": "monster"
+            },
+            {
+                "name": "Master Hand",
+                "deck": "door",
+                "smallImage": "masterHand",
+                "bigImage": "masterHand",
+                "description": "Legend says this hand was from Sakurai himself, it was disowned after being used to create Melee",
+                "level": 9,
+                "levelsGained": 1,
+                "treasuresDropped": 2,
+                "type": "monster"
+            },
+            {
+                "name": "Big Yoshi",
+                "deck": "door",
+                "smallImage": "bigYoshi",
+                "bigImage": "bigYoshi",
+                "description": "\"Yeah he's sitting there\"",
+                "level": 10,
+                "levelsGained": 1,
+                "treasuresDropped": 2,
+                "type": "monster"
+            },
+            {
+                "name": "Iron Golem",
+                "deck": "door",
+                "smallImage": "ironGolem",
+                "bigImage": "ironGolem",
+                "description": "Once a friendly mob, it seeks revenge from its fallen brethren",
+                "level": 11,
+                "levelsGained": 1,
+                "treasuresDropped": 2,
+                "type": "monster"
+            },
+            {
+                "name": "Jack Frost",
+                "deck": "door",
+                "smallImage": "jackFrost",
+                "bigImage": "jackFrost",
+                "description": "\"I'm going to kill you. Why? ...Eh, no reason! Life, hee...Life, ho...Hee ho is not fair!",
+                "level": 12,
+                "levelsGained": 1,
+                "treasuresDropped": 2,
+                "type": "monster"
+            },
+            {
+                "name": "Crazy Hand",
+                "deck": "door",
+                "smallImage": "crazyHand",
+                "bigImage": "crazyHand",
+                "description": "What? Your left hand doesn't also move like that?",
+                "level": 13,
+                "levelsGained": 1,
+                "treasuresDropped": 2,
+                "type": "monster"
+            },
+            {
+                "name": "Mario's Head",
+                "deck": "door",
+                "smallImage": "marioHead",
+                "bigImage": "marioHead",
+                "description": "It does not eat, it does not sleep, it is always watching, and won't stop until you learn to type",
+                "level": 14,
+                "levelsGained": 2,
+                "treasuresDropped": 2,
+                "type": "monster"
+            },
+            {
+                "name": "Golden Lynel",
+                "deck": "door",
+                "smallImage": "goldenLynel",
+                "bigImage": "goldenLynel",
+                "description": "Unlike Minecraft's gold, the gold on its skin is pretty tough...or maybe it's just its muscles, I don't know",
+                "level": 15,
+                "levelsGained": 1,
+                "treasuresDropped": 3,
+                "type": "monster"
+            },
+            {
+                "name": "Wither",
+                "deck": "door",
+                "smallImage": "wither",
+                "bigImage": "wither",
+                "description": "A floating, three-headed mob that floats with a skeletal appearance",
+                "level": 16,
+                "levelsGained": 2,
+                "treasuresDropped": 2,
+                "type": "monster"
+            },
+            {
+                "name": "Territorial Rotbart",
+                "deck": "door",
+                "smallImage": "territorialRotbart",
+                "bigImage": "territorialRotbart",
+                "description": "*You will know our name plays in the background*",
+                "level": 17,
+                "levelsGained": 2,
+                "treasuresDropped": 2,
+                "type": "monster"
+            },
+            {
+                "name": "Metal Face",
+                "deck": "door",
+                "smallImage": "metalFace",
+                "bigImage": "metalFace",
+                "description": "Fancy meeting you here, monado boy",
+                "level": 18,
+                "levelsGained": 2,
+                "treasuresDropped": 3,
+                "type": "monster"
+            },
+            {
+                "name": "Ender Dragon",
+                "deck": "door",
+                "smallImage": "enderDragon",
+                "bigImage": "enderDragon",
+                "description": "The mightiest dragon in Minecraft",
+                "level": 19,
+                "levelsGained": 2,
+                "treasuresDropped": 3,
+                "type": "monster"
+            },
+            {
+                "name": "Ultimate Kars",
+                "deck": "door",
+                "smallImage": "ultimateKars",
+                "bigImage": "ultimateKars",
+                "description": "The self-proclaimed ultimate lifeform",
+                "level": 20,
+                "levelsGained": 3,
+                "treasuresDropped": 3,
+                "type": "monster"
+            },
+            {
                 "name": "Pogmin",
                 "deck": "door",
                 "description": "An extremely powerful monster. If you can beat him, that would be a pogmin moment.",
@@ -12,40 +232,58 @@
                 "treasuresDropped": 5,
                 "type": "monster"
             },
-            {
-                "name": "Unpogmin",
-                "deck": "door",
-                "smallImage": "unpogminMonster",
-                "bigImage": "unpogminMonster",
-                "description": "The weakest monster ever. If you kill him, you are the monster.",
-                "level": 0,
-                "levelsGained": -1,
-                "treasuresDropped": 0,
-                "type": "monster"
-            },
-            {
-                "name": "Mike Wazowski",
-                "deck": "door",
-                "smallImage": "mikeWazowski",
-                "bigImage": "mikeWazowski",
-                "description": "Would you listen to this? Blame it on the little guy, how original. He must've read the schedule wrong with his one eye!",
-                "level": 2,
-                "levelsGained": 1,
-                "treasuresDropped": 1,
-                "type": "monster"
-            },
-           
+
 
             {
                 "name": "Duck of Doom",
                 "deck": "door",
                 "description": "Is a duck",
-                "smallImage": "doorCard",
-                "bigImage": "doorCard",
+                "smallImage": "duckOfDoom",
+                "bigImage": "duckOfDoom",
+                "type": "curse"
+            },
+            {
+                "name": "Go Down A Level",
+                "deck": "door",
+                "description": "Read the name",
+                "smallImage": "goDownALevel",
+                "bigImage": "goDownALevel",
+                "type": "curse"
+            },
+            {
+                "name": "From Hero To Zero",
+                "deck": "door",
+                "description": "Pogmin -> Unpogmin",
+                "smallImage": "fromHeroToZero",
+                "bigImage": "fromHeroToZero",
+                "type": "curse"
+            },
+            {
+                "name": "Antidoping",
+                "deck": "door",
+                "description": "Drugs are banned.",
+                "smallImage": "antidoping",
+                "bigImage": "antidoping",
+                "type": "curse"
+            },
+            {
+                "name": "Steal A Level",
+                "deck": "door",
+                "description": "Yoink",
+                "smallImage": "stealALevel",
+                "bigImage": "stealALevel",
+                "type": "curse"
+            },
+            {
+                "name": "Communism",
+                "deck": "door",
+                "description": "OUR levels.",
+                "smallImage": "communism",
+                "bigImage": "communism",
                 "type": "curse"
             }
         ],
-        "treasures": [
+        "treasures": [ 
             {
                 "name": "Diamond Sword",
                 "deck": "treasure",
@@ -118,6 +356,78 @@
                 "type": "equipment",
                 "value": 400
             },
+            {
+                "name": "Joker's mask",
+                "deck": "treasure",
+                "description": "Your last surprise.",
+                "smallImage": "jokerMask",
+                "bigImage": "jokerMask",
+                "size": "small",
+                "slotType": "head",
+                "statBonus": 3,
+                "type": "equipment",
+                "value": 300
+            },
+            {
+                "name": "EMPEROR",
+                "deck": "treasure",
+                "description": "Better than sex pistols.",
+                "smallImage": "emperor",
+                "bigImage": "emperor",
+                "size": "small",
+                "slotType": "hand",
+                "statBonus": 5,
+                "type": "equipment",
+                "value": 0
+            },
+            {
+                "name": "Rope Snake",
+                "deck": "treasure",
+                "description": "Who could this be from?",
+                "smallImage": "ropeSnake",
+                "bigImage": "ropeSnake",
+                "size": "small",
+                "slotType": "hand",
+                "statBonus": 1,
+                "type": "equipment",
+                "value": 100
+            },
+            {
+                "name": "Iron Chestplate",
+                "deck": "treasure",
+                "description": ".",
+                "smallImage": "ironChestplate",
+                "bigImage": "ironChestplate",
+                "size": "small",
+                "slotType": "torso",
+                "statBonus": 4,
+                "type": "equipment",
+                "value": 300
+            },
+            {
+                "name": "Gold Leggings",
+                "deck": "treasure",
+                "description": "Made out of pure gold.",
+                "smallImage": "goldLeggings",
+                "bigImage": "goldLeggings",
+                "size": "small",
+                "slotType": "legs",
+                "statBonus": 0,
+                "type": "equipment",
+                "value": 1000
+            },
+            {
+                "name": "Hover Boots",
+                "deck": "treasure",
+                "description": "Use them to hover over gaps.",
+                "smallImage": "hoverBoots",
+                "bigImage": "hoverBoots",
+                "size": "small",
+                "slotType": "feet",
+                "statBonus": 2,
+                "type": "equipment",
+                "value": 500
+            },
 
 
             {
@@ -131,7 +441,6 @@
                 "usableOnMonster": false,
                 "value": 0
             },
-
             {
                 "name": "Stand Arrow",
                 "deck": "treasure",
@@ -143,6 +452,78 @@
                 "usableOnMonster": true,
                 "statBonus": 8,
                 "value": 800
+            },
+            {
+                "name": "Arsene",
+                "deck": "treasure",
+                "description": "Looking cool, joker",
+                "smallImage": "arsene",
+                "bigImage": "arsene",
+                "type": "item",
+                "usableOnPlayer": true,
+                "usableOnMonster": true,
+                "statBonus": 5,
+                "value": 0
+            },
+            {
+                "name": "Fire Flower",
+                "deck": "treasure",
+                "description": "Pretty spicy",
+                "smallImage": "fireFlower",
+                "bigImage": "fireFlower",
+                "type": "item",
+                "usableOnPlayer": true,
+                "usableOnMonster": true,
+                "statBonus": 1,
+                "value": 200
+            },
+            {
+                "name": "Oxygen",
+                "deck": "treasure",
+                "description": "Vital for life",
+                "smallImage": "oxygen",
+                "bigImage": "oxygen",
+                "type": "item",
+                "usableOnPlayer": true,
+                "usableOnMonster": true,
+                "statBonus": 1,
+                "value": 100
+            },
+            {
+                "name": "Oxygen Capsule",
+                "deck": "treasure",
+                "description": "Its bottled oxygen",
+                "smallImage": "oxygenCapsule",
+                "bigImage": "oxygenCapsule",
+                "type": "item",
+                "usableOnPlayer": true,
+                "usableOnMonster": true,
+                "statBonus": 2,
+                "value": 300
+            },
+            {
+                "name": "Splash Potion",
+                "deck": "treasure",
+                "description": "Its bottled oxygen",
+                "smallImage": "splashPotion",
+                "bigImage": "splashPotion",
+                "type": "item",
+                "usableOnPlayer": true,
+                "usableOnMonster": true,
+                "statBonus": 2,
+                "value": 64
+            },
+            {
+                "name": "Power Stone",
+                "deck": "treasure",
+                "description": "Can you harness the power of an infinity stone?",
+                "smallImage": "powerStone",
+                "bigImage": "powerStone",
+                "type": "item",
+                "usableOnPlayer": true,
+                "usableOnMonster": true,
+                "statBonus": 2,
+                "value": 400
             }
         ]
     }
