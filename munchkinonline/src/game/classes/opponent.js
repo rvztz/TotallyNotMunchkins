@@ -53,6 +53,10 @@ export default class Opponent {
             scene.socket.emit('buffPlayer', this.socketId, amount)
         }
 
+        this.resetBuffs = () => {
+            scene.socket.emit('resetBuffs', this.socketId)
+        }
+
         this.updateStrength = (strength) => {
             this.strength = strength
         }

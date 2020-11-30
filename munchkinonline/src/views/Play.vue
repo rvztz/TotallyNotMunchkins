@@ -22,6 +22,7 @@
 import Card from '../components/site-interface/Card'
 import firebase from 'firebase';
 import { userCollection } from '../main.js';
+import swal from 'sweetalert'
 
 export default {
     name: 'play',
@@ -80,31 +81,39 @@ export default {
         //data = ["roomName"]
         async createGame(data) {
             // Game creation here
-            let response = await this.roomExists(data[0])
-            if (response.ans) {
-                // Room exists, so tell the user they can't create it
-                alert("Room already exists.")
-            }
-            else {
-                // Room doesn't exist, so create it and make this user the host
-                localStorage.setItem('roomEvent', 'createRoom')
-                localStorage.setItem('roomName', data[0])
-                this.$router.push('/game')
+            if(data[0].length > 0) {
+                let response = await this.roomExists(data[0])
+                if (response.ans) {
+                    // Room exists, so tell the user they can't create it
+                    swal("Oops!", "Room already exists.", "error")
+                }
+                else {
+                    // Room doesn't exist, so create it and make this user the host
+                    localStorage.setItem('roomEvent', 'createRoom')
+                    localStorage.setItem('roomName', data[0])
+                    this.$router.push('/game')
+                }
+            } else {
+                swal("Oops!", "Please enter a room name", "error")
             }
         },
         async joinGame(data) {
-            let response = await this.roomIsJoinable(data[0])
-            if (response.ans) {
-                // Room exists, so join the room
-                localStorage.setItem('roomEvent', 'joinRoom')
-                localStorage.setItem('roomName', data[0])
-                this.$router.push('/game')
+            if(data[0].length > 0) {
+                let response = await this.roomIsJoinable(data[0])
+                if (response.ans) {
+                    // Room exists, so join the room
+                    localStorage.setItem('roomEvent', 'joinRoom')
+                    localStorage.setItem('roomName', data[0])
+                    this.$router.push('/game')
+                } else {
+                    swal("Oops!", response.message, "error")
+                }
             } else {
-                alert(response.message)
+                swal("Oops!", "Please enter a room name", "error")
             }
         },
         async roomExists(roomName) {
-            const url = `/api/roomExists?name=${roomName}`
+            const url = `http://localhost:3000/api/roomExists?name=${roomName}`
 
             try {
                 let response = await fetch(url)
@@ -114,7 +123,7 @@ export default {
             }
         },
         async roomIsJoinable(roomName) {
-            const url = `/api/roomIsJoinable?name=${roomName}&userName=${localStorage.getItem('userName')}`
+            const url = `http://localhost:3000/api/roomIsJoinable?name=${roomName}&userName=${localStorage.getItem('userName')}`
 
             try {
                 let response = await fetch(url)
@@ -146,7 +155,7 @@ export default {
                     })
                 })
             } else {
-                alert("You have not signed in")
+                swal("Oops!", "You have not signed in", "error")
             }
         }
     }

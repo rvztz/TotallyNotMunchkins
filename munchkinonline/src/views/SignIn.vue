@@ -20,6 +20,7 @@
 <script>
 import Card from '../components/site-interface/Card'
 import firebase from 'firebase'; 
+import swal from 'sweetalert'
 
 function validateFields(data)  {
     return ((data[0].replace(/\s/g,"") == "") || (data[1].replace(/\s/g,"") == "")); 
@@ -65,14 +66,14 @@ export default {
         //data = ["username", "password"]
         signInMethod(data) {
             if(validateFields(data)) {
-                alert('Uno o más campos están vacíos');
+                swal("Oops", "One or more fields are empty", "error");
             } else {
                 firebase.auth().signInWithEmailAndPassword(
                     data[0], data[1]
                 ).then( () => {
                     this.$router.push('/profile'); 
                 }).catch((error) => {
-                    alert(error.message); 
+                    swal("Oops", error.message, "error"); 
                 }); 
             }
         },

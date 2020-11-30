@@ -53,6 +53,7 @@
 <script>
 import firebase from 'firebase';
 import { userCollection } from '../main.js';
+import swal from 'sweetalert'
 
 export default {
     name: 'About',
@@ -101,7 +102,7 @@ export default {
                 })
             })
         } else {
-            alert("You have not signed in")
+            swal("Oops!", "You have not signed in", "error")
         }
       }
     }

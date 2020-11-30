@@ -1,12 +1,17 @@
 export default class Token {
     constructor(scene) {
         this.renderedToken = null
+        this.initialX = 0
+        this.initialY = 0
 
         this.render = (startTile, index, isPlayerToken, sprite) => {
             let token = scene.physics.add.image(startTile.x, startTile.y, sprite).setScale(0.1, 0.1)
             let offsets = this.getOffsets(startTile, token, index) // replace 0 with index
             token.x += offsets.x
             token.y += offsets.y
+
+            this.initialX = token.x
+            this.initialY = token.y
 
             if (isPlayerToken) {
                 token.setInteractive({ cursor: 'pointer' })
@@ -43,6 +48,12 @@ export default class Token {
                 default:
                     console.log("Error: unexpected token index")
             }
+        } 
+ 
+        this.resetPosition = () => {
+            this.renderedToken.x = this.initialX
+            this.renderedToken.y = this.initialY
+            scene.socket.emit('moveToken', scene.roomName, this.initialX, this.initialY)
         }
     }
 }

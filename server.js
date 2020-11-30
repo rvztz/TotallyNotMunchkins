@@ -441,6 +441,10 @@ io.on('connection', (socket) => {
 		io.to(socketId).emit('buffPlayer', amount)
 	})
 
+	socket.on('resetBuffs', (socketId) => {
+		io.to(socketId).emit('resetBuffs')
+	})
+
 	socket.on('resetEffects', (socketId) => {
 		io.to(socketId).emit('resetEffects')
 	})

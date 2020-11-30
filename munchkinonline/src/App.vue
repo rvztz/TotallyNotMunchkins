@@ -48,12 +48,12 @@
 }
 
 #nav a:hover {
-  opacity: 70%;
+  opacity: 0.7;
   cursor: pointer;
 }
 
 #nav a.router-link-exact-active {
   text-decoration: underline;
-  opacity: 100%;
+  opacity: 1.0;
 }
 </style>

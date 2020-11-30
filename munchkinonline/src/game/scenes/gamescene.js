@@ -10,6 +10,7 @@ import Battlefield from '../classes/battlefield'
 import Log from '../classes/log'
 import { gameCollection } from '../../main.js';
 import router from '../../router/index'
+import swal from 'sweetalert'
 
 export default class GameScene extends Phaser.Scene {
     constructor() {
@@ -100,7 +101,7 @@ export default class GameScene extends Phaser.Scene {
         })
 
         // Render current turn text
-        this.currentTurnText = this.add.text(10, 36, "Pregame", {fontFamily: 'Avenir, Helvetica, Arial, sans-serif'}).setFontSize(24).setColor('#000')
+        this.currentTurnText = this.add.text(10, 6, "Pregame", {fontFamily: 'Avenir, Helvetica, Arial, sans-serif'}).setFontSize(24).setColor('#000')
 
         // Render strength text
         this.add.text(1106, 426, "Strength", {fontFamily: 'Avenir, Helvetica, Arial, sans-serif'}).setFontSize(20).setColor('#000')
@@ -152,7 +153,7 @@ export default class GameScene extends Phaser.Scene {
                     updateLastPosition(gameObject)
                     this.scene.socket.emit('moveToken', this.scene.roomName, gameObject.x, gameObject.y)
 
-                    if (gameObject.data.get('level') == 10) {
+                    if (gameObject.data.get('level') == 10 && !this.scene.gameState.endGame) {
                         this.scene.socket.emit('winGame', this.scene.roomName)
                         this.scene.socket.emit('addToLog', this.scene.roomName, `${this.scene.player.userName} won!`)
                     }
@@ -189,7 +190,7 @@ export default class GameScene extends Phaser.Scene {
 
             // Card on Tile (use card on self)
             } else if (gameObject.data.get('type') === 'card' && dropZone.data.get('type') === 'tile') {
-
+ 
                 if (this.scene.useCard(gameObject.data.get('data'), this.scene.socket.id)) {
                     if (gameObject.data.get('data').type === "monster") {
                         this.scene.removeCardFromPlayer(gameObject, /* destroy */ true)
@@ -345,6 +346,10 @@ export default class GameScene extends Phaser.Scene {
             this.player.buff(amount)
         })
 
+        this.socket.on('resetBuffs', () => {
+            this.player.resetBuffs()
+        })
+
         this.socket.on('updateStrength', (socketId, strength) => {
             this.opponents.forEach(opponent => {
                 if (opponent.socketId == socketId) {
@@ -367,6 +372,7 @@ export default class GameScene extends Phaser.Scene {
 
             let color = null
             if (socketId == this.socket.id) {
+                this.endTurnButton.renderedButton.clearTint()
                 color = this.player.colorString
                 if (this.player.isDead) {
                     this.player.resurrect()
@@ -374,9 +380,10 @@ export default class GameScene extends Phaser.Scene {
                     this.socket.emit('distributeCards', this.roomName)
                 }
             } else {
+                this.endTurnButton.renderedButton.setTint(0xc4c4c4)
                 this.opponents.forEach(opponent => {
                     if (opponent.socketId == socketId) {
-                        color = opponent.colorString
+                        color = opponent.colorString 
                     }
                 })
             }
@@ -392,11 +399,11 @@ export default class GameScene extends Phaser.Scene {
 
         this.socket.on('drewCard', () => {
             this.gameState.drewCard()
-        })
+        }) 
 
         this.socket.on('displayExitButton', () => {
             // Render new game image and add click event
-            this.exitButton = this.add.image(10, 80, 'exitBtn').setOrigin(0, 0).setInteractive({ cursor: 'pointer' })
+            this.exitButton = this.add.image(10, 50, 'exitBtn').setScale(0.4, 0.4).setOrigin(0, 0).setInteractive({ cursor: 'pointer' })
 
             this.exitButton.on('pointerup', () => {
                 this.socket.emit('closeRoom', this.roomName)
@@ -597,7 +604,7 @@ export default class GameScene extends Phaser.Scene {
 
     useCard(card, targetId) {
         if (this.gameState.inPregame || !this.gameState.cardDrawn) {
-            alert("You can't use cards right now.")
+            swal("Oops!", "You can't use cards right now.", "error")
             return false
         }
 
@@ -613,20 +620,20 @@ export default class GameScene extends Phaser.Scene {
             if (targetId == this.socket.id) {
                 return this.useCardEffect(card, this.player)
             } else {
+                let targetOpponent = null
                 this.opponents.forEach(opponent => { 
                     if (opponent.socketId == targetId) {
-                        return this.useCardEffect(card, opponent)
+                        targetOpponent = opponent
                     }
                 })
+                return this.useCardEffect(card, targetOpponent)
             }
-        } else {
-            alert("You can't use that card right now.")
+        } else { 
+            swal("Oops!", "You can't use that card right now.", "error")
             return false
         }
-
-        return true
     }
-
+ 
     /*======================CARD EFFECTS=======================*/
     useCardEffect(card, target) {
 
@@ -634,9 +641,60 @@ export default class GameScene extends Phaser.Scene {
             case "Go Up A Level":
                 target.levelUp(1)
                 return true
-            case "Stand Arrow":
+            case "Fire Flower": case "Oxygen": case "Oxygen Capsule": case "Splash Potion": case "Power Stone": case "Arsene": case "Stand Arrow":
                 target.buff(card.statBonus)
                 return true
+            case "Go Down A Level": 
+                target.levelUp(-1)
+                return true
+            case "Duck of Doom":
+                target.levelUp(-2)
+                return true
+            case "Antidoping":
+                target.resetBuffs()
+                return true
+            case "From Hero To Zero":
+                if (target.socketId) {
+                    target.buff(target.strength * -1)
+                } else {
+                    target.buff(target.getFullStrength() * -1)
+                }
+                return true
+            case "Steal A Level":
+                if (target.socketId) {
+                    if (target.level > 1) {
+                        target.levelUp(-1)
+                        this.player.levelUp(1)
+                        return true
+                    } else {
+                        swal("Oops!", "That opponent's level is too low", "error")
+                        return false
+                    } 
+                } else {
+                    swal("Oops!", "You can't use that card on yourself", "error")
+                    return false
+                }
+            case "Communism":
+                if (target.socketId) {
+                    let opponentCount = this.opponents.length
+                    if (target.level > opponentCount) {
+                        target.levelUp(opponentCount * -1)
+                        this.player.levelUp(1)
+                        
+                        this.opponents.forEach(opponent => {
+                            if (opponent.socketId != target.socketId) {
+                                opponent.levelUp(1)
+                            }
+                        })
+                        return true
+                    } else {
+                        swal("Oops!", "That opponent's level is too low", "error")
+                        return false
+                    } 
+                } else {
+                    swal("Oops!", "You can't use that card on yourself", "error")
+                    return false
+                }
             default:
                 console.log("Error: unexpected card name")
                 return false
@@ -679,10 +737,28 @@ export default class GameScene extends Phaser.Scene {
     }
 
     loadMonsters() {
-        this.load.image('blankCard', 'assets/monsters/blankCard.png')
+        this.load.image('blankCard', 'assets/monsters/blankCard.png')        
+        this.load.image('goomba', 'assets/monsters/goomba.png')
+        this.load.image('grunt', 'assets/monsters/grunt.png')
+        this.load.image('legoStormTrooper', 'assets/monsters/legoStormTrooper.png')
+        this.load.image('stackOfGoombas', 'assets/monsters/stackOfGoombas.png')
+        this.load.image('fatPikachu', 'assets/monsters/fatPikachu.png')
+        this.load.image('sansUndertale', 'assets/monsters/sansUndertale.png')
+        this.load.image('brute', 'assets/monsters/brute.png')
+        this.load.image('enderman', 'assets/monsters/enderman.png')
+        this.load.image('masterHand', 'assets/monsters/masterHand.png')
+        this.load.image('bigYoshi', 'assets/monsters/bigYoshi.png')
+        this.load.image('ironGolem', 'assets/monsters/ironGolem.png')
+        this.load.image('jackFrost', 'assets/monsters/jackFrost.png')
+        this.load.image('crazyHand', 'assets/monsters/crazyHand.png')
+        this.load.image('marioHead', 'assets/monsters/marioHead.png')
+        this.load.image('goldenLynel', 'assets/monsters/goldenLynel.png')
+        this.load.image('wither', 'assets/monsters/wither.png')
+        this.load.image('territorialRotbart', 'assets/monsters/territorialRotbart.png')
+        this.load.image('metalFace', 'assets/monsters/metalFace.png')
+        this.load.image('enderDragon', 'assets/monsters/enderDragon.png')
+        this.load.image('ultimateKars', 'assets/monsters/ultimateKars.png')
         this.load.image('pogminMonster', 'assets/monsters/pogminMonster.png')
-        this.load.image('unpogminMonster', 'assets/monsters/unpogminMonster.png')
-        this.load.image('mikeWazowski', 'assets/monsters/mikeWazowski.png')
     }
 
     loadEquipmentSlots() {
@@ -695,14 +771,37 @@ export default class GameScene extends Phaser.Scene {
     }
 
     loadItems() {
-        this.load.image('goUpALevel', 'assets/items/goUpALevel.png')
-        this.load.image('standArrow', 'assets/items/standArrow.png')
-        this.load.image('diamondSword', 'assets/items/diamondSword.png')
-        this.load.image('dkTie', 'assets/items/dkTie.png')
+        //Equipment items
         this.load.image('samusHelmet', 'assets/items/samusHelmet.png')
+        this.load.image('jokerMask', 'assets/items/jokerMask.png')
+        this.load.image('diamondSword', 'assets/items/diamondSword.png')
+        this.load.image('emperor', 'assets/items/emperor.png')
         this.load.image('dekuShield', 'assets/items/dekuShield.png')
-        this.load.image('sonicShoes', 'assets/items/sonicShoes.png')
+        this.load.image('ropeSnake', 'assets/items/ropeSnake.png')        
+        this.load.image('dkTie', 'assets/items/dkTie.png')
+        this.load.image('ironChestplate', 'assets/items/ironChestplate.png')
         this.load.image('squarepants', 'assets/items/squarepants.png')
+        this.load.image('goldLeggings', 'assets/items/goldLeggings.png')
+        this.load.image('sonicShoes', 'assets/items/sonicShoes.png')
+        this.load.image('hoverBoots', 'assets/items/hoverBoots.png')
+
+        //Buffs
+        this.load.image('fireFlower', 'assets/items/fireFlower.png')
+        this.load.image('oxygen', 'assets/items/oxygen.png')
+        this.load.image('oxygenCapsule', 'assets/items/oxygenCapsule.png')
+        this.load.image('splashPotion', 'assets/items/splashPotion.png')
+        this.load.image('powerStone', 'assets/items/powerStone.png')
+        this.load.image('arsene', 'assets/items/arsene.png')
+        this.load.image('standArrow', 'assets/items/standArrow.png')
+        this.load.image('goUpALevel', 'assets/items/goUpALevel.png')
+        
+        //Curses
+        this.load.image('goDownALevel', 'assets/items/goDownALevel.png')
+        this.load.image('duckOfDoom', 'assets/items/duckOfDoom.png')
+        this.load.image('fromHeroToZero', 'assets/items/fromHeroToZero.png')
+        this.load.image('antidoping', 'assets/items/antidoping.png')
+        this.load.image('stealALevel', 'assets/items/stealALevel.png')
+        this.load.image('communism', 'assets/items/communism.png')
     }
 
     loadTiles() {

@@ -1,5 +1,6 @@
 import PlayerHand from '../classes/playerHand'
 import Token from '../classes/token'
+import swal from 'sweetalert'
 
 export default class Player {
     constructor(scene) {
@@ -15,7 +16,6 @@ export default class Player {
         this.cards = []
         this.level = 1
         this.equipment = []
-        this.strength = 1
         this.gender = ""
         this.effects = 0
         this.helper = null
@@ -46,7 +46,7 @@ export default class Player {
             this.level = Math.min(this.level, 10)
             this.level = Math.max(this.level, 1)
             this.token.renderedToken.data.set('level', this.level)
-            scene.socket.emit('addToLog', scene.roomName, `${this.userName} leveled up to level ${this.level}.`)
+            scene.socket.emit('addToLog', scene.roomName, `${this.userName}'s level is now ${this.level}.`)
             scene.socket.emit('updateLevel', scene.roomName, this.level)
             scene.socket.emit('updateStrength', scene.roomName, this.getFullStrength())
         }
@@ -89,6 +89,11 @@ export default class Player {
 
         this.buff = (amount) => {
             this.effects += amount
+            scene.socket.emit('updateStrength', scene.roomName, this.getFullStrength())
+        }
+
+        this.resetBuffs = () => {
+            this.effects = 0
             scene.socket.emit('updateStrength', scene.roomName, this.getFullStrength())
         }
 
@@ -147,6 +152,7 @@ export default class Player {
             this.buff(this.effects * -1)
             this.resetHand()
             this.resetEquipment()
+            this.token.resetPosition()
             this.isDead = true
         }
 
@@ -157,22 +163,22 @@ export default class Player {
 
         this.equipCard = (card, placedOn, slotType, available) => {
             if (card.type != 'equipment') {
-                alert("You can't equip that card.")
+                swal("Oops!", "You can't equip that card.", "error")
                 return false
             }
 
             if (card.slotType != slotType) {
-                alert("This is the wrong slot for that card.")
+                swal("Oops!", "This is the wrong slot for that card.", "error")
                 return false
             }
 
             if(placedOn === "equipment") {
-                alert("That card was already on your equipment")
+                swal("Oops!", "That card was already on your equipment", "error")
                 return false
             }
 
             if(!available) {
-                alert("That slot isn't available.")
+                swal("Oops!", "That slot isn't available.", "error")
                 return false
             }
 

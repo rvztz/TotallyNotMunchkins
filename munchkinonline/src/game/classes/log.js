@@ -3,7 +3,7 @@ import Phaser from 'phaser'
 export default class Log {
     constructor(scene) {
         this.lengthLimit = 30
-        this.content = [`Game started in room ${scene.roomName}.`]
+        this.content = [`Game started in room ${scene.roomName}.`, "Use the ↑ and ↓ keys to scroll this log."]
         this.isVisible = false
         this.renderedGraphics = null
         this.renderedText = null 
@@ -14,7 +14,7 @@ export default class Log {
         this.currentY = 0
 
 
-        this.logButton = scene.add.image(1280, 620, 'logBtn').setScale(0.5, 0.5).setInteractive({ cursor: 'pointer' })
+        this.logButton = scene.add.image(1280, 620, 'logBtn').setScale(0.4, 0.4).setInteractive({ cursor: 'pointer' })
         this.logButton.x -= this.logButton.displayWidth*0.75
 
         this.logButton.on('pointerup', () => {
@@ -34,7 +34,7 @@ export default class Log {
 
             this.mask = new Phaser.Display.Masks.GeometryMask(scene, this.renderedGraphics)
 
-            this.updateText()
+            this.updateText() 
 
             this.downKey = scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.DOWN);
             this.downKey.on('down', function() {
